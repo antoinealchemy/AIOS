@@ -392,6 +392,30 @@
             letter-spacing: -0.03em;
         }
 
+        /* Afficher desktop par défaut, cacher mobile */
+        .title-mobile,
+        .subtitle-mobile {
+            display: none;
+        }
+
+        .title-desktop,
+        .subtitle-desktop {
+            display: block;
+        }
+
+        /* Sur mobile : cacher desktop, afficher mobile */
+        @media (max-width: 768px) {
+            .title-mobile,
+            .subtitle-mobile {
+                display: block;
+            }
+
+            .title-desktop,
+            .subtitle-desktop {
+                display: none;
+            }
+        }
+
         .gradient-text {
             background: linear-gradient(90deg, #3B82F6 0%, #06B6D4 100%);
             -webkit-background-clip: text;
@@ -1088,14 +1112,27 @@
                 Cabinets de Conseil 3-10 Personnes
             </div>
 
-            <h1>
+            <h1 class="title-desktop">
                 Arrêtez de Perdre<br>
                 <span class="gradient-text">22h/Semaine</span><br>
                 à Chercher Vos Infos
             </h1>
 
-            <p class="subtitle">
+            <h1 class="title-mobile">
+                Arrêtez de Perdre<br>
+                <span class="gradient-text">22h/Semaine</span><br>
+                à Chercher<br>
+                Vos Infos
+            </h1>
+
+            <p class="subtitle subtitle-desktop">
                 Votre Assistant IA Connaît TOUT de Vos 15 Clients.<br>
+                Question → Réponse en 8 Secondes.
+            </p>
+
+            <p class="subtitle subtitle-mobile">
+                Votre Assistant IA Connaît<br>
+                TOUT de Vos 15 Clients.<br>
                 Question → Réponse en 8 Secondes.
             </p>
 
