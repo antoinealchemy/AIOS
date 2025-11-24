@@ -189,9 +189,12 @@
         /* Hero Section */
         .hero {
             position: relative;
-            padding: 80px 24px 80px;
+            padding: 100px 24px 100px;
             overflow: hidden;
             background: #F8F8F8;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
         }
 
         /* Floating Icons */
@@ -213,28 +216,28 @@
             height: 40px;
         }
 
-        /* Positions des icônes */
+        /* Positions des icônes - aux 4 coins */
         .icon-1 {
-            top: 20%;
-            left: 8%;
+            top: 10%;
+            left: 10%;
             animation: float1 6s ease-in-out infinite, rotate1 8s ease-in-out infinite;
         }
 
         .icon-2 {
-            top: 20%;
-            right: 8%;
+            top: 10%;
+            right: 10%;
             animation: float2 7s ease-in-out infinite, rotate2 9s ease-in-out infinite;
         }
 
         .icon-3 {
-            bottom: 25%;
-            left: 8%;
+            top: 60%;
+            left: 10%;
             animation: float3 8s ease-in-out infinite, rotate3 10s ease-in-out infinite;
         }
 
         .icon-4 {
-            bottom: 25%;
-            right: 8%;
+            top: 60%;
+            right: 10%;
             animation: float4 7.5s ease-in-out infinite, rotate4 9.5s ease-in-out infinite;
         }
 
@@ -291,8 +294,9 @@
             position: relative;
             z-index: 1;
             text-align: center;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .badge {
@@ -314,10 +318,10 @@
         }
 
         h1 {
-            font-size: clamp(40px, 7vw, 80px);
+            font-size: clamp(48px, 8vw, 96px);
             font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 32px;
+            line-height: 1.05;
+            margin-bottom: 24px;
             letter-spacing: -0.04em;
         }
 
@@ -329,10 +333,11 @@
         }
 
         .subtitle {
-            font-size: clamp(18px, 3vw, 24px);
+            font-size: clamp(16px, 2.5vw, 20px);
             color: #6B7280;
-            margin-bottom: 48px;
-            line-height: 1.5;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         /* VSL Container */
@@ -922,16 +927,7 @@
                 Toute l'Équipe Pose une Question → Réponse en 8 Secondes.
             </p>
 
-            <div class="vsl-container">
-                <div class="vsl-placeholder">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                    </div>
-                    <p class="vsl-text">Cliquez pour voir la démo (90 sec)</p>
-                </div>
-            </div>
-
-            <div>
+            <div style="margin-bottom: 48px;">
                 <a href="#calendly" class="cta-primary">
                     <svg class="cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -944,6 +940,15 @@
                 <p class="cta-subtitle">
                     Places limitées cette semaine • Sans engagement
                 </p>
+            </div>
+
+            <div class="vsl-container">
+                <div class="vsl-placeholder">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                    </div>
+                    <p class="vsl-text">Cliquez pour voir la démo (90 sec)</p>
+                </div>
             </div>
         </div>
     </section>
