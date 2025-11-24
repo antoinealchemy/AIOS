@@ -35,13 +35,13 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 20px 0;
+            padding: 16px 0;
         }
 
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -139,7 +139,7 @@
         .nav-mobile {
             display: none;
             position: fixed;
-            top: 65px;
+            top: 60px;
             left: 0;
             right: 0;
             background: #FFFFFF;
@@ -766,6 +766,22 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            header {
+                padding: 12px 0;
+            }
+
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .logo img {
+                height: 28px;
+            }
+
+            .burger-menu {
+                padding: 4px;
+            }
+
             .hero {
                 padding: 60px 24px 60px;
             }
@@ -782,10 +798,6 @@
             .comparison-grid,
             .qualification-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .logo img {
-                height: 32px;
             }
 
             /* Mobile menu */
