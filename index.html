@@ -287,6 +287,19 @@
             50% { transform: rotate(-6deg); }
         }
 
+        /* Ajustement précis pour desktop */
+        @media (min-width: 1200px) {
+            .icon-1,
+            .icon-2 {
+                top: 37%;
+            }
+
+            .icon-3,
+            .icon-4 {
+                top: 53%;
+            }
+        }
+
         /* Responsive - afficher les 4 icônes sur mobile */
         @media (max-width: 1024px) {
             .floating-icon {
@@ -1406,7 +1419,7 @@
             <div class="footer-column">
                 <h3>Légal</h3>
                 <ul>
-                    <li><a href="mailto:contact@ai-os.fr">Contact</a></li>
+                    <li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9ebfb7f3b1adf0b8ac">Contact</a></li>
                     <li><a href="#mentions">Mentions Légales</a></li>
                     <li><a href="#confidentialite">Confidentialité</a></li>
                 </ul>
@@ -1423,12 +1436,12 @@
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
             <p>
-                Contact : <a href="mailto:contact@ai-os.fr" style="text-decoration: underline;">contact@ai-os.fr</a>
+                Contact : <a href="/cdn-cgi/l/email-protection#ee8d81809a8f8d9aae8f87c3819dc0889c" style="text-decoration: underline;"><span class="__cf_email__" data-cfemail="284b47465c494b5c68494105475b064e5a">[email&#160;protected]</span></a>
             </p>
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(button => {
             button.addEventListener('click', () => {
@@ -1481,7 +1494,7 @@
 
             // Close mobile menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!burgerMenu.contains(e.target) && !navMobile.contains(e.target)) {
+                  if (!burgerMenu.contains(e.target) && !navMobile.contains(e.target)) {
                     burgerMenu.classList.remove('active');
                     navMobile.classList.remove('active');
                 }
