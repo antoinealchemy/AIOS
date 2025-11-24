@@ -213,6 +213,7 @@
             justify-content: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             z-index: 0;
+            will-change: transform;
         }
 
         .floating-icon svg {
@@ -221,83 +222,79 @@
         }
 
         /* Positions des icônes - au niveau du titre */
+        /* Animations apesanteur + diagonale + rotation + scale */
         .icon-1 {
-            top: 30%;
+            top: 24%;
             left: 12%;
-            animation: float1 6s ease-in-out infinite, rotate1 8s ease-in-out infinite;
+            animation: floatIcon1 14s ease-in-out infinite;
         }
 
         .icon-2 {
-            top: 30%;
+            top: 24%;
             right: 12%;
-            animation: float2 7s ease-in-out infinite, rotate2 9s ease-in-out infinite;
+            animation: floatIcon2 16s ease-in-out infinite;
         }
 
         .icon-3 {
-            top: 48%;
+            top: 42%;
             left: 12%;
-            animation: float3 8s ease-in-out infinite, rotate3 10s ease-in-out infinite;
+            animation: floatIcon3 15s ease-in-out infinite;
         }
 
         .icon-4 {
-            top: 48%;
+            top: 42%;
             right: 12%;
-            animation: float4 7.5s ease-in-out infinite, rotate4 9.5s ease-in-out infinite;
+            animation: floatIcon4 17s ease-in-out infinite;
+        }
+
+        /* Icône 1 */
+        @keyframes floatIcon1 {
+            0%   { transform: translate3d(-10px, 0, 0) rotate(-6deg) scale(1); }
+            25%  { transform: translate3d(8px, -25px, 0) rotate(-2deg) scale(1.08); }
+            50%  { transform: translate3d(16px, -40px, 0) rotate(3deg) scale(1.12); }
+            75%  { transform: translate3d(4px, -18px, 0) rotate(0deg) scale(1.06); }
+            100% { transform: translate3d(-10px, 0, 0) rotate(-6deg) scale(1); }
+        }
+
+        /* Icône 2 */
+        @keyframes floatIcon2 {
+            0%   { transform: translate3d(8px, 0, 0) rotate(4deg) scale(1); }
+            25%  { transform: translate3d(-6px, -28px, 0) rotate(0deg) scale(1.07); }
+            50%  { transform: translate3d(-14px, -45px, 0) rotate(-4deg) scale(1.12); }
+            75%  { transform: translate3d(-2px, -22px, 0) rotate(1deg) scale(1.05); }
+            100% { transform: translate3d(8px, 0, 0) rotate(4deg) scale(1); }
+        }
+
+        /* Icône 3 */
+        @keyframes floatIcon3 {
+            0%   { transform: translate3d(-6px, 0, 0) rotate(-4deg) scale(1); }
+            25%  { transform: translate3d(4px, 24px, 0) rotate(-1deg) scale(1.06); }
+            50%  { transform: translate3d(12px, 40px, 0) rotate(3deg) scale(1.1); }
+            75%  { transform: translate3d(0px, 18px, 0) rotate(0deg) scale(1.04); }
+            100% { transform: translate3d(-6px, 0, 0) rotate(-4deg) scale(1); }
+        }
+
+        /* Icône 4 */
+        @keyframes floatIcon4 {
+            0%   { transform: translate3d(10px, 0, 0) rotate(3deg) scale(1); }
+            25%  { transform: translate3d(-4px, 26px, 0) rotate(0deg) scale(1.06); }
+            50%  { transform: translate3d(-16px, 45px, 0) rotate(-3deg) scale(1.1); }
+            75%  { transform: translate3d(-2px, 20px, 0) rotate(1deg) scale(1.05); }
+            100% { transform: translate3d(10px, 0, 0) rotate(3deg) scale(1); }
         }
 
         /* Animations flottement (haut-bas) */
         /* Animations flottement (haut-bas) - effet apesanteur accentué */
-        @keyframes float1 {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-40px); }
-        }
-
-        @keyframes float2 {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-45px); }
-        }
-
-        @keyframes float3 {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(40px); }
-        }
-
-        @keyframes float4 {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(45px); }
-        }
-
-        /* Animations rotation (gauche-droite) - très légère */
-        @keyframes rotate1 {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-        }
-
-        @keyframes rotate2 {
-            0%, 100% { transform: rotate(3deg); }
-            50% { transform: rotate(-3deg); }
-        }
-
-        @keyframes rotate3 {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
-        }
-
-        @keyframes rotate4 {
-            0%, 100% { transform: rotate(2deg); }
-            50% { transform: rotate(-2deg); }
-        }
-
         /* Ajustement précis pour desktop */
         @media (min-width: 1200px) {
             .icon-1,
             .icon-2 {
-                top: 20%;
+                top: 16%;
             }
 
             .icon-3,
             .icon-4 {
-                top: 34%;
+                top: 29%;
             }
         }
 
@@ -1007,6 +1004,13 @@
         @media (min-width: 769px) {
             .nav-mobile {
                 display: none !important;
+            }
+        }
+        /* Accessibilité - Réduction des animations */
+        @media (prefers-reduced-motion: reduce) {
+            .floating-icon {
+                animation: none;
+                transform: none;
             }
         }
     </style>
