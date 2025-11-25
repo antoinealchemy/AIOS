@@ -542,66 +542,6 @@
             letter-spacing: -0.03em;
         }
 
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .testimonial {
-            background: #FFFFFF;
-            backdrop-filter: blur(10px);
-            border: 1px solid #E5E7EB;
-            border-radius: 16px;
-            padding: 32px;
-            transition: all 0.3s ease;
-        }
-
-        .testimonial:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
-        }
-
-        .testimonial-text {
-            font-size: 18px;
-            margin-bottom: 24px;
-            line-height: 1.6;
-            color: #1a1a1a;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 20px;
-            color: white;
-        }
-
-        .author-info h4 {
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: #1a1a1a;
-        }
-
-        .author-info p {
-            font-size: 14px;
-            color: #6C6C6C;
-        }
-
         /* Stats Section */
         .stats-section {
             padding: 0 24px 40px;
@@ -1047,6 +987,144 @@
 
         .not-for-you .qualification-list li {
             color: #6C6C6C;
+        }
+
+        /* Testimonials Carousel */
+        .testimonials-carousel {
+            padding: 80px 24px;
+            background: #F8F8F8;
+            overflow: hidden;
+        }
+
+        .testimonials-carousel .container {
+            text-align: center;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            max-width: 1200px;
+            margin: 48px auto 0;
+            overflow: hidden;
+            mask-image: linear-gradient(
+                to right,
+                transparent,
+                black 10%,
+                black 90%,
+                transparent
+            );
+            -webkit-mask-image: linear-gradient(
+                to right,
+                transparent,
+                black 10%,
+                black 90%,
+                transparent
+            );
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            animation: scroll 40s linear infinite;
+            width: fit-content;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-50%));
+            }
+        }
+
+        .testimonial-card {
+            flex: 0 0 380px;
+            background: #F8F8F8;
+            border: 1px solid #E5E7EB;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .testimonial-info h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            width: 16px;
+            height: 16px;
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1a1a1a;
+            font-weight: 400;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .testimonials-carousel {
+                padding: 60px 16px;
+            }
+
+            .carousel-wrapper {
+                margin: 32px auto 0;
+            }
+
+            .testimonial-card {
+                flex: 0 0 320px;
+                padding: 24px;
+            }
+
+            .testimonial-avatar {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+            .testimonial-info h4 {
+                font-size: 16px;
+            }
+
+            .testimonial-text {
+                font-size: 14px;
+            }
         }
 
         /* FAQ Section */
@@ -1686,43 +1764,6 @@
         </div>
     </section>
 
-    <!-- Social Proof -->
-    <section class="social-proof" id="temoignages">
-        <div class="container">
-            <h2 class="section-title">
-                Ils L'Ont <span class="gradient-text">Fait</span>
-            </h2>
-
-            <div class="testimonials">
-                <div class="testimonial">
-                    <p class="testimonial-text">
-                        "De 25 min à 10 secondes pour préparer mes calls"
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="avatar">M</div>
-                        <div class="author-info">
-                            <h4>Marc D.</h4>
-                            <p>Momentum Consulting (Lyon)</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial">
-                    <p class="testimonial-text">
-                        "Mon équipe a gagné 18h/semaine. ROI en 1 semaine."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="avatar">S</div>
-                        <div class="author-info">
-                            <h4>Sophie L.</h4>
-                            <p>TransfoDigital (Paris)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Before/After -->
     <section class="before-after" id="solution">
         <div class="container">
@@ -1874,6 +1915,270 @@
                             <span>Vous cherchez un <strong>CRM traditionnel</strong></span>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Carousel -->
+    <section class="testimonials-carousel">
+        <div class="container">
+            <div class="badge">RÉSULTATS</div>
+            <h2 class="section-title">
+                Nos Clients en Parlent <span class="gradient-text">Mieux Que Nous</span>
+            </h2>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">T</div>
+                            <div class="testimonial-info">
+                                <h4>Thomas</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Avant AIOS, on perdait 3h par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en 8 secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">S</div>
+                            <div class="testimonial-info">
+                                <h4>Sophie</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Setup en 7 jours comme promis. Dès la première semaine, j'ai préparé 4 calls clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">M</div>
+                            <div class="testimonial-info">
+                                <h4>Marc</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est 3x plus productive. On a même identifié 12K€ d'opportunités cross-sell qu'on aurait ratées. Meilleur investissement business de l'année."</p>
+                    </div>
+
+                    <!-- Testimonial 4 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">C</div>
+                            <div class="testimonial-info">
+                                <h4>Claire</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Je ne pensais pas qu'on pouvait gagner autant de temps. 22h par semaine récupérées sur l'équipe, c'est l'équivalent d'un recrutement évité. En plus, Antoine a livré en 6 jours. Rapide, efficace, transformateur."</p>
+                    </div>
+
+                    <!-- Testimonial 5 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">D</div>
+                            <div class="testimonial-info">
+                                <h4>David</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Le vrai avant/après : avant, on naviguait à l'aveugle. Après AIOS, on a une vision complète de tous nos clients en temps réel. Mes consultants sont autonomes, je prends de meilleures décisions. Honnêtement, je ne comprends pas comment on faisait avant."</p>
+                    </div>
+
+                    <!-- Testimonial 6 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-info">
+                                <h4>Julie</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Setup ultra rapide, résultats immédiats. En 2 semaines, toute l'équipe l'utilise quotidiennement. On a éliminé les réunions de sync inutiles. Productivité en hausse, stress en baisse. Si vous hésitez encore : foncez."</p>
+                    </div>
+
+                    <!-- Duplicate for seamless loop -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">T</div>
+                            <div class="testimonial-info">
+                                <h4>Thomas</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Avant AIOS, on perdait 3h par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en 8 secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">S</div>
+                            <div class="testimonial-info">
+                                <h4>Sophie</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Setup en 7 jours comme promis. Dès la première semaine, j'ai préparé 4 calls clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">M</div>
+                            <div class="testimonial-info">
+                                <h4>Marc</h4>
+                                <div class="testimonial-stars">
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est 3x plus productive. On a même identifié 12K€ d'opportunités cross-sell qu'on aurait ratées. Meilleur investissement business de l'année."</p>
+                    </div>
                 </div>
             </div>
         </div>
