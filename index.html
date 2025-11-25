@@ -599,6 +599,70 @@
             color: #6C6C6C;
         }
 
+        /* Stats Section */
+        .stats-section {
+            padding: 0 24px 80px;
+            background: #F8F8F8;
+        }
+
+        .stats-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 32px;
+            letter-spacing: -0.04em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #6C6C6C;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .stats-title {
+                font-size: 20px;
+                margin-bottom: 24px;
+            }
+
+            .stats-grid {
+                gap: 40px;
+            }
+
+            .stat-number {
+                font-size: 42px;
+            }
+
+            .stat-label {
+                font-size: 15px;
+            }
+        }
+
         /* Before/After Section */
         .before-after {
             padding: 80px 24px;
@@ -1159,6 +1223,27 @@
         </div>
     </section>
 
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="stats-title">AIOS en quelques chiffres</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">+300h/an</div>
+                    <div class="stat-label">économisées pour nos clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7 secondes</div>
+                    <div class="stat-label">pour répondre à TOUTES vos questions sur votre entreprise</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+3 ans</div>
+                    <div class="stat-label">d'expérience dans le prompt engineering</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Social Proof -->
     <section class="social-proof" id="temoignages">
         <div class="container">
@@ -1479,12 +1564,12 @@
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
             <p>
-                Contact : <a href="mailto:contact@ai-os.fr" style="text-decoration: underline;">contact@ai-os.fr</a>
+                Contact : <a href="/cdn-cgi/l/email-protection#5d3e3233293c3e291d3c3470322e733b2f" style="text-decoration: underline;"><span class="__cf_email__" data-cfemail="c1a2aeafb5a0a2b581a0a8ecaeb2efa7b3">[email&#160;protected]</span></a>
             </p>
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(button => {
             button.addEventListener('click', () => {
@@ -1537,7 +1622,7 @@
 
             // Close mobile menu when clicking outside
             document.addEventListener('click', (e) => {
-                  if (!burgerMenu.contains(e.target) && !navMobile.contains(e.target)) {
+                if (!burgerMenu.contains(e.target) && !navMobile.contains(e.target) && navMobile.classList.contains('active')) {
                     burgerMenu.classList.remove('active');
                     navMobile.classList.remove('active');
                 }
