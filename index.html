@@ -685,7 +685,7 @@
 
         @media (max-width: 768px) {
             .hero {
-                padding: 0 16px 12px;
+                padding: 40px 16px 12px;
                 min-height: auto;
                 align-items: flex-start;
             }
@@ -1307,8 +1307,21 @@
 
         /* Compactage extrême des chiffres sur mobile */
         @media (max-width: 768px) {
+            /* Restaurer le titre visible */
+            .stats-section {
+                margin-top: 0 !important;
+                padding-top: 8px !important;
+            }
+
+            /* Titre plus proche des chiffres */
+            .stats-title {
+                margin-bottom: 4px !important;
+            }
+
+            /* Remonter uniquement les chiffres, pas le titre */
             .stats-grid {
                 gap: 8px !important;
+                margin-top: -8px !important;
             }
 
             .stat-item {
