@@ -1304,6 +1304,32 @@
                 transform: none;
             }
         }
+
+        /* Compactage extrême des chiffres sur mobile */
+        @media (max-width: 768px) {
+            .stats-grid {
+                gap: 8px !important;
+            }
+
+            .stat-item {
+                margin: 0 !important;
+                padding: 12px 0 !important;
+            }
+
+            .stat-item:not(:last-child)::after {
+                width: 70% !important;
+                margin-top: 4px;
+            }
+
+            .stat-number {
+                font-size: 38px !important;
+                margin-bottom: 0 !important;
+            }
+
+            .stat-label {
+                margin-top: 4px !important;
+            }
+        }
     </style>
 </head>
 <body>
