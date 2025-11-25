@@ -718,6 +718,114 @@
             background: #F8F8F8;
         }
 
+        /* AIOS Features Section */
+        .aios-features {
+            padding: 80px 24px;
+            background: #F8F8F8;
+        }
+
+        .features-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 24px;
+            background: transparent;
+            color: #3B82F6;
+            border: 2px solid #3B82F6;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 auto 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .features-badge:hover {
+            background: #3B82F6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .features-title {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 64px;
+            color: #1a1a1a;
+            letter-spacing: -0.03em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px 32px;
+            border: 1px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: #3B82F6;
+        }
+
+        .feature-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #6C6C6C;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .aios-features {
+                padding: 60px 24px;
+            }
+
+            .features-title {
+                font-size: 28px;
+                margin-bottom: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .feature-card {
+                padding: 32px 24px;
+            }
+
+            .feature-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
         .comparison-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1294,6 +1402,47 @@
                         <span class="stat-prefix">+</span><span class="stat-counter" data-target="3">0</span><span class="stat-suffix"> ans</span>
                     </div>
                     <div class="stat-label">d'expérience dans le prompt engineering</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AIOS Features Section -->
+    <section class="aios-features">
+        <div class="container">
+            <a href="#solution" class="features-badge">
+                En savoir plus
+            </a>
+            
+            <h2 class="features-title">AIOS C'est Quoi ?</h2>
+
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <img src="aios-brain.avif" alt="Cerveau IA" class="feature-image">
+                    <h3>Votre nouveau cerveau qui révolutionne votre business</h3>
+                    <p>On installe pour vous un assistant IA qui connaît votre business en profondeur : Emails, docs, décisions, clients, KPIs. Accessible par toute l'équipe. Question → Réponse en 7 secondes.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <img src="aios-brain.avif" alt="ROI" class="feature-image">
+                    <h3>ROI immédiatement mesurable</h3>
+                    <p>Temps gagné = Argent gagné. Moins de recherche, plus de production. Chaque heure récupérée augmente votre capacité facturable. ROI visible dès J1.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <img src="aios-brain.avif" alt="Recherche instantanée" class="feature-image">
+                    <h3>Zéro temps perdu en recherche</h3>
+                    <p>Budget client ? Historique projet ? Décision passée ? KPIs performance ? L'info arrive en 7 secondes. Plus jamais 20 min à chercher dans vos outils. Toute l'équipe gagne du temps.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <img src="aios-brain.avif" alt="Analyse 24/7" class="feature-image">
+                    <h3>Analyse et audit de votre business 24/7</h3>
+                    <p>L'IA analyse vos données clients et projets. Vous alerte sur les opportunités (cross-sell, upsell) et les risques (client silencieux, projet bloqué). Aide à décider, pas à deviner.</p>
                 </div>
             </div>
         </div>
