@@ -640,9 +640,18 @@
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
+        .stat-number-small {
+            font-size: 48px;
+        }
+
         .stat-number.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .stat-prefix,
+        .stat-suffix {
+            display: inline;
         }
 
         .stat-label {
@@ -668,6 +677,10 @@
 
             .stat-number {
                 font-size: 42px;
+            }
+
+            .stat-number-small {
+                font-size: 36px;
             }
 
             .stat-label {
@@ -1241,16 +1254,22 @@
             <h2 class="stats-title">AIOS en quelques chiffres</h2>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-number" data-target="300">0</div>
-                    <div class="stat-label">h/an économisées pour nos clients</div>
+                    <div class="stat-number">
+                        <span class="stat-prefix">+</span><span class="stat-counter" data-target="300">0</span><span class="stat-suffix">h/an</span>
+                    </div>
+                    <div class="stat-label">économisées pour nos clients</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" data-target="7">0</div>
-                    <div class="stat-label">secondes pour répondre à TOUTES vos questions sur votre entreprise</div>
+                    <div class="stat-number stat-number-small">
+                        <span class="stat-counter" data-target="7">0</span><span class="stat-suffix"> secondes</span>
+                    </div>
+                    <div class="stat-label">pour retrouver n'importe quel document</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" data-target="3">0</div>
-                    <div class="stat-label">ans d'expérience dans le prompt engineering</div>
+                    <div class="stat-number">
+                        <span class="stat-prefix">+</span><span class="stat-counter" data-target="3">0</span><span class="stat-suffix"> ans</span>
+                    </div>
+                    <div class="stat-label">d'expérience dans le prompt engineering</div>
                 </div>
             </div>
         </div>
@@ -1645,9 +1664,10 @@
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const statNumber = entry.target;
-                    const target = parseInt(statNumber.getAttribute('data-target'));
-                    const duration = 1500; // 1.5 seconds
+                    const statCounter = entry.target;
+                    const statNumber = statCounter.closest('.stat-number');
+                    const target = parseInt(statCounter.getAttribute('data-target'));
+                    const duration = 1000; // 1 second (plus rapide)
                     const increment = target / (duration / 16); // 60fps
                     let current = 0;
 
@@ -1656,28 +1676,21 @@
                     const updateCounter = () => {
                         current += increment;
                         if (current < target) {
-                            statNumber.textContent = Math.ceil(current);
+                            statCounter.textContent = Math.ceil(current);
                             requestAnimationFrame(updateCounter);
                         } else {
-                            // Format final avec préfixes
-                            if (target === 300) {
-                                statNumber.textContent = '+300h/an';
-                            } else if (target === 7) {
-                                statNumber.textContent = '7 secondes';
-                            } else if (target === 3) {
-                                statNumber.textContent = '+3 ans';
-                            }
+                            statCounter.textContent = target;
                         }
                     };
 
                     updateCounter();
-                    statsObserver.unobserve(statNumber);
+                    statsObserver.unobserve(statCounter);
                 }
             });
         }, { threshold: 0.5 });
 
-        // Observe all stat numbers
-        document.querySelectorAll('.stat-number').forEach(stat => {
+        // Observe all stat counters
+        document.querySelectorAll('.stat-counter').forEach(stat => {
             statsObserver.observe(stat);
         });
     </script>
