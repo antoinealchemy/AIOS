@@ -626,6 +626,24 @@
             text-align: center;
         }
 
+        /* Barres verticales sur desktop */
+        @media (min-width: 1024px) {
+            .stat-item {
+                position: relative;
+                padding: 0 40px;
+            }
+
+            .stat-item:not(:first-child)::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 20%;
+                height: 60%;
+                width: 1px;
+                background: #E5E7EB;
+            }
+        }
+
         .stat-number {
             font-size: 56px;
             font-weight: 800;
@@ -640,8 +658,8 @@
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .stat-number-small {
-            font-size: 48px;
+        .stat-suffix-small {
+            font-size: 0.75em;
         }
 
         .stat-number.visible {
@@ -662,8 +680,21 @@
         }
 
         @media (max-width: 768px) {
+            .hero {
+                padding: 8px 20px 24px;
+            }
+
             .stats-section {
-                margin-top: -24px;
+                margin-top: -8px;
+            }
+
+            .stat-item {
+                margin-bottom: 24px;
+            }
+
+            .stat-number {
+                font-size: 42px;
+                margin-bottom: 4px;
             }
 
             .stats-title {
@@ -675,16 +706,9 @@
                 gap: 40px;
             }
 
-            .stat-number {
-                font-size: 42px;
-            }
-
-            .stat-number-small {
-                font-size: 36px;
-            }
-
             .stat-label {
-                font-size: 15px;
+                margin-top: 0;
+                font-size: 14px;
             }
         }
 
@@ -1030,7 +1054,7 @@
             }
 
             .hero {
-                padding: 4px 20px 60px;
+                padding: 8px 20px 24px;
             }
 
             .badge {
@@ -1260,8 +1284,8 @@
                     <div class="stat-label">économisées pour nos clients</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number stat-number-small">
-                        <span class="stat-counter" data-target="7">0</span><span class="stat-suffix"> secondes</span>
+                    <div class="stat-number">
+                        <span class="stat-counter" data-target="7">0</span><span class="stat-suffix stat-suffix-small"> secondes</span>
                     </div>
                     <div class="stat-label">pour retrouver n'importe quel document</div>
                 </div>
