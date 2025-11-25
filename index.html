@@ -690,6 +690,19 @@
 
             .stat-item {
                 margin-bottom: 24px;
+                padding-bottom: 24px;
+                position: relative;
+            }
+
+            .stat-item:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+                height: 1px;
+                background: #E5E7EB;
             }
 
             .stat-number {
@@ -778,8 +791,8 @@
         }
 
         .feature-image {
-            width: 120px;
-            height: 120px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto 24px;
             display: block;
             object-fit: contain;
@@ -821,8 +834,8 @@
             }
 
             .feature-image {
-                width: 100px;
-                height: 100px;
+                width: 150px;
+                height: 150px;
             }
         }
 
@@ -1434,7 +1447,7 @@
                 <!-- Feature 3 -->
                 <div class="feature-card">
                     <img src="Exemple1.avif" alt="Recherche instantanée" class="feature-image">
-                    <h3>Zéro temps perdu en recherche</h3>
+                    <h3>Zéro temps perdu à chercher</h3>
                     <p>Budget client ? Historique projet ? Décision passée ? KPIs performance ? L'info arrive en 7 secondes. Plus jamais 20 min à chercher dans vos outils. Toute l'équipe gagne du temps.</p>
                 </div>
 
