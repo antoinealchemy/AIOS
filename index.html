@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1858,7 +1862,7 @@
     </section>
 
     <!-- AIOS Features Section -->
-    <section class="aios-features">
+    <section class="aios-features" id="solution">
         <div class="container" style="text-align: center;">
             <a href="#solution" class="features-badge">
                 En savoir plus
@@ -1955,7 +1959,7 @@
     </section>
 
     <!-- Testimonials Carousel -->
-    <section class="testimonials-carousel">
+    <section class="testimonials-carousel" id="temoignages">
         <div class="container">
             <div class="badge">Résultats</div>
             <h2 class="section-title">
@@ -2219,7 +2223,7 @@
     </section>
 
     <!-- FAQ -->
-    <section class="faq">
+    <section class="faq" id="faq">
         <div class="container">
             <div class="badge">FAQ</div>
             <h2 class="section-title">
@@ -2451,6 +2455,14 @@
         // Observe all stat counters
         document.querySelectorAll('.stat-counter').forEach(stat => {
             statsObserver.observe(stat);
+        });
+
+        // Close mobile menu when clicking on navigation links
+        document.querySelectorAll('.nav-mobile-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMobile.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            });
         });
     </script>
 </body>
