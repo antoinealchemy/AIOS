@@ -523,6 +523,10 @@
             color: #6C6C6C;
         }
 
+        .hero-cta {
+            margin-bottom: 48px;
+        }
+
         /* Social Proof Section */
         .social-proof {
             padding: 80px 24px;
@@ -681,12 +685,25 @@
 
         @media (max-width: 768px) {
             .hero {
-                padding: 8px 20px 24px;
+                padding: 0 16px 12px;
+                min-height: auto;
+                align-items: flex-start;
+            }
+
+            /* Hero CTA moins d'espace sur mobile */
+            .hero-cta {
+                margin-bottom: 16px;
+            }
+
+            /* VSL plus proche des chiffres */
+            .vsl-container {
+                margin: 0 auto 8px;
             }
 
             /* Stats section ultra-serrée sur mobile */
             .stats-section {
-                margin-top: -8px;
+                margin-top: -24px;
+                padding-top: 0;
                 padding-bottom: 8px !important;
                 margin-bottom: 0 !important;
             }
@@ -1415,7 +1432,7 @@
                 Question → Réponse en 8 Secondes.
             </p>
 
-            <div style="margin-bottom: 48px;">
+            <div class="hero-cta">
                 <a href="#calendly" class="cta-primary">
                     Réserver maintenant
                 </a>
