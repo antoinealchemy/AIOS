@@ -601,8 +601,9 @@
 
         /* Stats Section */
         .stats-section {
-            padding: 0 24px 80px;
+            padding: 0 24px 60px;
             background: #F8F8F8;
+            margin-top: -40px;
         }
 
         .stats-title {
@@ -635,6 +636,14 @@
             background-clip: text;
             margin-bottom: 12px;
             letter-spacing: -0.03em;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .stat-number.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .stat-label {
@@ -645,6 +654,10 @@
         }
 
         @media (max-width: 768px) {
+            .stats-section {
+                margin-top: -20px;
+            }
+
             .stats-title {
                 font-size: 20px;
                 margin-bottom: 24px;
@@ -1229,16 +1242,16 @@
             <h2 class="stats-title">AIOS en quelques chiffres</h2>
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-number">+300h/an</div>
-                    <div class="stat-label">économisées pour nos clients</div>
+                    <div class="stat-number" data-target="300">0</div>
+                    <div class="stat-label">h/an économisées pour nos clients</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">7 secondes</div>
-                    <div class="stat-label">pour répondre à TOUTES vos questions sur votre entreprise</div>
+                    <div class="stat-number" data-target="7">0</div>
+                    <div class="stat-label">secondes pour répondre à TOUTES vos questions sur votre entreprise</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">+3 ans</div>
-                    <div class="stat-label">d'expérience dans le prompt engineering</div>
+                    <div class="stat-number" data-target="3">0</div>
+                    <div class="stat-label">ans d'expérience dans le prompt engineering</div>
                 </div>
             </div>
         </div>
@@ -1628,6 +1641,46 @@
                 }
             });
         }
+
+        // Stats Counter Animation
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumber = entry.target;
+                    const target = parseInt(statNumber.getAttribute('data-target'));
+                    const duration = 1500; // 1.5 seconds
+                    const increment = target / (duration / 16); // 60fps
+                    let current = 0;
+
+                    statNumber.classList.add('visible');
+
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            statNumber.textContent = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            // Format final avec préfixes
+                            if (target === 300) {
+                                statNumber.textContent = '+300h/an';
+                            } else if (target === 7) {
+                                statNumber.textContent = '7 secondes';
+                            } else if (target === 3) {
+                                statNumber.textContent = '+3 ans';
+                            }
+                        }
+                    };
+
+                    updateCounter();
+                    statsObserver.unobserve(statNumber);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe all stat numbers
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            statsObserver.observe(stat);
+        });
     </script>
 </body>
 </html>
