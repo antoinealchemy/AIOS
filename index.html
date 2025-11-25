@@ -834,10 +834,11 @@
 
         .feature-card {
             background: #FFFFFF;
-            border-radius: 16px;
-            padding: 40px 32px;
+            border-radius: 24px;
+            padding: 32px 32px 40px;
             border: 1px solid #E5E7EB;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .feature-card:hover {
@@ -846,11 +847,21 @@
             border-color: #3B82F6;
         }
 
-        .feature-image {
-            width: 240px;
-            height: 240px;
+        /* Nouveau wrapper qui simule la "carte" intérieure */
+        .feature-image-wrapper {
+            background: #F9FAFB;
+            border-radius: 22px;
+            padding: 24px 28px;
             margin: 0 auto 24px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+        }
+
+        /* L'image occupe presque toute la largeur du cadre interne */
+        .feature-image {
+            width: 100%;
+            height: auto;
             display: block;
+            border-radius: 18px;
             object-fit: contain;
         }
 
@@ -886,12 +897,12 @@
             }
 
             .feature-card {
-                padding: 32px 24px;
+                padding: 28px 20px 32px;
             }
 
-            .feature-image {
-                width: 200px;
-                height: 200px;
+            .feature-image-wrapper {
+                padding: 18px 20px;
+                margin-bottom: 20px;
             }
         }
 
@@ -1529,28 +1540,36 @@
             <div class="features-grid">
                 <!-- Feature 1 -->
                 <div class="feature-card">
-                    <img src="image1.png" alt="Cerveau IA" class="feature-image">
+                    <div class="feature-image-wrapper">
+                        <img src="image1.png" alt="Cerveau IA" class="feature-image">
+                    </div>
                     <h3>Votre nouveau cerveau qui révolutionne votre business</h3>
                     <p>On installe pour vous un assistant IA qui connaît votre business en profondeur : Emails, docs, décisions, clients, KPIs. Accessible par toute l'équipe. Question → Réponse en 7 secondes.</p>
                 </div>
 
                 <!-- Feature 2 -->
                 <div class="feature-card">
-                    <img src="image1.png" alt="ROI" class="feature-image">
+                    <div class="feature-image-wrapper">
+                        <img src="image1.png" alt="ROI" class="feature-image">
+                    </div>
                     <h3>ROI immédiatement mesurable</h3>
                     <p>Temps gagné = Argent gagné. Moins de recherche, plus de production. Chaque heure récupérée augmente votre capacité facturable. ROI visible dès J1.</p>
                 </div>
 
                 <!-- Feature 3 -->
                 <div class="feature-card">
-                    <img src="image1.png" alt="Recherche instantanée" class="feature-image">
+                    <div class="feature-image-wrapper">
+                        <img src="image1.png" alt="Recherche instantanée" class="feature-image">
+                    </div>
                     <h3>Zéro temps perdu à chercher</h3>
                     <p>Budget client ? Historique projet ? Décision passée ? KPIs performance ? L'info arrive en 7 secondes. Plus jamais 20 min à chercher dans vos outils. Toute l'équipe gagne du temps.</p>
                 </div>
 
                 <!-- Feature 4 -->
                 <div class="feature-card">
-                    <img src="image1.png" alt="Analyse 24/7" class="feature-image">
+                    <div class="feature-image-wrapper">
+                        <img src="image1.png" alt="Analyse 24/7" class="feature-image">
+                    </div>
                     <h3>Analyse et audit de votre business 24/7</h3>
                     <p>L'IA analyse vos données clients et projets. Vous alerte sur les opportunités (cross-sell, upsell) et les risques (client silencieux, projet bloqué). Aide à décider, pas à deviner.</p>
                 </div>
