@@ -1055,9 +1055,14 @@
             background: #F8F8F8;
         }
 
+        .faq .container {
+            text-align: center;
+        }
+
         .faq-container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 32px auto 0;
+            text-align: left;
         }
 
         .faq-item {
@@ -1123,20 +1128,220 @@
         .cta-secondary {
             padding: 80px 24px;
             background: #F8F8F8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 24px;
+            padding: 80px 40px;
             text-align: center;
+            overflow: hidden;
+        }
+
+        /* Favicons flottants avec effet néon */
+        .cta-floating-icon {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6), 
+                        0 0 80px rgba(59, 130, 246, 0.3),
+                        0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            will-change: transform;
+        }
+
+        .cta-floating-icon img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .cta-icon-left {
+            top: 50%;
+            left: 8%;
+            transform: translateY(-50%);
+            animation: floatCtaLeft 14s ease-in-out infinite;
+        }
+
+        .cta-icon-right {
+            top: 50%;
+            right: 8%;
+            transform: translateY(-50%);
+            animation: floatCtaRight 16s ease-in-out infinite;
+        }
+
+        @keyframes floatCtaLeft {
+            0%   { transform: translate3d(-6px, -50%, 0) rotate(-4deg) scale(1); }
+            25%  { transform: translate3d(4px, calc(-50% - 18px), 0) rotate(-1deg) scale(1.06); }
+            50%  { transform: translate3d(10px, calc(-50% - 28px), 0) rotate(2deg) scale(1.08); }
+            75%  { transform: translate3d(2px, calc(-50% - 12px), 0) rotate(0deg) scale(1.04); }
+            100% { transform: translate3d(-6px, -50%, 0) rotate(-4deg) scale(1); }
+        }
+
+        @keyframes floatCtaRight {
+            0%   { transform: translate3d(6px, -50%, 0) rotate(4deg) scale(1); }
+            25%  { transform: translate3d(-4px, calc(-50% - 20px), 0) rotate(0deg) scale(1.05); }
+            50%  { transform: translate3d(-10px, calc(-50% - 30px), 0) rotate(-3deg) scale(1.08); }
+            75%  { transform: translate3d(-2px, calc(-50% - 14px), 0) rotate(1deg) scale(1.04); }
+            100% { transform: translate3d(6px, -50%, 0) rotate(4deg) scale(1); }
         }
 
         .cta-secondary h2 {
-            font-size: clamp(32px, 5vw, 48px);
+            font-size: clamp(32px, 5vw, 56px);
             font-weight: 700;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             color: #1a1a1a;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-arrow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-arrow {
+            width: 20px;
+            height: 20px;
+            color: #3B82F6;
         }
 
         .cta-secondary p {
-            font-size: 20px;
+            font-size: 18px;
             color: #6C6C6C;
             margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 40px;
+            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Grandes courbes comme Scaling Playbook */
+        .cta-big-curve {
+            position: absolute;
+            width: 850px;
+            height: 420px;
+            top: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        /* Courbe gauche */
+        .cta-big-curve-left {
+            left: -250px;
+            transform: rotate(-12deg);
+        }
+
+        /* Courbe droite */
+        .cta-big-curve-right {
+            right: -250px;
+            transform: rotate(12deg);
+        }
+
+        /* On assure que le contenu passe au-dessus */
+        .cta-box > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cta-box {
+                padding: 60px 24px;
+            }
+
+            .cta-floating-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .cta-floating-icon img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .cta-icon-left {
+                left: 5%;
+            }
+
+            .cta-icon-right {
+                right: 5%;
+            }
+
+            .cta-secondary h2 {
+                font-size: 32px;
+            }
+
+            .cta-secondary p {
+                font-size: 16px;
+            }
+
+            .cta-button {
+                font-size: 14px;
+                padding: 10px 32px;
+            }
+
+            .cta-big-curve {
+                width: 600px;
+                height: 300px;
+            }
+
+            .cta-big-curve-left {
+                left: -200px;
+            }
+
+            .cta-big-curve-right {
+                right: -200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-floating-icon {
+                display: none;
+            }
+
+            .cta-big-curve {
+                display: none;
+            }
         }
 
         /* Footer */
@@ -1838,7 +2043,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer">
-                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre cabinet), une formation vidéo de 30 minutes pour vous et votre équipe, et 3 mois de support inclus (email/WhatsApp, réponse sous 24h). Tout est clé en main.
+                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise), une formation vidéo de 30 minutes pour vous et votre équipe, et 3 mois de support inclus (email/WhatsApp, réponse sous 24h). Tout est clé en main.
                     </div>
                 </div>
             </div>
@@ -1847,14 +2052,50 @@
 
     <!-- CTA Secondary -->
     <section class="cta-secondary">
-        <div class="container">
+        <div class="cta-box">
+            <!-- Grande courbe gauche -->
+            <svg class="cta-big-curve cta-big-curve-left" viewBox="0 0 800 400">
+                <path d="M0 300 Q 300 0 800 200" 
+                      stroke="rgba(59,130,246,0.20)" 
+                      stroke-width="60" 
+                      fill="none" 
+                      stroke-linecap="round"/>
+            </svg>
+
+            <!-- Grande courbe droite -->
+            <svg class="cta-big-curve cta-big-curve-right" viewBox="0 0 800 400">
+                <path d="M0 300 Q 300 0 800 200" 
+                      stroke="rgba(59,130,246,0.20)" 
+                      stroke-width="60" 
+                      fill="none" 
+                      stroke-linecap="round"/>
+            </svg>
+
+            <!-- Favicon gauche flottant -->
+            <div class="cta-floating-icon cta-icon-left">
+                <img src="favicon.png" alt="AIOS">
+            </div>
+
+            <!-- Favicon droit flottant -->
+            <div class="cta-floating-icon cta-icon-right">
+                <img src="favicon.png" alt="AIOS">
+            </div>
+
             <h2>
-                Prêt à Gagner <span class="gradient-text">22h/Semaine</span> ?
+                Prêt à gagner <span class="gradient-text">300h/an</span> ?
             </h2>
-            <p>
-                Call gratuit de 30 minutes. Sans engagement. Places limitées.
-            </p>
-            <a href="#calendly" class="cta-primary">
+
+            <div class="cta-arrow-container">
+                <svg class="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+                <p style="margin: 0;">Réservez votre appel gratuit maintenant</p>
+                <svg class="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+
+            <a href="#calendly" class="cta-button">
                 Réserver maintenant
             </a>
         </div>
