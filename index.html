@@ -1667,6 +1667,24 @@
                 margin-top: 4px !important;
             }
         }
+        /* Réduction de l'espace entre "AIOS C'est Quoi ?" et "AIOS n'est pas pour tout le monde" */
+        .aios-features {
+            padding-bottom: 32px;   /* avant : 80px (60px sur mobile) */
+        }
+
+        .for-who {
+            padding-top: 16px;      /* avant : 40px */
+        }
+
+        @media (max-width: 768px) {
+            .aios-features {
+                padding-bottom: 24px;  /* avant : 60px */
+            }
+
+            .for-who {
+                padding-top: 12px !important;  /* avant : 30px */
+            }
+        }
     </style>
 </head>
 <body>
@@ -1883,81 +1901,6 @@
                     </div>
                     <h3>Analyse et audit de votre business 24/7</h3>
                     <p>L'IA analyse vos données clients et projets. Vous alerte sur les opportunités (cross-sell, upsell) et les risques (client silencieux, projet bloqué). Aide à décider, pas à deviner.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Before/After -->
-    <section class="before-after" id="solution">
-        <div class="container">
-            <h2 class="section-title">
-                Avant / <span class="gradient-text">Après</span>
-            </h2>
-
-            <div class="comparison-grid">
-                <div class="comparison-box before-box">
-                    <h3 class="comparison-title">
-                        ❌ AVANT
-                    </h3>
-                    <ul class="comparison-list">
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <span>30 min recherche</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <span>5 outils différents</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <span>Infos perdues</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <span>Équipe désynchronisée</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="comparison-box after-box">
-                    <h3 class="comparison-title">
-                        ✅ APRÈS
-                    </h3>
-                    <ul class="comparison-list">
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>8 sec réponse</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>1 interface</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>Mémoire parfaite</span>
-                        </li>
-                        <li>
-                            <svg class="comparison-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>Vision partagée</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
