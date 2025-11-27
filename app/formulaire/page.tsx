@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 
 export default function FormulairePage() {
   const router = useRouter()
@@ -63,11 +62,9 @@ export default function FormulairePage() {
       {/* HEADER */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <Image 
+          <img 
             src="/logo.png" 
             alt="AIOS Logo" 
-            width={120} 
-            height={40}
             className="h-10 w-auto"
           />
         </div>
