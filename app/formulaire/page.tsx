@@ -18,7 +18,7 @@ const INITIAL_QUESTION = {
 const QUESTIONS = [
   {
     id: 'interested',
-    label: '{firstName}, êtes-vous vraiment intéressé par notre service ?',
+    label: 'Êtes-vous vraiment intéressé par notre service, {firstName} ?',
     type: 'radio',
     options: [
       'Oui, je suis intéressé et je cherche une solution',
@@ -28,7 +28,7 @@ const QUESTIONS = [
   },
   {
     id: 'role',
-    label: '{firstName}, quel est votre rôle ?',
+    label: 'Quel est votre rôle actuellement ?',
     type: 'radio',
     options: [
       'Dirigeant d\'une structure de services (1 personne - solopreneur)',
@@ -41,7 +41,7 @@ const QUESTIONS = [
   },
   {
     id: 'businessDescription',
-    label: '{firstName}, décrivez brièvement votre activité',
+    label: 'Pouvez-vous nous décrire brièvement votre activité ?',
     type: 'text',
     placeholder: 'Ex: Cabinet de conseil en transformation digitale, Agence marketing B2B...',
     conditional: (data: any) => data.role && data.role !== 'Manager/Employé (je ne suis pas décisionnaire)'
@@ -59,7 +59,7 @@ const QUESTIONS = [
   },
   {
     id: 'problems',
-    label: '{firstName}, quel(s) est/sont votre/vos plus gros problème(s) aujourd\'hui ? (Plusieurs choix possibles)',
+    label: 'Quel(s) est/sont vos plus gros problème(s) aujourd\'hui ? (Plusieurs choix possibles)',
     type: 'checkbox',
     options: [
       'Temps perdu à chercher des informations',
@@ -72,7 +72,7 @@ const QUESTIONS = [
   },
   {
     id: 'budget',
-    label: '{firstName}, quel budget êtes-vous prêt à investir dans votre entreprise pour résoudre ce(s) problème(s) ?',
+    label: 'Quel budget êtes-vous prêt à investir pour résoudre ce(s) problème(s) ?',
     type: 'radio',
     options: [
       'Moins de 1 500€',
@@ -85,7 +85,7 @@ const QUESTIONS = [
   },
   {
     id: 'urgency',
-    label: '{firstName}, nous ne travaillons qu\'avec 4 entreprises par mois pour garantir la qualité. Êtes-vous prêt à démarrer rapidement si sélectionné ?',
+    label: 'Une dernière chose : nous ne travaillons qu\'avec 4 entreprises par mois pour garantir la qualité. Êtes-vous prêt à démarrer rapidement si sélectionné ?',
     type: 'radio',
     options: [
       'Oui, dès que possible (cette semaine)',
@@ -105,6 +105,7 @@ export default function FormulairePage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [emailError, setEmailError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
   const [phoneCountry, setPhoneCountry] = useState('+33')
   const [formData, setFormData] = useState<any>({
     interested: '',
@@ -150,7 +151,12 @@ export default function FormulairePage() {
     if (isContactStep) {
       const hasAllFields = formData.email && formData.phone
       const noEmailError = !emailError
-      return hasAllFields && noEmailError
+      const noPhoneError = !phoneError
+      // Valider le téléphone avant de permettre la soumission
+      if (formData.phone) {
+        validatePhone(formData.phone, phoneCountry)
+      }
+      return hasAllFields && noEmailError && noPhoneError
     }
 
     // S'assurer que question existe
@@ -187,17 +193,51 @@ export default function FormulairePage() {
     return true
   }
 
+  // VALIDER TÉLÉPHONE FRANÇAIS (10 chiffres)
+  const validatePhone = (phone: string, countryCode: string) => {
+    // Retirer espaces, tirets, points
+    const cleanPhone = phone.replace(/[\s\-\.]/g, '')
+    
+    // Validation pour France (+33)
+    if (countryCode === '+33') {
+      // Accepter 06... ou 6... (10 chiffres au total)
+      const phoneRegex = /^0?[1-9]\d{8}$/
+      
+      if (!phoneRegex.test(cleanPhone)) {
+        setPhoneError('Numéro français invalide (10 chiffres attendus)')
+        return false
+      }
+    } else {
+      // Pour autres pays : au moins 8 chiffres
+      if (cleanPhone.length < 8) {
+        setPhoneError('Numéro de téléphone trop court')
+        return false
+      }
+    }
+    
+    setPhoneError('')
+    return true
+  }
+
   const handleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }))
     
     // Validation email en temps réel SEULEMENT si l'email semble complet
     if (field === 'email' && value) {
-      // Ne valider que si l'email contient @ ET un point après le @
       if (value.includes('@') && value.split('@')[1]?.includes('.')) {
         validateEmail(value)
       } else {
-        // Effacer l'erreur pendant la saisie
         setEmailError('')
+      }
+    }
+    
+    // Validation téléphone en temps réel SEULEMENT si au moins 8 chiffres
+    if (field === 'phone' && value) {
+      const cleanPhone = value.replace(/[\s\-\.]/g, '')
+      if (cleanPhone.length >= 8) {
+        validatePhone(value, phoneCountry)
+      } else {
+        setPhoneError('')
       }
     }
   }
@@ -339,9 +379,16 @@ export default function FormulairePage() {
                         onChange={(e) => handleChange(field.id, e.target.value)}
                         placeholder={field.placeholder}
                         required={field.required}
-                        className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                        className={`flex-1 px-4 py-3 border-2 rounded-lg focus:outline-none ${
+                          phoneError 
+                            ? 'border-red-500 focus:border-red-500' 
+                            : 'border-gray-300 focus:border-blue-500'
+                        }`}
                       />
                     </div>
+                    {phoneError && (
+                      <p className="mt-1 text-sm text-red-600">{phoneError}</p>
+                    )}
                   </div>
                 )
               }
