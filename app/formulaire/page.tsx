@@ -88,14 +88,16 @@ const QUESTIONS = [
 const CONTACT_FIELDS = [
   { id: 'firstName', label: 'Prénom', type: 'text', required: true },
   { id: 'lastName', label: 'Nom', type: 'text', required: true },
-  { id: 'email', label: 'Adresse e-mail', type: 'email', required: true },
-  { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true }
+  { id: 'email', label: 'Adresse e-mail', type: 'email', required: true, validate: true },
+  { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '6 12 34 56 78', required: true, international: true }
 ]
 
 export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [emailError, setEmailError] = useState('')
+  const [phoneCountry, setPhoneCountry] = useState('+33')
   const [formData, setFormData] = useState<any>({
     interested: '',
     role: '',
@@ -132,7 +134,9 @@ export default function FormulairePage() {
   // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
   const isCurrentStepValid = () => {
     if (isContactStep) {
-      return formData.firstName && formData.lastName && formData.email && formData.phone
+      const hasAllFields = formData.firstName && formData.lastName && formData.email && formData.phone
+      const noEmailError = !emailError
+      return hasAllFields && noEmailError
     }
 
     const question = currentQuestion
@@ -154,8 +158,33 @@ export default function FormulairePage() {
     return value && value !== ''
   }
 
+  // VALIDER EMAIL (simple regex + vérification format)
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError('Format d\'email invalide')
+      return false
+    }
+    
+    // Liste de domaines email suspects/jetables
+    const disposableDomains = ['tempmail', 'throwaway', '10minutemail', 'guerrillamail', 'mailinator']
+    const domain = email.split('@')[1]
+    if (disposableDomains.some(d => domain.includes(d))) {
+      setEmailError('Veuillez utiliser un email professionnel')
+      return false
+    }
+    
+    setEmailError('')
+    return true
+  }
+
   const handleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }))
+    
+    // Validation email en temps réel
+    if (field === 'email' && value) {
+      validateEmail(value)
+    }
   }
 
   const handleCheckboxChange = (field: string, value: string) => {
@@ -186,13 +215,27 @@ export default function FormulairePage() {
     setLoading(true)
 
     try {
+      // FORMATER LE NUMÉRO DE TÉLÉPHONE AVEC CODE PAYS
+      const fullPhone = `${phoneCountry}${formData.phone.replace(/^0/, '')}`
+      
       const response = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          phone: fullPhone
+        })
       })
 
       const data = await response.json()
+
+      // STOCKER LES DONNÉES DU LEAD DANS SESSIONSTORAGE POUR PRÉ-REMPLISSAGE CALENDLY
+      sessionStorage.setItem('leadData', JSON.stringify({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: fullPhone
+      }))
 
       // REDIRECTION SELON QUALIFICATION
       if (data.qualified) {
@@ -214,21 +257,65 @@ export default function FormulairePage() {
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Vos coordonnées</h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {CONTACT_FIELDS.map((field) => (
-              <div key={field.id} className={field.id === 'email' || field.id === 'phone' ? 'md:col-span-2' : ''}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {field.label} {field.required && '*'}
-                </label>
-                <input
-                  type={field.type}
-                  value={formData[field.id]}
-                  onChange={(e) => handleChange(field.id, e.target.value)}
-                  placeholder={field.placeholder}
-                  required={field.required}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-            ))}
+            {CONTACT_FIELDS.map((field) => {
+              if (field.id === 'phone') {
+                return (
+                  <div key={field.id} className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {field.label} {field.required && '*'}
+                    </label>
+                    <div className="flex gap-2">
+                      <select
+                        value={phoneCountry}
+                        onChange={(e) => setPhoneCountry(e.target.value)}
+                        className="w-32 px-3 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                      >
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+32">🇧🇪 +32</option>
+                        <option value="+41">🇨🇭 +41</option>
+                        <option value="+352">🇱🇺 +352</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+39">🇮🇹 +39</option>
+                      </select>
+                      <input
+                        type="tel"
+                        value={formData[field.id]}
+                        onChange={(e) => handleChange(field.id, e.target.value)}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                )
+              }
+              
+              return (
+                <div key={field.id} className={field.id === 'email' ? 'md:col-span-2' : ''}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {field.label} {field.required && '*'}
+                  </label>
+                  <input
+                    type={field.type}
+                    value={formData[field.id]}
+                    onChange={(e) => handleChange(field.id, e.target.value)}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none ${
+                      field.id === 'email' && emailError 
+                        ? 'border-red-500 focus:border-red-500' 
+                        : 'border-gray-300 focus:border-blue-500'
+                    }`}
+                  />
+                  {field.id === 'email' && emailError && (
+                    <p className="mt-1 text-sm text-red-600">{emailError}</p>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       )
