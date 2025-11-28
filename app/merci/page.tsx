@@ -1,8 +1,23 @@
 'use client'
 
+import { useEffect } from 'react'
 import Image from 'next/image'
 
 export default function MerciPage() {
+  useEffect(() => {
+    // CHARGER SCRIPT CALENDLY
+    const script = document.createElement('script')
+    script.src = 'https://assets.calendly.com/assets/external/widget.js'
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200">
@@ -18,7 +33,7 @@ export default function MerciPage() {
       </header>
 
       <main className="max-w-3xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,17 +41,17 @@ export default function MerciPage() {
             </svg>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
             Merci pour votre intérêt
           </h1>
           
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-600 mb-8 text-center">
             Nous avons bien reçu vos informations.
           </p>
 
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8 text-left">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8">
             <p className="text-gray-700 mb-4">
-              Malheureusement, votre profil ne correspond pas exactement à ce que nous recherchons pour le moment.
+              Votre profil ne correspond pas exactement à nos critères actuels, mais nous aimerions quand même échanger avec vous.
             </p>
             <p className="text-gray-700 mb-4">
               <strong>AIOS est conçu pour :</strong>
@@ -61,8 +76,25 @@ export default function MerciPage() {
             </ul>
           </div>
 
-          <div className="border-t border-gray-200 pt-6">
-            <p className="text-gray-600 mb-4">
+          {/* SECTION CALENDLY */}
+          <div className="border-t-2 border-gray-200 pt-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Discutons de votre situation
+            </h2>
+            <p className="text-gray-600 mb-6 text-center">
+              Si vous pensez qu&apos;AIOS pourrait quand même vous convenir, réservez un appel de 30 minutes avec Antoine.
+            </p>
+
+            {/* WIDGET CALENDLY */}
+            <div 
+              className="calendly-inline-widget border-2 border-gray-200 rounded-xl overflow-hidden" 
+              data-url="https://calendly.com/antoinealchemy/30min"
+              style={{ minWidth: '320px', height: '700px' }}
+            />
+          </div>
+
+          <div className="border-t border-gray-200 pt-6 text-center">
+            <p className="text-gray-600 mb-2">
               Si votre situation évolue, n&apos;hésitez pas à nous recontacter.
             </p>
             <p className="text-sm text-gray-500">
@@ -70,7 +102,7 @@ export default function MerciPage() {
             </p>
           </div>
 
-          <div className="mt-8 text-gray-700">
+          <div className="mt-8 text-gray-700 text-center">
             <p className="font-semibold">Bonne continuation,</p>
             <p>Antoine</p>
             <p className="text-sm text-gray-500 mt-2">

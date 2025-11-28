@@ -13,6 +13,19 @@ export default function MerciQualifiePage() {
         content_name: 'Lead Qualifié AIOS'
       })
     }
+
+    // CHARGER SCRIPT CALENDLY
+    const script = document.createElement('script')
+    script.src = 'https://assets.calendly.com/assets/external/widget.js'
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      // Cleanup au démontage
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
+    }
   }, [])
 
   return (
@@ -80,16 +93,12 @@ export default function MerciQualifiePage() {
             </p>
           </div>
 
-          {/* CALENDLY EMBED */}
-          <div className="border-2 border-gray-200 rounded-xl overflow-hidden">
-            <iframe
-              src="https://app.iclosed.io/e/aios-decouverte"
-              width="100%"
-              height="700"
-              frameBorder="0"
-              title="Réserver un appel AIOS"
-            />
-          </div>
+          {/* CALENDLY WIDGET */}
+          <div 
+            className="calendly-inline-widget border-2 border-gray-200 rounded-xl overflow-hidden" 
+            data-url="https://calendly.com/antoinealchemy/30min"
+            style={{ minWidth: '320px', height: '700px' }}
+          />
 
           {/* FOOTER MESSAGE */}
           <div className="mt-8 text-center text-gray-600">

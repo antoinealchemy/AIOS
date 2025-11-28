@@ -85,7 +85,6 @@ const QUESTIONS = [
   }
 ]
 
-// QUESTIONS POUR COORDONNÉES (ÉTAPE FINALE)
 const CONTACT_FIELDS = [
   { id: 'firstName', label: 'Prénom', type: 'text', required: true },
   { id: 'lastName', label: 'Nom', type: 'text', required: true },
@@ -133,7 +132,6 @@ export default function FormulairePage() {
   // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
   const isCurrentStepValid = () => {
     if (isContactStep) {
-      // Vérifier tous les champs de contact
       return formData.firstName && formData.lastName && formData.email && formData.phone
     }
 
@@ -156,15 +154,10 @@ export default function FormulairePage() {
     return value && value !== ''
   }
 
-  // GÉRER CHANGEMENT DE VALEUR
   const handleChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      [field]: value
-    }))
+    setFormData((prev: any) => ({ ...prev, [field]: value }))
   }
 
-  // GÉRER CHECKBOX
   const handleCheckboxChange = (field: string, value: string) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -174,7 +167,6 @@ export default function FormulairePage() {
     }))
   }
 
-  // NAVIGATION
   const handleNext = () => {
     if (isCurrentStepValid()) {
       setCurrentStep(prev => prev + 1)
@@ -326,7 +318,6 @@ export default function FormulairePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
-      {/* HEADER */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <Image 
@@ -339,11 +330,9 @@ export default function FormulairePage() {
         </div>
       </header>
 
-      {/* FORMULAIRE */}
       <main className="max-w-3xl mx-auto px-6 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           
-          {/* BARRE DE PROGRESSION */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium text-gray-600">
@@ -361,12 +350,10 @@ export default function FormulairePage() {
             </div>
           </div>
 
-          {/* QUESTION ACTUELLE */}
           <div className="mb-8">
             {renderQuestion()}
           </div>
 
-          {/* BOUTONS NAVIGATION */}
           <div className="flex gap-4">
             {currentStep > 0 && (
               <button
