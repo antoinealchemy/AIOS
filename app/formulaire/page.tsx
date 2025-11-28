@@ -5,10 +5,20 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 // DÉFINITION DES QUESTIONS
+const INITIAL_QUESTION = {
+  id: 'nameFields',
+  label: 'Commençons par faire connaissance',
+  type: 'name',
+  fields: [
+    { id: 'firstName', label: 'Prénom', placeholder: 'Ex: Antoine' },
+    { id: 'lastName', label: 'Nom', placeholder: 'Ex: Dubois' }
+  ]
+}
+
 const QUESTIONS = [
   {
     id: 'interested',
-    label: 'Êtes-vous vraiment intéressé par notre service ?',
+    label: '{firstName}, êtes-vous vraiment intéressé par notre service ?',
     type: 'radio',
     options: [
       'Oui, je suis intéressé et je cherche une solution',
@@ -18,7 +28,7 @@ const QUESTIONS = [
   },
   {
     id: 'role',
-    label: 'Quel est votre rôle ?',
+    label: '{firstName}, quel est votre rôle ?',
     type: 'radio',
     options: [
       'Dirigeant d\'une structure de services (1 personne - solopreneur)',
@@ -31,14 +41,14 @@ const QUESTIONS = [
   },
   {
     id: 'businessDescription',
-    label: 'Décrivez brièvement votre activité',
+    label: '{firstName}, décrivez brièvement votre activité',
     type: 'text',
     placeholder: 'Ex: Cabinet de conseil en transformation digitale, Agence marketing B2B...',
     conditional: (data: any) => data.role && data.role !== 'Manager/Employé (je ne suis pas décisionnaire)'
   },
   {
     id: 'toolsUsed',
-    label: 'Utilisez-vous des outils pour coordonner votre activité et gérer vos clients ?',
+    label: '{firstName}, utilisez-vous des outils pour coordonner votre activité et gérer vos clients ?',
     type: 'radio',
     options: [
       'Oui, plusieurs outils (CRM, gestion projet, docs partagés, etc.)',
@@ -49,7 +59,7 @@ const QUESTIONS = [
   },
   {
     id: 'problems',
-    label: 'Quel(s) est/sont votre/vos plus gros problème(s) aujourd\'hui ? (Plusieurs choix possibles)',
+    label: '{firstName}, quel(s) est/sont votre/vos plus gros problème(s) aujourd\'hui ? (Plusieurs choix possibles)',
     type: 'checkbox',
     options: [
       'Temps perdu à chercher des informations',
@@ -62,7 +72,7 @@ const QUESTIONS = [
   },
   {
     id: 'budget',
-    label: 'Quel budget êtes-vous prêt à investir dans votre entreprise pour résoudre ce(s) problème(s) ?',
+    label: '{firstName}, quel budget êtes-vous prêt à investir dans votre entreprise pour résoudre ce(s) problème(s) ?',
     type: 'radio',
     options: [
       'Moins de 1 500€',
@@ -75,7 +85,7 @@ const QUESTIONS = [
   },
   {
     id: 'urgency',
-    label: 'Nous ne travaillons qu\'avec 4 entreprises par mois pour garantir la qualité. Êtes-vous prêt à démarrer rapidement si sélectionné ?',
+    label: '{firstName}, nous ne travaillons qu\'avec 4 entreprises par mois pour garantir la qualité. Êtes-vous prêt à démarrer rapidement si sélectionné ?',
     type: 'radio',
     options: [
       'Oui, dès que possible (cette semaine)',
@@ -86,8 +96,6 @@ const QUESTIONS = [
 ]
 
 const CONTACT_FIELDS = [
-  { id: 'firstName', label: 'Prénom', type: 'text', required: true },
-  { id: 'lastName', label: 'Nom', type: 'text', required: true },
   { id: 'email', label: 'Adresse e-mail', type: 'email', required: true, validate: true },
   { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '6 12 34 56 78', required: true, international: true }
 ]
@@ -122,9 +130,10 @@ export default function FormulairePage() {
     return true
   })
 
-  const totalSteps = activeQuestions.length
+  const isNameStep = currentStep === 0
+  const totalSteps = activeQuestions.length + 1 // +1 pour l'étape nom
   const isContactStep = currentStep >= totalSteps
-  const currentQuestion = activeQuestions[currentStep]
+  const currentQuestion = isNameStep ? null : activeQuestions[currentStep - 1]
 
   // CALCULER LA PROGRESSION
   const progress = isContactStep 
@@ -133,11 +142,19 @@ export default function FormulairePage() {
 
   // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
   const isCurrentStepValid = () => {
+    if (isNameStep) {
+      return formData.firstName && formData.firstName.trim().length > 0 &&
+             formData.lastName && formData.lastName.trim().length > 0
+    }
+
     if (isContactStep) {
-      const hasAllFields = formData.firstName && formData.lastName && formData.email && formData.phone
+      const hasAllFields = formData.email && formData.phone
       const noEmailError = !emailError
       return hasAllFields && noEmailError
     }
+
+    // S'assurer que question existe
+    if (!currentQuestion) return false
 
     const question = currentQuestion
     const value = formData[question.id]
@@ -173,9 +190,15 @@ export default function FormulairePage() {
   const handleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }))
     
-    // Validation email en temps réel
+    // Validation email en temps réel SEULEMENT si l'email semble complet
     if (field === 'email' && value) {
-      validateEmail(value)
+      // Ne valider que si l'email contient @ ET un point après le @
+      if (value.includes('@') && value.split('@')[1]?.includes('.')) {
+        validateEmail(value)
+      } else {
+        // Effacer l'erreur pendant la saisie
+        setEmailError('')
+      }
     }
   }
 
@@ -244,11 +267,42 @@ export default function FormulairePage() {
 
   // RENDER QUESTION
   const renderQuestion = () => {
+    // ÉTAPE 1 : PRÉNOM + NOM
+    if (isNameStep) {
+      return (
+        <div className="space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
+            {INITIAL_QUESTION.label}
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {INITIAL_QUESTION.fields.map((field) => (
+              <div key={field.id}>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {field.label} *
+                </label>
+                <input
+                  type="text"
+                  value={formData[field.id]}
+                  onChange={(e) => handleChange(field.id, e.target.value)}
+                  placeholder={field.placeholder}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    // ÉTAPE FINALE : EMAIL + TÉLÉPHONE
     if (isContactStep) {
       return (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Vos coordonnées</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            {formData.firstName}, dernière étape : vos coordonnées
+          </h2>
+          <div className="space-y-4">
             {CONTACT_FIELDS.map((field) => {
               if (field.id === 'phone') {
                 return (
@@ -293,7 +347,7 @@ export default function FormulairePage() {
               }
               
               return (
-                <div key={field.id} className={field.id === 'email' ? 'md:col-span-2' : ''}>
+                <div key={field.id}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {field.label} {field.required && '*'}
                   </label>
@@ -320,12 +374,16 @@ export default function FormulairePage() {
       )
     }
 
+    // QUESTIONS STANDARDS AVEC PERSONNALISATION
+    if (!currentQuestion) return null
+    
     const question = currentQuestion
+    const personalizedLabel = question.label.replace('{firstName}', formData.firstName || 'Prénom')
 
     return (
       <div>
         <label className="block text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          {question.label}
+          {personalizedLabel}
         </label>
 
         {question.type === 'radio' && (
@@ -422,9 +480,11 @@ export default function FormulairePage() {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium text-gray-600">
-                {isContactStep 
-                  ? 'Coordonnées' 
-                  : `Question ${currentStep + 1} sur ${totalSteps}`}
+                {isNameStep
+                  ? 'Étape 1 : Présentation'
+                  : isContactStep 
+                  ? 'Dernière étape : Coordonnées' 
+                  : `Question ${currentStep} sur ${totalSteps - 1}`}
               </span>
               <span className="text-sm font-medium text-blue-600">{progress}%</span>
             </div>
