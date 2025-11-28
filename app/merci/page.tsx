@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export default function MerciPage() {
-  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/30min')
+  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/presentation')
 
   useEffect(() => {
     // RÉCUPÉRER LES DONNÉES DU LEAD DEPUIS SESSIONSTORAGE
@@ -19,7 +19,7 @@ export default function MerciPage() {
         a1: data.phone
       })
       
-      setCalendlyUrl(`https://calendly.com/antoinealchemy/30min?${params.toString()}`)
+      setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${params.toString()}`)
     }
 
     // CHARGER SCRIPT CALENDLY
