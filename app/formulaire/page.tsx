@@ -7,7 +7,7 @@ import Image from 'next/image'
 // DÉFINITION DES QUESTIONS
 const INITIAL_QUESTION = {
   id: 'nameFields',
-  label: 'Commençons par faire connaissance',
+  label: 'Commençons par faire connaissance :',
   type: 'name',
   fields: [
     { id: 'firstName', label: 'Prénom', placeholder: 'Ex: Antoine' },
@@ -195,6 +195,11 @@ export default function FormulairePage() {
 
   // VALIDER TÉLÉPHONE FRANÇAIS (10 chiffres)
   const validatePhone = (phone: string, countryCode: string) => {
+    if (!phone || !countryCode) {
+      setPhoneError('')
+      return false
+    }
+    
     // Retirer espaces, tirets, points
     const cleanPhone = phone.replace(/[\s\-\.]/g, '')
     
@@ -223,7 +228,7 @@ export default function FormulairePage() {
     setFormData((prev: any) => ({ ...prev, [field]: value }))
     
     // Validation email en temps réel SEULEMENT si l'email semble complet
-    if (field === 'email' && value) {
+    if (field === 'email' && value && typeof value === 'string') {
       if (value.includes('@') && value.split('@')[1]?.includes('.')) {
         validateEmail(value)
       } else {
@@ -232,7 +237,7 @@ export default function FormulairePage() {
     }
     
     // Validation téléphone en temps réel SEULEMENT si au moins 8 chiffres
-    if (field === 'phone' && value) {
+    if (field === 'phone' && value && typeof value === 'string') {
       const cleanPhone = value.replace(/[\s\-\.]/g, '')
       if (cleanPhone.length >= 8) {
         validatePhone(value, phoneCountry)
