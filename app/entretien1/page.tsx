@@ -3,17 +3,22 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-export default function MerciQualifiePage() {
+export default function Entretien1Page() {
   const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/presentation')
 
   useEffect(() => {
-    // PIXEL FACEBOOK - EVENT LEAD
+    // ========================================
+    // 🔵 PIXEL FACEBOOK - ÉVÉNEMENT OPTIONNEL
+    // ========================================
+    // Cet événement sert uniquement à l'analyse
+    // Il ne sera PAS utilisé pour optimiser la campagne
+    
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead', {
-        value: 2000,
-        currency: 'EUR',
-        content_name: 'Lead Qualifié AIOS'
+      (window as any).fbq('trackCustom', 'CalendlyViewed', {
+        content_name: 'Page Calendly - Lead Qualifié'
       })
+      
+      console.log('📊 Facebook Pixel: CalendlyViewed event fired')
     }
 
     // RÉCUPÉRER LES DONNÉES DU LEAD DEPUIS SESSIONSTORAGE
