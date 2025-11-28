@@ -1,10 +1,27 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export default function MerciPage() {
+  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/30min')
+
   useEffect(() => {
+    // RÉCUPÉRER LES DONNÉES DU LEAD DEPUIS SESSIONSTORAGE
+    const leadData = sessionStorage.getItem('leadData')
+    if (leadData) {
+      const data = JSON.parse(leadData)
+      
+      // CONSTRUIRE URL CALENDLY AVEC PRÉ-REMPLISSAGE
+      const params = new URLSearchParams({
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        a1: data.phone
+      })
+      
+      setCalendlyUrl(`https://calendly.com/antoinealchemy/30min?${params.toString()}`)
+    }
+
     // CHARGER SCRIPT CALENDLY
     const script = document.createElement('script')
     script.src = 'https://assets.calendly.com/assets/external/widget.js'
@@ -85,10 +102,10 @@ export default function MerciPage() {
               Si vous pensez qu&apos;AIOS pourrait quand même vous convenir, réservez un appel de 30 minutes avec Antoine.
             </p>
 
-            {/* WIDGET CALENDLY */}
+            {/* WIDGET CALENDLY AVEC PRÉ-REMPLISSAGE */}
             <div 
               className="calendly-inline-widget border-2 border-gray-200 rounded-xl overflow-hidden" 
-              data-url="https://calendly.com/antoinealchemy/30min"
+              data-url={calendlyUrl}
               style={{ minWidth: '320px', height: '700px' }}
             />
           </div>
