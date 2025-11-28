@@ -5,46 +5,85 @@ import Image from 'next/image'
 
 export default function Confirmation2Page() {
   const [appointmentData, setAppointmentData] = useState({
-    name: 'Antoine Perreault',
+    name: '',
+    email: '',
     date: '',
     time: '',
-    timezone: 'Heure d\'Europe centrale'
+    timezone: 'Heure d\'Europe centrale',
+    eventTypeName: 'Appel avec Antoine'
   })
 
   useEffect(() => {
-    // RÉCUPÉRER LES DONNÉES DU RDV DEPUIS SESSIONSTORAGE OU URL
-    const leadData = sessionStorage.getItem('leadData')
-    if (leadData) {
-      const data = JSON.parse(leadData)
-      setAppointmentData(prev => ({
-        ...prev,
-        name: `${data.firstName} ${data.lastName}`
-      }))
-    }
-
-    // RÉCUPÉRER LA DATE/HEURE DEPUIS LES PARAMÈTRES URL CALENDLY
+    // RÉCUPÉRER TOUS LES PARAMÈTRES URL ENVOYÉS PAR CALENDLY
     const urlParams = new URLSearchParams(window.location.search)
-    const eventTime = urlParams.get('event_start_time')
     
-    if (eventTime) {
-      const date = new Date(eventTime)
-      const options: Intl.DateTimeFormatOptions = { 
+    // Variables de l'événement
+    const eventTypeName = urlParams.get('event_type_name')
+    const eventStartTime = urlParams.get('event_start_time')
+    const eventEndTime = urlParams.get('event_end_time')
+    
+    // Variables de l'invité
+    const inviteeFirstName = urlParams.get('invitee_first_name')
+    const inviteeLastName = urlParams.get('invitee_last_name')
+    const inviteeFullName = urlParams.get('invitee_full_name')
+    const inviteeEmail = urlParams.get('invitee_email')
+    
+    // Construire le nom complet
+    let fullName = inviteeFullName || ''
+    if (!fullName && (inviteeFirstName || inviteeLastName)) {
+      fullName = `${inviteeFirstName || ''} ${inviteeLastName || ''}`.trim()
+    }
+    
+    // Si pas de nom dans l'URL, essayer sessionStorage
+    if (!fullName) {
+      const leadData = sessionStorage.getItem('leadData')
+      if (leadData) {
+        const data = JSON.parse(leadData)
+        fullName = `${data.firstName} ${data.lastName}`
+      }
+    }
+    
+    // Formater la date et l'heure
+    let formattedDate = ''
+    let formattedTime = ''
+    
+    if (eventStartTime) {
+      const startDate = new Date(eventStartTime)
+      const endDate = eventEndTime ? new Date(eventEndTime) : null
+      
+      const dateOptions: Intl.DateTimeFormatOptions = { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric' 
       }
+      
       const timeOptions: Intl.DateTimeFormatOptions = { 
         hour: '2-digit', 
-        minute: '2-digit' 
+        minute: '2-digit',
+        hour12: false
       }
       
-      setAppointmentData(prev => ({
-        ...prev,
-        date: date.toLocaleDateString('fr-FR', options),
-        time: date.toLocaleTimeString('fr-FR', timeOptions)
-      }))
+      formattedDate = startDate.toLocaleDateString('fr-FR', dateOptions)
+      
+      // Format: "16:30 - 17:00"
+      const startTime = startDate.toLocaleTimeString('fr-FR', timeOptions)
+      if (endDate) {
+        const endTime = endDate.toLocaleTimeString('fr-FR', timeOptions)
+        formattedTime = `${startTime} - ${endTime}`
+      } else {
+        formattedTime = startTime
+      }
     }
+    
+    setAppointmentData({
+      name: fullName || 'Antoine Perreault',
+      email: inviteeEmail || '',
+      date: formattedDate || 'samedi, 29 novembre 2025',
+      time: formattedTime || '16:30 - 17:00',
+      timezone: 'Heure d\'Europe centrale',
+      eventTypeName: eventTypeName || 'Appel avec Antoine'
+    })
   }, [])
 
   return (
@@ -56,7 +95,7 @@ export default function Confirmation2Page() {
           <div className="flex justify-center mb-6">
             <div className="w-24 h-24 rounded-full bg-gray-300 overflow-hidden">
               <Image 
-                src="/profile.jpg" 
+                src="/antoine.jpg" 
                 alt="Antoine Perreault"
                 width={96}
                 height={96}
@@ -95,7 +134,7 @@ export default function Confirmation2Page() {
           {/* CARD DÉTAILS RDV */}
           <div className="bg-gray-50 rounded-xl p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Appel avec Antoine
+              {appointmentData.eventTypeName}
             </h2>
 
             {/* PERSONNE */}
@@ -115,6 +154,9 @@ export default function Confirmation2Page() {
               </svg>
               <div>
                 <p className="text-gray-900 font-medium">{appointmentData.name}</p>
+                {appointmentData.email && (
+                  <p className="text-gray-600 text-sm">{appointmentData.email}</p>
+                )}
               </div>
             </div>
 
@@ -135,10 +177,10 @@ export default function Confirmation2Page() {
               </svg>
               <div>
                 <p className="text-gray-900 font-medium">
-                  {appointmentData.time || '16:30 - 17:00'}
+                  {appointmentData.time}
                 </p>
                 <p className="text-gray-600 text-sm">
-                  {appointmentData.date || 'samedi, 29 novembre 2025'}
+                  {appointmentData.date}
                 </p>
               </div>
             </div>
