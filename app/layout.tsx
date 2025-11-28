@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'AIOS - Centralisez vos infos clients',
-  description: 'Centralisez toutes vos infos clients sans toucher à vos outils',
+  title: 'AIOS',
+  description: 'Centralisez votre business sans toucher à vos outils',
   icons: {
     icon: '/favicon.png',
   },

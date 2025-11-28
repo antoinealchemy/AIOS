@@ -14,7 +14,25 @@ export default function Confirmation1Page() {
   })
 
   useEffect(() => {
-    // RÉCUPÉRER TOUS LES PARAMÈTRES URL ENVOYÉS PAR CALENDLY
+    // ========================================
+    // 🎯 PIXEL FACEBOOK - ÉVÉNEMENT LEAD
+    // ========================================
+    // Se déclenche uniquement quand quelqu'un arrive sur cette page
+    // = Quelqu'un a réellement booké un call sur Calendly
+    
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        value: 2000,
+        currency: 'EUR',
+        content_name: 'Lead Qualifié AIOS - Call Booké'
+      })
+      
+      console.log('✅ Facebook Pixel: Lead event fired')
+    }
+
+    // ========================================
+    // RÉCUPÉRER PARAMÈTRES CALENDLY
+    // ========================================
     const urlParams = new URLSearchParams(window.location.search)
     
     // Variables de l'événement
