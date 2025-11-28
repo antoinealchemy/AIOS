@@ -2,9 +2,14 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
   useEffect(() => {
+    fbq.event('ViewContent', {
+      content_name: 'Landing Page AIOS'
+    })
+
     // FAQ Accordion
     const faqButtons = document.querySelectorAll('.faq-question')
     faqButtons.forEach(button => {
