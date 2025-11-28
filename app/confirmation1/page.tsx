@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import * as fbq from '@/lib/fbPixel'
 
 export default function Confirmation1Page() {
   const [appointmentData, setAppointmentData] = useState({
@@ -14,45 +15,29 @@ export default function Confirmation1Page() {
   })
 
   useEffect(() => {
-    // ========================================
     // 🎯 PIXEL FACEBOOK - ÉVÉNEMENT LEAD
-    // ========================================
-    // Se déclenche uniquement quand quelqu'un arrive sur cette page
-    // = Quelqu'un a réellement booké un call sur Calendly
-    
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead', {
-        value: 2000,
-        currency: 'EUR',
-        content_name: 'Lead Qualifié AIOS - Call Booké'
-      })
-      
-      console.log('✅ Facebook Pixel: Lead event fired')
-    }
+    fbq.event('Lead', {
+      value: 2000,
+      currency: 'EUR',
+      content_name: 'Lead Qualifié AIOS - Call Booké'
+    })
 
-    // ========================================
-    // RÉCUPÉRER PARAMÈTRES CALENDLY
-    // ========================================
     const urlParams = new URLSearchParams(window.location.search)
     
-    // Variables de l'événement
     const eventTypeName = urlParams.get('event_type_name')
     const eventStartTime = urlParams.get('event_start_time')
     const eventEndTime = urlParams.get('event_end_time')
     
-    // Variables de l'invité
     const inviteeFirstName = urlParams.get('invitee_first_name')
     const inviteeLastName = urlParams.get('invitee_last_name')
     const inviteeFullName = urlParams.get('invitee_full_name')
     const inviteeEmail = urlParams.get('invitee_email')
     
-    // Construire le nom complet
     let fullName = inviteeFullName || ''
     if (!fullName && (inviteeFirstName || inviteeLastName)) {
       fullName = `${inviteeFirstName || ''} ${inviteeLastName || ''}`.trim()
     }
     
-    // Si pas de nom dans l'URL, essayer sessionStorage
     if (!fullName) {
       const leadData = sessionStorage.getItem('leadData')
       if (leadData) {
@@ -61,7 +46,6 @@ export default function Confirmation1Page() {
       }
     }
     
-    // Formater la date et l'heure
     let formattedDate = ''
     let formattedTime = ''
     
@@ -84,7 +68,6 @@ export default function Confirmation1Page() {
       
       formattedDate = startDate.toLocaleDateString('fr-FR', dateOptions)
       
-      // Format: "16:30 - 17:00"
       const startTime = startDate.toLocaleTimeString('fr-FR', timeOptions)
       if (endDate) {
         const endTime = endDate.toLocaleTimeString('fr-FR', timeOptions)
@@ -107,9 +90,7 @@ export default function Confirmation1Page() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full">
-        {/* CARD PRINCIPALE */}
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-          {/* PHOTO PROFIL */}
           <div className="flex justify-center mb-6">
             <div className="w-24 h-24 rounded-full bg-gray-300 overflow-hidden">
               <Image 
@@ -122,7 +103,6 @@ export default function Confirmation1Page() {
             </div>
           </div>
 
-          {/* TITRE AVEC CHECKMARK */}
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
               <svg 
@@ -144,18 +124,15 @@ export default function Confirmation1Page() {
             </h1>
           </div>
 
-          {/* SOUS-TITRE */}
           <p className="text-center text-gray-600 mb-8">
             Une invitation a été envoyée à votre adresse email.
           </p>
 
-          {/* CARD DÉTAILS RDV */}
           <div className="bg-gray-50 rounded-xl p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               {appointmentData.eventTypeName}
             </h2>
 
-            {/* PERSONNE */}
             <div className="flex items-start gap-3">
               <svg 
                 className="w-6 h-6 text-gray-500 mt-1 flex-shrink-0" 
@@ -178,7 +155,6 @@ export default function Confirmation1Page() {
               </div>
             </div>
 
-            {/* DATE ET HEURE */}
             <div className="flex items-start gap-3">
               <svg 
                 className="w-6 h-6 text-gray-500 mt-1 flex-shrink-0" 
@@ -203,7 +179,6 @@ export default function Confirmation1Page() {
               </div>
             </div>
 
-            {/* FUSEAU HORAIRE */}
             <div className="flex items-start gap-3">
               <svg 
                 className="w-6 h-6 text-gray-500 mt-1 flex-shrink-0" 
@@ -221,7 +196,6 @@ export default function Confirmation1Page() {
               <p className="text-gray-900">{appointmentData.timezone}</p>
             </div>
 
-            {/* INFO CONFÉRENCE */}
             <div className="flex items-start gap-3">
               <svg 
                 className="w-6 h-6 text-gray-500 mt-1 flex-shrink-0" 
@@ -242,7 +216,6 @@ export default function Confirmation1Page() {
             </div>
           </div>
 
-          {/* BOUTON RETOUR (OPTIONNEL) */}
           <div className="mt-8 text-center">
             <a 
               href="/" 
