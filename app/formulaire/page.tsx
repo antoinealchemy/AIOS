@@ -301,9 +301,9 @@ export default function FormulairePage() {
 
       // REDIRECTION SELON QUALIFICATION
       if (data.qualified) {
-        router.push('/merci-qualifie')
+        router.push('/entretien1')
       } else {
-        router.push('/merci')
+        router.push('/entretien2')
       }
     } catch (error) {
       console.error('Erreur:', error)
