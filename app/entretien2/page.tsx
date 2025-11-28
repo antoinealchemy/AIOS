@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export default function MerciPage() {
-  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/presentation')
+  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/antoinealchemy/entretien')
 
   useEffect(() => {
     // PAS DE PIXEL FACEBOOK POUR LES NON QUALIFIÉS
@@ -21,7 +21,7 @@ export default function MerciPage() {
         a1: data.phone
       })
       
-      setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${params.toString()}`)
+      setCalendlyUrl(`https://calendly.com/antoinealchemy/entretien?${params.toString()}`)
     }
 
     // CHARGER SCRIPT CALENDLY
