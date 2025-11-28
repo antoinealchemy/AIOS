@@ -152,10 +152,6 @@ export default function FormulairePage() {
       const hasAllFields = formData.email && formData.phone
       const noEmailError = !emailError
       const noPhoneError = !phoneError
-      // Valider le téléphone avant de permettre la soumission
-      if (formData.phone) {
-        validatePhone(formData.phone, phoneCountry)
-      }
       return hasAllFields && noEmailError && noPhoneError
     }
 
@@ -272,11 +268,17 @@ export default function FormulairePage() {
   const handleSubmit = async () => {
     if (!isCurrentStepValid()) return
 
+    // VALIDATION FINALE DU TÉLÉPHONE
+    const phoneValid = validatePhone(formData.phone, phoneCountry)
+    if (!phoneValid) {
+      return // Arrêter si téléphone invalide
+    }
+
     setLoading(true)
 
     try {
       // FORMATER LE NUMÉRO DE TÉLÉPHONE AVEC CODE PAYS
-      const fullPhone = `${phoneCountry}${formData.phone.replace(/^0/, '')}`
+      const fullPhone = `${phoneCountry}${formData.phone.replace(/^0/, '').replace(/[\s\-\.]/g, '')}`
       
       const response = await fetch('/api/submit-lead', {
         method: 'POST',
