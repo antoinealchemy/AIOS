@@ -6,26 +6,13 @@ import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
   useEffect(() => {
-    fbq.event('ViewContent', {
-      content_name: 'Landing Page AIOS'
-    })
-
-    // FAQ Accordion
-    const faqButtons = document.querySelectorAll('.faq-question')
-    faqButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const faqItem = button.parentElement
-        const isActive = faqItem?.classList.contains('active')
-        
-        document.querySelectorAll('.faq-item').forEach(item => {
-          item.classList.remove('active')
-        })
-        
-        if (!isActive && faqItem) {
-          faqItem.classList.add('active')
-        }
+    // 👁️ PIXEL FACEBOOK - VIEWCONTENT
+    // Attendre 500ms que le script Facebook soit chargé
+    setTimeout(() => {
+      fbq.event('ViewContent', {
+        content_name: 'Landing Page AIOS'
       })
-    })
+    }, 500)
 
     // Smooth scroll
     document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
