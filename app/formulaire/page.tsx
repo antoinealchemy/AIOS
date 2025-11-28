@@ -158,19 +158,11 @@ export default function FormulairePage() {
     return value && value !== ''
   }
 
-  // VALIDER EMAIL (simple regex + vérification format)
+  // VALIDER EMAIL (format basique uniquement)
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       setEmailError('Format d\'email invalide')
-      return false
-    }
-    
-    // Liste de domaines email suspects/jetables
-    const disposableDomains = ['tempmail', 'throwaway', '10minutemail', 'guerrillamail', 'mailinator']
-    const domain = email.split('@')[1]
-    if (disposableDomains.some(d => domain.includes(d))) {
-      setEmailError('Veuillez utiliser un email professionnel')
       return false
     }
     
