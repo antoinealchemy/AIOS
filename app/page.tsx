@@ -1930,21 +1930,21 @@ export default function HomePage() {
             <div className="stats-grid">
                 <div className="stat-item">
                     <div className="stat-number">
-                        <span className="stat-prefix">+</span><span className="stat-counter" data-target="300">0</span><span className="stat-suffix">h/an</span>
+                        <span className="stat-counter" data-target="20">0</span><span className="stat-suffix">min</span>
                     </div>
-                    <div className="stat-label">économisées pour nos clients</div>
+                    <div className="stat-label">économisées avant chaque appel client</div>
                 </div>
                 <div className="stat-item">
                     <div className="stat-number">
-                        <span className="stat-counter" data-target="7">0</span><span className="stat-suffix stat-suffix-small"> secondes</span>
+                        <span className="stat-counter" data-target="98">0</span><span className="stat-suffix">%</span>
                     </div>
-                    <div className="stat-label">pour retrouver n'importe quel document</div>
+                    <div className="stat-label">de taux de réponse précise</div>
                 </div>
                 <div className="stat-item">
                     <div className="stat-number">
-                        <span className="stat-prefix">+</span><span className="stat-counter" data-target="3">0</span><span className="stat-suffix"> ans</span>
+                        <span className="stat-counter" data-target="100">0</span><span className="stat-suffix">%</span>
                     </div>
-                    <div className="stat-label">d'expérience dans le prompt engineering</div>
+                    <div className="stat-label">de vos infos clients centralisées</div>
                 </div>
             </div>
         </div>
