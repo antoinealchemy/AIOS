@@ -2004,7 +2004,7 @@ export default function HomePage() {
         <div className="container">
             <div className="badge">Pour qui ?</div>
             <h2 className="section-title" style={{ marginBottom: 16 }}>
-                AI<span className="gradient-text">OS</span> N'est Pas Pour <span className="gradient-text">Tout Le Monde</span>
+                AI<span className="gradient-text">OS</span> N'est Pas Pour Tout Le Monde
             </h2>
             <p className="section-subtitle">
                 C'est pour les entreprises de services qui gèrent plusieurs clients et veulent économiser leur temps en centralisant leurs informations.
@@ -2052,7 +2052,7 @@ export default function HomePage() {
         <div className="container">
             <div className="badge">Résultats</div>
             <h2 className="section-title">
-                Nos Clients en Parlent <span className="gradient-text">Mieux Que Nous</span>
+                Nos Clients en Parlent Mieux Que Nous
             </h2>
 
             <div className="carousel-wrapper">
@@ -2316,7 +2316,7 @@ export default function HomePage() {
         <div className="container">
             <div className="badge">FAQ</div>
             <h2 className="section-title">
-                Les Questions <span className="gradient-text">Fréquentes</span>
+                Les Questions Fréquentes
             </h2>
 
             <div className="faq-container">
