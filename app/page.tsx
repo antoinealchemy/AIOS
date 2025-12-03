@@ -1873,26 +1873,26 @@ export default function HomePage() {
             </div>
 
             <h1 className="title-desktop">
-                Arrêtez de Perdre 20 Min à Chercher<br />
-                <span className="gradient-text">Avant Chaque Rendez-vous Client</span>
+                <span className="gradient-text">Arrêtez de Perdre 20 Min à Chercher</span><br />
+                Avant Chaque Rendez-vous Client
             </h1>
 
             <h1 className="title-mobile">
-                Arrêtez de Perdre<br />
-                20 Min à Chercher<br />
-                <span className="gradient-text">Avant Chaque<br />Rendez-vous Client</span>
+                <span className="gradient-text">Arrêtez de Perdre<br />
+                20 Min à Chercher</span><br />
+                Avant Chaque<br />Rendez-vous Client
             </h1>
 
             <p className="subtitle subtitle-desktop">
                 Votre équipe pose une question sur n'importe quel client et obtient<br />
-                réponse instantanée : emails, docs, historique, tout est centralisé.
+                réponse instantanée : emails, docs, historique, <u>tout est centralisé</u>.
             </p>
 
             <p className="subtitle subtitle-mobile">
                 Votre équipe pose une question<br />
                 sur n'importe quel client et obtient<br />
                 réponse instantanée : emails, docs,<br />
-                historique, tout est centralisé.
+                historique, <u>tout est centralisé</u>.
             </p>
 
             <div className="hero-cta">
