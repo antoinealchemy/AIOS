@@ -1869,32 +1869,30 @@ export default function HomePage() {
 
         <div className="hero-content">
             <div className="badge">
-                Entreprises 2-10 personnes :
+                Cabinets de conseil :
             </div>
 
             <h1 className="title-desktop">
-                Centralisez Toutes<br />
-                <span className="gradient-text">Vos Infos Clients</span><br />
-                Sans Toucher à Vos Outils
+                Arrêtez de Perdre 20 Min à Chercher<br />
+                <span className="gradient-text">Avant Chaque Rendez-vous Client</span>
             </h1>
 
             <h1 className="title-mobile">
-                Centralisez Toutes<br />
-                <span className="gradient-text">Vos Infos Clients</span><br />
-                Sans Toucher<br />
-                à Vos Outils
+                Arrêtez de Perdre<br />
+                20 Min à Chercher<br />
+                <span className="gradient-text">Avant Chaque<br />Rendez-vous Client</span>
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                Aucune migration, aucun paramétrage technique.<br />
-                On connecte vos outils existants, l'IA fait le reste.
+                Votre équipe pose une question sur n'importe quel client et obtient<br />
+                réponse instantanée : emails, docs, historique, tout est centralisé.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Aucune migration, aucun<br />
-                paramétrage technique.<br />
-                On connecte vos outils existants,<br />
-                l'IA fait le reste.
+                Votre équipe pose une question<br />
+                sur n'importe quel client et obtient<br />
+                réponse instantanée : emails, docs,<br />
+                historique, tout est centralisé.
             </p>
 
             <div className="hero-cta">
