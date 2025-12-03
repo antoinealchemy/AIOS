@@ -1965,7 +1965,7 @@ export default function HomePage() {
                     <div className="feature-image-wrapper">
                         <img src="image1.png" alt="Cerveau IA" className="feature-image" />
                     </div>
-                    <h3>Votre nouveau cerveau qui révolutionne votre business</h3>
+                    <h3>Votre Mémoire d'Entreprise Centralisée</h3>
                     <p>On installe et personnalisons pour vous un assistant IA qui connaît votre entreprise en profondeur. Accessible par toute l'équipe. Question → Réponse instantanée.</p>
                 </div>
 
