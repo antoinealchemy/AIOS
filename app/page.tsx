@@ -2328,7 +2328,7 @@ export default function HomePage() {
                         </svg>
                     </button>
                     <div className="faq-answer">
-                        AIOS, c'est votre nouvel assistant intelligent qui centralise toutes les informations de votre entreprise. On analyse en profondeur votre activité, vos clients, vos projets et vos processus, puis on configure une intelligence artificielle de pointe spécialement entraînée pour votre business. Le résultat ? Vous posez une question, vous obtenez la réponse précise en moins de 7 secondes. Plus besoin de chercher dans 5 outils différents : tout est à portée de main, instantanément.
+                        AIOS, c'est votre nouvel assistant intelligent qui centralise toutes les informations de votre entreprise. Le résultat ? Vous posez une question, vous obtenez la réponse précise instantanément. Plus besoin de chercher dans 5 outils différents : tout est à portée de main, instantanément.
                     </div>
                 </div>
 
@@ -2364,7 +2364,7 @@ export default function HomePage() {
                         </svg>
                     </button>
                     <div className="faq-answer">
-                        7 jours du début à la fin. Vous nous partagez de manière sécurisée les connexions à vos outils (Gmail, CRM, Drive, etc.) et vous répondez à quelques questions sur votre activité (2-3h de votre temps au total). Nous nous occupons de tout le reste. Au bout de 7 jours, votre livrable complet est prêt à l'emploi.
+                        2 semaines du début à la fin. Nous vous transmettons les formulaires à remplir et on s'occupe d'absolument toute la configuration interne de votre assistant. Au bout de 2 semaines, votre livrable complet est prêt à l'emploi.
                     </div>
                 </div>
 
@@ -2376,7 +2376,7 @@ export default function HomePage() {
                         </svg>
                     </button>
                     <div className="faq-answer">
-                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise), une formation vidéo de 30 minutes pour vous et votre équipe, et 3 mois de support inclus (email/WhatsApp, réponse sous 24h). Tout est clé en main.
+                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise) et une courte formation vidéo pour vous aider à exploiter votre assistant à 100% de son potentiel. Tout est clé en main.
                     </div>
                 </div>
             </div>
