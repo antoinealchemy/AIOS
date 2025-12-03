@@ -1966,7 +1966,7 @@ export default function HomePage() {
                         <img src="image1.png" alt="Cerveau IA" className="feature-image" />
                     </div>
                     <h3>Votre nouveau cerveau qui révolutionne votre business</h3>
-                    <p>On installe pour vous un assistant IA qui connaît votre business en profondeur : Emails, docs, décisions, clients, KPIs. Accessible par toute l'équipe. Question → Réponse en 7 secondes.</p>
+                    <p>On installe et personnalisons pour vous un assistant IA qui connaît votre entreprise en profondeur. Accessible par toute l'équipe. Question → Réponse instantanée.</p>
                 </div>
 
                 {/* Feature 2 */}
@@ -1984,7 +1984,7 @@ export default function HomePage() {
                         <img src="image3.png" alt="Recherche instantanée" className="feature-image" />
                     </div>
                     <h3>Zéro temps perdu à chercher</h3>
-                    <p>Budget client ? Historique projet ? Décision passée ? KPIs performance ? L'info arrive en 7 secondes. Plus jamais 20 min à chercher dans vos outils. Toute l'équipe gagne du temps.</p>
+                    <p>Informations sur un client ? Historique d'un projet ? Décision passée ? Ne perdez plus jamais 20 min à chercher l'information.</p>
                 </div>
 
                 {/* Feature 4 */}
@@ -1992,8 +1992,8 @@ export default function HomePage() {
                     <div className="feature-image-wrapper">
                         <img src="image4.png" alt="Analyse 24/7" className="feature-image" />
                     </div>
-                    <h3>Analyse et audit de votre business 24/7</h3>
-                    <p>L'IA analyse vos données clients et projets. Vous alerte sur les opportunités (cross-sell, upsell) et les risques (client silencieux, projet bloqué). Aide à décider, pas à deviner.</p>
+                    <h3>Vision 360° Sur Votre Entreprise</h3>
+                    <p>Interrogez votre base de données complète pour obtenir une vue d'ensemble instantanée.</p>
                 </div>
             </div>
         </div>
