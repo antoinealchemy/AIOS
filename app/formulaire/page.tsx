@@ -18,7 +18,7 @@ const INITIAL_QUESTION = {
 const QUESTIONS = [
   {
     id: 'interested',
-    label: 'Êtes-vous vraiment intéressé par notre service, {firstName} ?',
+    label: '{firstName}, êtes-vous vraiment intéressé par notre solution ?',
     type: 'radio',
     options: [
       'Oui, je suis intéressé et je cherche une solution',
@@ -27,52 +27,41 @@ const QUESTIONS = [
     ]
   },
   {
-    id: 'role',
-    label: 'Quel est votre rôle actuellement ?',
+    id: 'activity',
+    label: 'Quelle est votre activité ?',
     type: 'radio',
     options: [
-      'Dirigeant d\'une structure de services (1 personne - solopreneur)',
-      'Dirigeant d\'une structure de services (2-10 personnes)',
-      'Dirigeant d\'une structure de services (plus de 10 personnes)',
-      'Manager/Employé (je ne suis pas décisionnaire)',
+      'Cabinet de conseil (stratégie, transformation digitale, management)',
+      'Agence web / digitale',
+      'Agence marketing / communication',
+      'Cabinet d\'experts-comptables',
       'Autre'
     ],
     hasOther: true
   },
   {
-    id: 'businessDescription',
-    label: 'Pouvez-vous nous décrire brièvement votre activité ?',
-    type: 'text',
-    placeholder: 'Ex: Cabinet de conseil en transformation digitale, Agence marketing B2B...',
-    conditional: (data: any) => data.role && data.role !== 'Manager/Employé (je ne suis pas décisionnaire)'
+    id: 'website',
+    label: 'Quel est le site web de votre entreprise ?',
+    type: 'website',
+    placeholder: 'https://votre-entreprise.com',
+    checkboxLabel: 'Je n\'ai pas de site web'
   },
   {
-    id: 'toolsUsed',
-    label: '{firstName}, utilisez-vous des outils pour coordonner votre activité et gérer vos clients ?',
+    id: 'role',
+    label: 'Quel est votre rôle dans l\'entreprise ?',
     type: 'radio',
     options: [
-      'Oui, plusieurs outils (CRM, gestion projet, docs partagés, etc.)',
-      'Oui, 1-2 outils basiques (Excel, Gmail, Drive)',
-      'Non, tout est dans ma tête ou sur papier',
-      'On a essayé mais on n\'utilise plus'
-    ]
-  },
-  {
-    id: 'problems',
-    label: 'Quel(s) est/sont vos plus gros problème(s) aujourd\'hui ? (Plusieurs choix possibles)',
-    type: 'checkbox',
-    options: [
-      'Temps perdu à chercher des informations',
-      'Difficile de coordonner l\'équipe (contexte dispersé)',
-      'Manque de vision stratégique sur mon activité',
-      'Préparation des rendez-vous clients trop longue',
+      'Dirigeant / CEO / Fondateur',
+      'Associé / Co-dirigeant',
+      'Directeur (Marketing, Digital, Opérations, etc.)',
+      'Manager / Employé',
       'Autre'
     ],
     hasOther: true
   },
   {
     id: 'budget',
-    label: 'Quel budget êtes-vous prêt à investir pour résoudre ce(s) problème(s) ?',
+    label: 'Quel budget êtes-vous prêt à investir pour cette solution ?',
     type: 'radio',
     options: [
       'Moins de 1 500€',
@@ -82,22 +71,12 @@ const QUESTIONS = [
       'Plus de 10 000€',
       'Je ne sais pas encore'
     ]
-  },
-  {
-    id: 'urgency',
-    label: 'Une dernière chose : nous ne travaillons qu\'avec 4 entreprises par mois pour garantir la qualité. Êtes-vous prêt à démarrer rapidement si sélectionné ?',
-    type: 'radio',
-    options: [
-      'Oui, dès que possible (cette semaine)',
-      'Oui, mais dans 1 mois maximum',
-      'Non, je réfléchis encore / pas d\'urgence'
-    ]
   }
 ]
 
 const CONTACT_FIELDS = [
   { id: 'email', label: 'Adresse e-mail', type: 'email', required: true, validate: true },
-  { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '6 12 34 56 78', required: true, international: true }
+  { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true, international: true }
 ]
 
 export default function FormulairePage() {
@@ -109,201 +88,107 @@ export default function FormulairePage() {
   const [phoneCountry, setPhoneCountry] = useState('+33')
   const [formData, setFormData] = useState<any>({
     interested: '',
+    activity: '',
+    activityOther: '',
+    website: '',
+    noWebsite: false,
     role: '',
     roleOther: '',
-    businessDescription: '',
-    toolsUsed: '',
-    problems: [],
-    problemsOther: '',
     budget: '',
-    urgency: '',
     firstName: '',
     lastName: '',
     email: '',
     phone: ''
   })
 
-  // FILTRER LES QUESTIONS SELON CONDITIONS
-  const activeQuestions = QUESTIONS.filter(q => {
-    if (q.conditional) {
-      return q.conditional(formData)
-    }
-    return true
-  })
+  const totalSteps = QUESTIONS.length + 2 // +1 pour nom/prénom, +1 pour contact
 
-  const isNameStep = currentStep === 0
-  const totalSteps = activeQuestions.length + 1 // +1 pour l'étape nom
-  const isContactStep = currentStep >= totalSteps
-  const currentQuestion = isNameStep ? null : activeQuestions[currentStep - 1]
-
-  // CALCULER LA PROGRESSION
-  const progress = isContactStep 
-    ? 100 
-    : Math.round(((currentStep + 1) / (totalSteps + 1)) * 100)
-
-  // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
-  const isCurrentStepValid = () => {
-    if (isNameStep) {
-      return formData.firstName && formData.firstName.trim().length > 0 &&
-             formData.lastName && formData.lastName.trim().length > 0
-    }
-
-    if (isContactStep) {
-      const hasAllFields = formData.email && formData.phone
-      const noEmailError = !emailError
-      const noPhoneError = !phoneError
-      return hasAllFields && noEmailError && noPhoneError
-    }
-
-    // S'assurer que question existe
-    if (!currentQuestion) return false
-
-    const question = currentQuestion
-    const value = formData[question.id]
-
-    if (question.type === 'checkbox') {
-      return value && value.length > 0
-    }
-
-    if (question.type === 'text') {
-      return value && value.trim().length > 0
-    }
-
-    if (question.hasOther && value === 'Autre') {
-      const otherValue = formData[`${question.id}Other`]
-      return otherValue && otherValue.trim().length > 0
-    }
-
-    return value && value !== ''
-  }
-
-  // VALIDER EMAIL (format basique uniquement)
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setEmailError('Format d\'email invalide')
-      return false
-    }
-    
-    setEmailError('')
-    return true
-  }
-
-  // VALIDER TÉLÉPHONE FRANÇAIS (10 chiffres)
-  const validatePhone = (phone: string, countryCode: string) => {
-    if (!phone || !countryCode) {
-      setPhoneError('')
-      return false
-    }
-    
-    // Retirer espaces, tirets, points
-    const cleanPhone = phone.replace(/[\s\-\.]/g, '')
-    
-    // Validation pour France (+33)
-    if (countryCode === '+33') {
-      // Accepter 06... ou 6... (10 chiffres au total)
-      const phoneRegex = /^0?[1-9]\d{8}$/
-      
-      if (!phoneRegex.test(cleanPhone)) {
-        setPhoneError('Numéro français invalide (10 chiffres attendus)')
-        return false
-      }
-    } else {
-      // Pour autres pays : au moins 8 chiffres
-      if (cleanPhone.length < 8) {
-        setPhoneError('Numéro de téléphone trop court')
-        return false
-      }
-    }
-    
-    setPhoneError('')
-    return true
-  }
-
-  const handleChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }))
-    
-    // Validation email en temps réel SEULEMENT si l'email semble complet
-    if (field === 'email' && value && typeof value === 'string') {
-      if (value.includes('@') && value.split('@')[1]?.includes('.')) {
-        validateEmail(value)
-      } else {
-        setEmailError('')
-      }
-    }
-    
-    // Validation téléphone en temps réel SEULEMENT si au moins 8 chiffres
-    if (field === 'phone' && value && typeof value === 'string') {
-      const cleanPhone = value.replace(/[\s\-\.]/g, '')
-      if (cleanPhone.length >= 8) {
-        validatePhone(value, phoneCountry)
-      } else {
-        setPhoneError('')
-      }
+  const handleNameSubmit = () => {
+    if (formData.firstName.trim() && formData.lastName.trim()) {
+      setCurrentStep(1)
     }
   }
 
-  const handleCheckboxChange = (field: string, value: string) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      [field]: prev[field].includes(value)
-        ? prev[field].filter((v: string) => v !== value)
-        : [...prev[field], value]
-    }))
+  const handleAnswerSelect = (questionId: string, value: any) => {
+    setFormData({ ...formData, [questionId]: value })
   }
 
   const handleNext = () => {
-    if (isCurrentStepValid()) {
-      setCurrentStep(prev => prev + 1)
+    const question = QUESTIONS[currentStep - 1]
+    
+    // Validation pour la question website
+    if (question?.id === 'website') {
+      if (!formData.noWebsite && !formData.website.trim()) {
+        return // Ne pas avancer si pas de site web ET checkbox non cochée
+      }
     }
+    
+    // Validation pour les autres questions
+    if (question?.type === 'radio' && !formData[question.id]) {
+      return
+    }
+    
+    if (question?.hasOther && formData[question.id] === 'Autre' && !formData[`${question.id}Other`]?.trim()) {
+      return
+    }
+    
+    setCurrentStep(currentStep + 1)
   }
 
-  const handlePrevious = () => {
+  const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1)
+      setCurrentStep(currentStep - 1)
     }
   }
 
-  // SOUMISSION FINALE
-  const handleSubmit = async () => {
-    if (!isCurrentStepValid()) return
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return re.test(email)
+  }
 
-    // VALIDATION FINALE DU TÉLÉPHONE
-    const phoneValid = validatePhone(formData.phone, phoneCountry)
-    if (!phoneValid) {
-      return // Arrêter si téléphone invalide
+  const validatePhone = (phone: string) => {
+    const cleaned = phone.replace(/\s/g, '')
+    return cleaned.length >= 10
+  }
+
+  const handleSubmit = async () => {
+    setEmailError('')
+    setPhoneError('')
+
+    if (!validateEmail(formData.email)) {
+      setEmailError('Veuillez entrer une adresse e-mail valide')
+      return
+    }
+
+    if (!validatePhone(formData.phone)) {
+      setPhoneError('Veuillez entrer un numéro de téléphone valide')
+      return
     }
 
     setLoading(true)
 
     try {
-      // FORMATER LE NUMÉRO DE TÉLÉPHONE AVEC CODE PAYS
-      const fullPhone = `${phoneCountry}${formData.phone.replace(/^0/, '').replace(/[\s\-\.]/g, '')}`
-      
       const response = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          phone: fullPhone
+          phone: phoneCountry + formData.phone.replace(/\s/g, '')
         })
       })
 
-      const data = await response.json()
+      const result = await response.json()
 
-      // STOCKER LES DONNÉES DU LEAD DANS SESSIONSTORAGE POUR PRÉ-REMPLISSAGE CALENDLY
-      sessionStorage.setItem('leadData', JSON.stringify({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: fullPhone
-      }))
-
-      // REDIRECTION SELON QUALIFICATION
-      if (data.qualified) {
-        router.push('/entretien1')
+      if (result.success) {
+        // Redirection selon qualification
+        if (result.qualified) {
+          router.push('/merci-qualifie')
+        } else {
+          router.push('/merci')
+        }
       } else {
-        router.push('/entretien2')
+        alert('Une erreur est survenue. Veuillez réessayer.')
+        setLoading(false)
       }
     } catch (error) {
       console.error('Erreur:', error)
@@ -312,282 +197,503 @@ export default function FormulairePage() {
     }
   }
 
-  // RENDER QUESTION
   const renderQuestion = () => {
-    // ÉTAPE 1 : PRÉNOM + NOM
-    if (isNameStep) {
+    // ÉTAPE 0: Nom et prénom
+    if (currentStep === 0) {
       return (
-        <div className="space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
-            {INITIAL_QUESTION.label}
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
+        <div className="question-container">
+          <h2 className="question-title">{INITIAL_QUESTION.label}</h2>
+          <div className="name-fields">
             {INITIAL_QUESTION.fields.map((field) => (
-              <div key={field.id}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {field.label} *
-                </label>
+              <div key={field.id} className="input-group">
+                <label>{field.label}</label>
                 <input
                   type="text"
-                  value={formData[field.id]}
-                  onChange={(e) => handleChange(field.id, e.target.value)}
                   placeholder={field.placeholder}
-                  required
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                  value={formData[field.id] || ''}
+                  onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
+                  className="text-input"
                 />
               </div>
             ))}
           </div>
+          <button
+            onClick={handleNameSubmit}
+            disabled={!formData.firstName.trim() || !formData.lastName.trim()}
+            className="btn-next"
+          >
+            Suivant
+          </button>
         </div>
       )
     }
 
-    // ÉTAPE FINALE : EMAIL + TÉLÉPHONE
-    if (isContactStep) {
+    // ÉTAPE FINALE: Contact
+    if (currentStep === totalSteps - 1) {
       return (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {formData.firstName}, dernière étape : vos coordonnées
-          </h2>
-          <div className="space-y-4">
-            {CONTACT_FIELDS.map((field) => {
-              if (field.id === 'phone') {
-                return (
-                  <div key={field.id} className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {field.label} {field.required && '*'}
-                    </label>
-                    <div className="flex gap-2">
-                      <select
-                        value={phoneCountry}
-                        onChange={(e) => setPhoneCountry(e.target.value)}
-                        className="w-28 px-3 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none appearance-none bg-white"
-                        style={{
-                          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                          backgroundPosition: 'right 0.5rem center',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundSize: '1.5em 1.5em',
-                          paddingRight: '2.5rem'
-                        }}
-                      >
-                        <option value="+33">🇫🇷 +33</option>
-                        <option value="+32">🇧🇪 +32</option>
-                        <option value="+41">🇨🇭 +41</option>
-                        <option value="+352">🇱🇺 +352</option>
-                        <option value="+1">🇺🇸 +1</option>
-                        <option value="+44">🇬🇧 +44</option>
-                        <option value="+49">🇩🇪 +49</option>
-                        <option value="+34">🇪🇸 +34</option>
-                        <option value="+39">🇮🇹 +39</option>
-                      </select>
-                      <input
-                        type="tel"
-                        value={formData[field.id]}
-                        onChange={(e) => handleChange(field.id, e.target.value)}
-                        placeholder={field.placeholder}
-                        required={field.required}
-                        className={`flex-1 px-4 py-3 border-2 rounded-lg focus:outline-none ${
-                          phoneError 
-                            ? 'border-red-500 focus:border-red-500' 
-                            : 'border-gray-300 focus:border-blue-500'
-                        }`}
-                      />
-                    </div>
-                    {phoneError && (
-                      <p className="mt-1 text-sm text-red-600">{phoneError}</p>
-                    )}
-                  </div>
-                )
-              }
-              
-              return (
-                <div key={field.id}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.label} {field.required && '*'}
-                  </label>
-                  <input
-                    type={field.type}
-                    value={formData[field.id]}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none ${
-                      field.id === 'email' && emailError 
-                        ? 'border-red-500 focus:border-red-500' 
-                        : 'border-gray-300 focus:border-blue-500'
-                    }`}
-                  />
-                  {field.id === 'email' && emailError && (
-                    <p className="mt-1 text-sm text-red-600">{emailError}</p>
-                  )}
-                </div>
-              )
-            })}
+        <div className="question-container">
+          <h2 className="question-title">Dernière étape : comment peut-on vous recontacter ?</h2>
+          
+          <div className="contact-fields">
+            <div className="input-group">
+              <label>Adresse e-mail *</label>
+              <input
+                type="email"
+                placeholder="votre@email.com"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value })
+                  setEmailError('')
+                }}
+                className={`text-input ${emailError ? 'error' : ''}`}
+              />
+              {emailError && <span className="error-message">{emailError}</span>}
+            </div>
+
+            <div className="input-group">
+              <label>Numéro de téléphone *</label>
+              <div className="phone-input-wrapper">
+                <select
+                  value={phoneCountry}
+                  onChange={(e) => setPhoneCountry(e.target.value)}
+                  className="phone-country"
+                >
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+32">🇧🇪 +32</option>
+                  <option value="+41">🇨🇭 +41</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                </select>
+                <input
+                  type="tel"
+                  placeholder="06 12 34 56 78"
+                  value={formData.phone}
+                  onChange={(e) => {
+                    setFormData({ ...formData, phone: e.target.value })
+                    setPhoneError('')
+                  }}
+                  className={`text-input phone-number ${phoneError ? 'error' : ''}`}
+                />
+              </div>
+              {phoneError && <span className="error-message">{phoneError}</span>}
+            </div>
+          </div>
+
+          <div className="nav-buttons">
+            <button onClick={handleBack} className="btn-back">Retour</button>
+            <button
+              onClick={handleSubmit}
+              disabled={loading || !formData.email || !formData.phone}
+              className="btn-submit"
+            >
+              {loading ? 'Envoi en cours...' : 'Réserver mon appel'}
+            </button>
           </div>
         </div>
       )
     }
 
-    // QUESTIONS STANDARDS AVEC PERSONNALISATION
-    if (!currentQuestion) return null
-    
-    const question = currentQuestion
-    const personalizedLabel = question.label.replace('{firstName}', formData.firstName || 'Prénom')
+    // QUESTIONS INTERMÉDIAIRES
+    const question = QUESTIONS[currentStep - 1]
+    const questionLabel = question.label.replace('{firstName}', formData.firstName)
 
     return (
-      <div>
-        <label className="block text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          {personalizedLabel}
-        </label>
+      <div className="question-container">
+        <h2 className="question-title">{questionLabel}</h2>
 
-        {question.type === 'radio' && (
-          <div className="space-y-3">
-            {question.options?.map((option) => (
-              <label
+        {/* TYPE: RADIO */}
+        {question.type === 'radio' && question.options && (
+          <div className="options-list">
+            {question.options.map((option) => (
+              <button
                 key={option}
-                className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all"
+                onClick={() => handleAnswerSelect(question.id, option)}
+                className={`option-button ${formData[question.id] === option ? 'selected' : ''}`}
               >
-                <input
-                  type="radio"
-                  name={question.id}
-                  value={option}
-                  checked={formData[question.id] === option}
-                  onChange={(e) => handleChange(question.id, e.target.value)}
-                  className="w-5 h-5 text-blue-600"
-                />
-                <span className="ml-3 text-gray-700">{option}</span>
-              </label>
+                {option}
+              </button>
             ))}
           </div>
         )}
 
-        {question.type === 'checkbox' && (
-          <div className="space-y-3">
-            {question.options?.map((option) => (
-              <label
-                key={option}
-                className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all"
-              >
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={formData[question.id].includes(option)}
-                  onChange={() => handleCheckboxChange(question.id, option)}
-                  className="w-5 h-5 text-blue-600 rounded"
-                />
-                <span className="ml-3 text-gray-700">{option}</span>
-              </label>
-            ))}
-          </div>
-        )}
-
-        {question.type === 'text' && (
-          <input
-            type="text"
-            value={formData[question.id]}
-            onChange={(e) => handleChange(question.id, e.target.value)}
-            placeholder={question.placeholder}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
-        )}
-
+        {/* CHAMP "AUTRE" pour radio */}
         {question.hasOther && formData[question.id] === 'Autre' && (
-          <input
-            type="text"
-            placeholder="Précisez..."
-            value={formData[`${question.id}Other`]}
-            onChange={(e) => handleChange(`${question.id}Other`, e.target.value)}
-            className="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
+          <div className="input-group" style={{ marginTop: '16px' }}>
+            <input
+              type="text"
+              placeholder="Précisez..."
+              value={formData[`${question.id}Other`] || ''}
+              onChange={(e) => setFormData({ ...formData, [`${question.id}Other`]: e.target.value })}
+              className="text-input"
+            />
+          </div>
         )}
 
-        {question.hasOther && question.type === 'checkbox' && formData[question.id].includes('Autre') && (
-          <input
-            type="text"
-            placeholder="Précisez votre problème..."
-            value={formData[`${question.id}Other`]}
-            onChange={(e) => handleChange(`${question.id}Other`, e.target.value)}
-            className="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
+        {/* TYPE: WEBSITE */}
+        {question.type === 'website' && (
+          <div className="website-field">
+            <input
+              type="text"
+              placeholder={question.placeholder}
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              disabled={formData.noWebsite}
+              className="text-input"
+            />
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={formData.noWebsite}
+                onChange={(e) => setFormData({ ...formData, noWebsite: e.target.checked, website: '' })}
+              />
+              <span>{question.checkboxLabel}</span>
+            </label>
+          </div>
         )}
+
+        <div className="nav-buttons">
+          <button onClick={handleBack} className="btn-back">Retour</button>
+          <button
+            onClick={handleNext}
+            disabled={
+              (question.type === 'radio' && !formData[question.id]) ||
+              (question.hasOther && formData[question.id] === 'Autre' && !formData[`${question.id}Other`]?.trim()) ||
+              (question.type === 'website' && !formData.noWebsite && !formData.website.trim())
+            }
+            className="btn-next"
+          >
+            Suivant
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
-      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <Image 
-            src="/logo.png" 
-            alt="AIOS Logo" 
-            width={120} 
-            height={40}
-            className="h-10 w-auto"
-          />
-        </div>
-      </header>
+    <>
+      <style jsx global>{`
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
 
-      <main className="max-w-3xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-          
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-600">
-                {isNameStep
-                  ? 'Étape 1 : Présentation'
-                  : isContactStep 
-                  ? 'Dernière étape : Coordonnées' 
-                  : `Question ${currentStep} sur ${totalSteps - 1}`}
-              </span>
-              <span className="text-sm font-medium text-blue-600">{progress}%</span>
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: #F8F8F8;
+          color: #1a1a1a;
+          line-height: 1.6;
+        }
+
+        .form-page {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        /* Header */
+        .form-header {
+          background: white;
+          padding: 20px 24px;
+          border-bottom: 1px solid #E5E7EB;
+        }
+
+        .header-content {
+          max-width: 800px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .logo-link {
+          display: flex;
+          align-items: center;
+        }
+
+        .logo-img {
+          height: 40px;
+          width: auto;
+        }
+
+        .progress-bar-container {
+          flex: 1;
+          max-width: 300px;
+          margin-left: 40px;
+        }
+
+        .progress-text {
+          font-size: 13px;
+          color: #6C6C6C;
+          margin-bottom: 8px;
+          text-align: right;
+        }
+
+        .progress-bar {
+          height: 8px;
+          background: #E5E7EB;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          transition: width 0.3s ease;
+        }
+
+        /* Main Content */
+        .form-content {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 40px 24px;
+        }
+
+        .question-container {
+          width: 100%;
+          max-width: 600px;
+          background: white;
+          padding: 48px;
+          border-radius: 16px;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .question-title {
+          font-size: 28px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 32px;
+          line-height: 1.3;
+        }
+
+        /* Name Fields */
+        .name-fields {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 32px;
+        }
+
+        .input-group {
+          flex: 1;
+        }
+
+        .input-group label {
+          display: block;
+          font-size: 14px;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin-bottom: 8px;
+        }
+
+        .text-input {
+          width: 100%;
+          padding: 14px 16px;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          font-size: 16px;
+          transition: all 0.2s;
+        }
+
+        .text-input:focus {
+          outline: none;
+          border-color: #3B82F6;
+        }
+
+        .text-input.error {
+          border-color: #EF4444;
+        }
+
+        .error-message {
+          display: block;
+          color: #EF4444;
+          font-size: 13px;
+          margin-top: 6px;
+        }
+
+        /* Options List */
+        .options-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 32px;
+        }
+
+        .option-button {
+          width: 100%;
+          padding: 16px 20px;
+          background: white;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #1a1a1a;
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: left;
+        }
+
+        .option-button:hover {
+          border-color: #3B82F6;
+          background: #F0F9FF;
+        }
+
+        .option-button.selected {
+          border-color: #3B82F6;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          color: white;
+        }
+
+        /* Website Field */
+        .website-field {
+          margin-bottom: 32px;
+        }
+
+        .checkbox-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 12px;
+          cursor: pointer;
+          font-size: 14px;
+          color: #6C6C6C;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+          width: 18px;
+          height: 18px;
+          cursor: pointer;
+        }
+
+        /* Contact Fields */
+        .contact-fields {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          margin-bottom: 32px;
+        }
+
+        .phone-input-wrapper {
+          display: flex;
+          gap: 8px;
+        }
+
+        .phone-country {
+          padding: 14px 12px;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          font-size: 16px;
+          cursor: pointer;
+          background: white;
+        }
+
+        .phone-number {
+          flex: 1;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+          display: flex;
+          gap: 12px;
+          margin-top: 32px;
+        }
+
+        .btn-back {
+          padding: 14px 24px;
+          background: white;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #6C6C6C;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+          border-color: #3B82F6;
+          color: #3B82F6;
+        }
+
+        .btn-next,
+        .btn-submit {
+          flex: 1;
+          padding: 14px 24px;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          border: none;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-next:hover,
+        .btn-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-next:disabled,
+        .btn-submit:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          .question-container {
+            padding: 32px 24px;
+          }
+
+          .question-title {
+            font-size: 24px;
+          }
+
+          .name-fields {
+            flex-direction: column;
+          }
+
+          .progress-bar-container {
+            margin-left: 20px;
+            max-width: 200px;
+          }
+
+          .header-content {
+            flex-wrap: wrap;
+          }
+        }
+      `}</style>
+
+      <div className="form-page">
+        {/* Header */}
+        <header className="form-header">
+          <div className="header-content">
+            <a href="/" className="logo-link">
+              <Image src="/logo.png" alt="AIOS" width={120} height={40} className="logo-img" />
+            </a>
+            <div className="progress-bar-container">
+              <div className="progress-text">
+                Étape {currentStep + 1} sur {totalSteps}
+              </div>
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div 
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
           </div>
+        </header>
 
-          <div className="mb-8">
-            {renderQuestion()}
-          </div>
-
-          <div className="flex gap-4">
-            {currentStep > 0 && (
-              <button
-                onClick={handlePrevious}
-                disabled={loading}
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
-              >
-                ← Précédent
-              </button>
-            )}
-
-            {!isContactStep && (
-              <button
-                onClick={handleNext}
-                disabled={!isCurrentStepValid() || loading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Continuer →
-              </button>
-            )}
-
-            {isContactStep && (
-              <button
-                onClick={handleSubmit}
-                disabled={!isCurrentStepValid() || loading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Envoi en cours...' : 'Vérifier mon éligibilité →'}
-              </button>
-            )}
-          </div>
-
-        </div>
-      </main>
-    </div>
+        {/* Main Content */}
+        <main className="form-content">
+          {renderQuestion()}
+        </main>
+      </div>
+    </>
   )
 }

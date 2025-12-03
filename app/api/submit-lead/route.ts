@@ -10,12 +10,10 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    // LOGIQUE DE QUALIFICATION
+    // LOGIQUE DE QUALIFICATION SIMPLIFIÉE
     const isQualified = 
       data.interested === 'Oui, je suis intéressé et je cherche une solution' &&
-      data.role !== 'Manager/Employé (je ne suis pas décisionnaire)' &&
-      data.budget !== 'Moins de 1 500€' &&
-      data.urgency !== 'Non, je réfléchis encore / pas d\'urgence'
+      data.budget !== 'Moins de 1 500€'
 
     // PRÉPARER DONNÉES POUR SUPABASE
     const leadData = {
@@ -24,14 +22,10 @@ export async function POST(request: NextRequest) {
       last_name: data.lastName,
       phone: data.phone,
       interested: data.interested === 'Oui, je suis intéressé et je cherche une solution',
+      activity: data.activity === 'Autre' ? data.activityOther : data.activity,
+      website: data.noWebsite ? null : data.website,
       role: data.role === 'Autre' ? data.roleOther : data.role,
-      business_description: data.businessDescription || null,
-      tools_used: data.toolsUsed,
-      problems: data.problems.includes('Autre') 
-        ? [...data.problems.filter((p: string) => p !== 'Autre'), data.problemsOther]
-        : data.problems,
       budget: data.budget,
-      urgency: data.urgency,
       qualified: isQualified,
       call_booked: false,
       pixel_sent: false
