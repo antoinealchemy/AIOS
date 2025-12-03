@@ -2007,7 +2007,7 @@ export default function HomePage() {
                 AI<span className="gradient-text">OS</span> N'est Pas Pour <span className="gradient-text">Tout Le Monde</span>
             </h2>
             <p className="section-subtitle">
-                C'est pour les dirigeants qui gèrent plusieurs clients simultanément et veulent reprendre le contrôle de leur temps.
+                C'est pour les entreprises de services qui gèrent plusieurs clients et veulent économiser leur temps en centralisant leurs informations.
             </p>
 
             <div className="business-types-grid">
@@ -2019,7 +2019,7 @@ export default function HomePage() {
                         </svg>
                     </div>
                     <h3>Cabinets de Conseil & Stratégie</h3>
-                    <p>Vous accompagnez plusieurs clients en transformation digitale, stratégie, ou management. Vos infos sont dispersées entre Gmail, Drive, CRM. Vous perdez 3h/jour à chercher l'historique avant chaque rendez-vous client.</p>
+                    <p>Vous accompagnez plusieurs clients en transformation digitale, stratégie, ou management et vos infos sont dispersées. Vous perdez 4h/jour avant vos rendez-vous client.</p>
                 </div>
 
                 {/* Card 2 */}
@@ -2030,7 +2030,7 @@ export default function HomePage() {
                         </svg>
                     </div>
                     <h3>Agences Marketing & Communication</h3>
-                    <p>Vous gérez 15+ comptes clients avec campagnes, livrables, feedbacks. Votre équipe jongle entre Notion, Slack, Trello. Vous ratez des deadlines parce que l'info n'était pas au bon endroit.</p>
+                    <p>Vous gérez 5+ clients avec campagnes, livrables, feedbacks et votre équipe jongle entre Notion, Slack, Trello.</p>
                 </div>
 
                 {/* Card 3 */}
