@@ -1883,14 +1883,14 @@ export default function HomePage() {
             </div>
 
             <h1 className="title-desktop">
-                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span><br />
-                à Chercher Avant Vos Rendez-vous Client
+                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span> à Chercher<br />
+                Avant Vos Rendez-vous Client
             </h1>
 
             <h1 className="title-mobile">
-                <span className="gradient-text">Arrêtez de Perdre<br />
-                4h/jour</span><br />
-                à Chercher Avant Vos<br />Rendez-vous Client
+                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span><br />
+                à Chercher Avant Vos<br />
+                Rendez-vous Client
             </h1>
 
             <p className="subtitle subtitle-desktop">
