@@ -653,10 +653,6 @@ export default function FormulairePage() {
             font-size: 24px;
           }
 
-          .name-fields {
-            flex-direction: column;
-          }
-
           .progress-bar-container {
             margin-left: 20px;
             max-width: 200px;
