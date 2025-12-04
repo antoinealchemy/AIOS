@@ -1,14 +1,108 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIOS</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
+'use client'
+
+import { useEffect } from 'react'
+import Link from 'next/link'
+import * as fbq from '@/lib/fbPixel'
+
+export default function HomePage() {
+  useEffect(() => {
+    // 👁️ PIXEL FACEBOOK - VIEWCONTENT
+    // Attendre 500ms que le script Facebook soit chargé
+    setTimeout(() => {
+      fbq.event('ViewContent', {
+        content_name: 'Landing Page AIOS'
+      })
+    }, 500)
+
+    // Smooth scroll
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault()
+        const href = anchor.getAttribute('href')
+        if (!href) return
+        
+        const target = document.querySelector(href)
+        if (target instanceof HTMLElement) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
+    })
+
+    // Burger Menu
+    const burgerMenu = document.getElementById('burgerMenu')
+    const navMobile = document.getElementById('navMobile')
+
+    if (burgerMenu && navMobile) {
+      burgerMenu.addEventListener('click', () => {
+        burgerMenu.classList.toggle('active')
+        navMobile.classList.toggle('active')
+      })
+
+      document.querySelectorAll('.nav-mobile-links a, .nav-mobile-cta a').forEach(link => {
+        link.addEventListener('click', () => {
+          burgerMenu.classList.remove('active')
+          navMobile.classList.remove('active')
+        })
+      })
+
+      document.addEventListener('click', (e) => {
+        const target = e.target as Node
+        if (!burgerMenu.contains(target) && !navMobile.contains(target) && navMobile.classList.contains('active')) {
+          burgerMenu.classList.remove('active')
+          navMobile.classList.remove('active')
+        }
+      })
+    }
+
+    // Stats Counter
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statCounter = entry.target as HTMLElement
+          const statNumber = statCounter.closest('.stat-number') as HTMLElement
+          const target = parseInt(statCounter.getAttribute('data-target') || '0')
+          const duration = 1000
+          const increment = target / (duration / 16)
+          let current = 0
+
+          if (statNumber) {
+            statNumber.classList.add('visible')
+          }
+
+          const updateCounter = () => {
+            current += increment
+            if (current < target) {
+              statCounter.textContent = Math.ceil(current).toString()
+              requestAnimationFrame(updateCounter)
+            } else {
+              statCounter.textContent = target.toString()
+            }
+          }
+
+          updateCounter()
+          statsObserver.unobserve(statCounter)
+        }
+      })
+    }, { threshold: 0.5 })
+
+    document.querySelectorAll('.stat-counter').forEach(stat => {
+      statsObserver.observe(stat)
+    })
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.closest('.faq-item')
+        if (faqItem) {
+          faqItem.classList.toggle('active')
+        }
+      })
+    })
+  }, [])
+
+  return (
+    <>
+      <style jsx global>{`
         html {
             scroll-behavior: smooth;
         }
@@ -1578,6 +1672,7 @@
 
             .subtitle {
                 margin-bottom: 20px;
+                font-size: 18px;
             }
 
             .section-title {
@@ -1689,264 +1784,260 @@
                 padding-top: 12px !important;  /* avant : 30px */
             }
         }
-    </style>
-</head>
-<body>
-    <!-- Header -->
+      `}</style>
+    {/* Header */}
     <header>
-        <div class="header-content">
-            <a href="#" class="logo">
-                <img src="logo.png" alt="AIOS Logo" style="height: 40px; width: auto;">
+        <div className="header-content">
+            <a href="#" className="logo">
+                <img src="logo.png" alt="AIOS Logo" style={{ height: 40, width: "auto" }} />
             </a>
             
-            <!-- Navigation Desktop -->
-            <nav class="nav-desktop">
-                <ul class="nav-links">
+            {/* Navigation Desktop */}
+            <nav className="nav-desktop">
+                <ul className="nav-links">
                     <li><a href="#solution">La Solution</a></li>
                     <li><a href="#temoignages">Témoignages</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
-                <a href="https://ai-os.fr/formulaire" class="header-cta">
+                <Link href="/formulaire" className="header-cta">
                     Réserver maintenant
-                </a>
+                </Link>
             </nav>
 
-            <!-- Burger Menu Button -->
-            <button class="burger-menu" id="burgerMenu" aria-label="Menu">
-                <span class="burger-line"></span>
-                <span class="burger-line"></span>
-                <span class="burger-line"></span>
+            {/* Burger Menu Button */}
+            <button className="burger-menu" id="burgerMenu" aria-label="Menu">
+                <span className="burger-line" />
+                <span className="burger-line" />
+                <span className="burger-line" />
             </button>
         </div>
 
-        <!-- Navigation Mobile -->
-        <nav class="nav-mobile" id="navMobile">
-            <ul class="nav-mobile-links">
+        {/* Navigation Mobile */}
+        <nav className="nav-mobile" id="navMobile">
+            <ul className="nav-mobile-links">
                 <li><a href="#solution">La Solution</a></li>
                 <li><a href="#temoignages">Témoignages</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
-            <div class="nav-mobile-cta">
-                <a href="https://ai-os.fr/formulaire" class="header-cta">
+            <div className="nav-mobile-cta">
+                <Link href="/formulaire" className="header-cta">
                     Réserver maintenant
-                </a>
+                </Link>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <!-- Floating Icons -->
-        <div class="floating-icon icon-1">
+    {/* Hero Section */}
+    <section className="hero">
+        {/* Floating Icons */}
+        <div className="floating-icon icon-1">
             <svg fill="none" stroke="url(#gradient1)" viewBox="0 0 24 24">
                 <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
                     </linearGradient>
                 </defs>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
             </svg>
         </div>
 
-        <div class="floating-icon icon-2">
+        <div className="floating-icon icon-2">
             <svg fill="none" stroke="url(#gradient2)" viewBox="0 0 24 24">
                 <defs>
                     <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
                     </linearGradient>
                 </defs>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
         </div>
 
-        <div class="floating-icon icon-3">
+        <div className="floating-icon icon-3">
             <svg fill="none" stroke="url(#gradient3)" viewBox="0 0 24 24">
                 <defs>
                     <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
                     </linearGradient>
                 </defs>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
         </div>
 
-        <div class="floating-icon icon-4">
+        <div className="floating-icon icon-4">
             <svg fill="none" stroke="url(#gradient4)" viewBox="0 0 24 24">
                 <defs>
                     <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
                     </linearGradient>
                 </defs>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
         </div>
 
-        <div class="hero-content">
-            <div class="badge">
-                Entreprises 2-10 personnes :
+        <div className="hero-content">
+            <div className="badge">
+                Cabinets de conseil :
             </div>
 
-            <h1 class="title-desktop">
-                Centralisez Toutes<br>
-                <span class="gradient-text">Vos Infos Clients</span><br>
-                Sans Toucher à Vos Outils
+            <h1 className="title-desktop">
+                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span> à Chercher<br />
+                Avant Vos Rendez-vous Client
             </h1>
 
-            <h1 class="title-mobile">
-                Centralisez Toutes<br>
-                <span class="gradient-text">Vos Infos Clients</span><br>
-                Sans Toucher<br>
-                à Vos Outils
+            <h1 className="title-mobile">
+                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span><br />
+                à Chercher Avant Vos<br />
+                Rendez-vous Client
             </h1>
 
-            <p class="subtitle subtitle-desktop">
-                Aucune migration, aucun paramétrage technique.<br>
-                On connecte vos outils existants, l'IA fait le reste.
+            <p className="subtitle subtitle-desktop">
+                Votre équipe pose une question sur n'importe quel client et obtient<br />
+                réponse instantanée : emails, docs, historique, <u>tout est centralisé</u>.
             </p>
 
-            <p class="subtitle subtitle-mobile">
-                Aucune migration, aucun<br>
-                paramétrage technique.<br>
-                On connecte vos outils existants,<br>
-                l'IA fait le reste.
+            <p className="subtitle subtitle-mobile">
+                Votre équipe pose une question<br />
+                sur n'importe quel client et obtient<br />
+                réponse instantanée : emails, docs,<br />
+                historique, <u>tout est centralisé</u>.
             </p>
 
-            <div class="hero-cta">
-                <a href="https://ai-os.fr/formulaire" class="cta-primary">
+            <div className="hero-cta">
+                <Link href="/formulaire" className="cta-primary">
                     Réserver maintenant
-                </a>
+                </Link>
             </div>
 
-            <div class="vsl-container">
-                <div class="vsl-placeholder">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
+            <div className="vsl-container">
+                <div className="vsl-placeholder">
+                    <div className="play-button">
+                        <div className="play-icon"></div>
                     </div>
-                    <p class="vsl-text">Cliquez pour voir la démo (90 sec)</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <h2 class="stats-title">AIOS en quelques chiffres</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">
-                        <span class="stat-prefix">+</span><span class="stat-counter" data-target="300">0</span><span class="stat-suffix">h/an</span>
-                    </div>
-                    <div class="stat-label">économisées pour nos clients</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">
-                        <span class="stat-counter" data-target="7">0</span><span class="stat-suffix stat-suffix-small"> secondes</span>
-                    </div>
-                    <div class="stat-label">pour retrouver n'importe quel document</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">
-                        <span class="stat-prefix">+</span><span class="stat-counter" data-target="3">0</span><span class="stat-suffix"> ans</span>
-                    </div>
-                    <div class="stat-label">d'expérience dans le prompt engineering</div>
+                    <p className="vsl-text">Cliquez pour voir la démo (90 sec)</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- AIOS Features Section -->
-    <section class="aios-features" id="solution">
-        <div class="container" style="text-align: center;">
-            <a href="#solution" class="features-badge">
+    {/* Stats Section */}
+    <section className="stats-section">
+        <div className="container">
+            <h2 className="stats-title">AIOS en quelques chiffres</h2>
+            <div className="stats-grid">
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="20">0</span><span className="stat-suffix">min</span>
+                    </div>
+                    <div className="stat-label">économisées avant chaque appel client</div>
+                </div>
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="98">0</span><span className="stat-suffix">%</span>
+                    </div>
+                    <div className="stat-label">de taux de réponse précise</div>
+                </div>
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="100">0</span><span className="stat-suffix">%</span>
+                    </div>
+                    <div className="stat-label">de vos infos clients centralisées</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* AIOS Features Section */}
+    <section className="aios-features" id="solution">
+        <div className="container" style={{ textAlign: "center" }}>
+            <a href="#solution" className="features-badge">
                 En savoir plus
             </a>
             
-            <h2 class="features-title">AI<span class="gradient-text">OS</span> C'est Quoi ?</h2>
+            <h2 className="features-title">AI<span className="gradient-text">OS</span> C'est Quoi ?</h2>
 
-            <div class="features-grid">
-                <!-- Feature 1 -->
-                <div class="feature-card">
-                    <div class="feature-image-wrapper">
-                        <img src="image1.png" alt="Cerveau IA" class="feature-image">
+            <div className="features-grid">
+                {/* Feature 1 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image1.png" alt="Cerveau IA" className="feature-image" />
                     </div>
-                    <h3>Votre nouveau cerveau qui révolutionne votre business</h3>
-                    <p>On installe pour vous un assistant IA qui connaît votre business en profondeur : Emails, docs, décisions, clients, KPIs. Accessible par toute l'équipe. Question → Réponse en 7 secondes.</p>
+                    <h3>Votre Mémoire d'Entreprise Centralisée</h3>
+                    <p>On installe et personnalisons pour vous un assistant IA qui connaît votre entreprise en profondeur. Accessible par toute l'équipe. Question → Réponse instantanée.</p>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="feature-card">
-                    <div class="feature-image-wrapper">
-                        <img src="image2.png" alt="ROI" class="feature-image">
+                {/* Feature 2 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image2.png" alt="ROI" className="feature-image" />
                     </div>
                     <h3>ROI immédiatement mesurable</h3>
                     <p>Temps gagné = Argent gagné. Moins de recherche, plus de production. Chaque heure récupérée augmente votre capacité facturable. ROI visible dès J1.</p>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="feature-card">
-                    <div class="feature-image-wrapper">
-                        <img src="image3.png" alt="Recherche instantanée" class="feature-image">
+                {/* Feature 3 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image3.png" alt="Recherche instantanée" className="feature-image" />
                     </div>
                     <h3>Zéro temps perdu à chercher</h3>
-                    <p>Budget client ? Historique projet ? Décision passée ? KPIs performance ? L'info arrive en 7 secondes. Plus jamais 20 min à chercher dans vos outils. Toute l'équipe gagne du temps.</p>
+                    <p>Informations sur un client ? Historique d'un projet ? Décision passée ? Ne perdez plus jamais 20 min à chercher l'information.</p>
                 </div>
 
-                <!-- Feature 4 -->
-                <div class="feature-card">
-                    <div class="feature-image-wrapper">
-                        <img src="image4.png" alt="Analyse 24/7" class="feature-image">
+                {/* Feature 4 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image4.png" alt="Analyse 24/7" className="feature-image" />
                     </div>
-                    <h3>Analyse et audit de votre business 24/7</h3>
-                    <p>L'IA analyse vos données clients et projets. Vous alerte sur les opportunités (cross-sell, upsell) et les risques (client silencieux, projet bloqué). Aide à décider, pas à deviner.</p>
+                    <h3>Vision 360° Sur Votre Entreprise</h3>
+                    <p>Interrogez votre base de données complète pour obtenir une vue d'ensemble instantanée.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pour Qui -->
-    <section class="for-who">
-        <div class="container">
-            <div class="badge">Pour qui ?</div>
-            <h2 class="section-title" style="margin-bottom: 16px;">
-                AI<span class="gradient-text">OS</span> N'est Pas Pour <span class="gradient-text">Tout Le Monde</span>
+    {/* Pour Qui */}
+    <section className="for-who">
+        <div className="container">
+            <div className="badge">Pour qui ?</div>
+            <h2 className="section-title" style={{ marginBottom: 16 }}>
+                AI<span className="gradient-text">OS</span> N'est Pas Pour Tout Le Monde
             </h2>
-            <p class="section-subtitle">
-                C'est pour les dirigeants qui gèrent plusieurs clients simultanément et veulent reprendre le contrôle de leur temps.
+            <p className="section-subtitle">
+                C'est pour les entreprises de services qui gèrent plusieurs clients et veulent économiser leur temps en centralisant leurs informations.
             </p>
 
-            <div class="business-types-grid">
-                <!-- Card 1 -->
-                <div class="business-card">
-                    <div class="business-icon">
+            <div className="business-types-grid">
+                {/* Card 1 */}
+                <div className="business-card">
+                    <div className="business-icon">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                     </div>
                     <h3>Cabinets de Conseil & Stratégie</h3>
-                    <p>Vous accompagnez plusieurs clients en transformation digitale, stratégie, ou management. Vos infos sont dispersées entre Gmail, Drive, CRM. Vous perdez 3h/jour à chercher l'historique avant chaque rendez-vous client.</p>
+                    <p>Vous accompagnez plusieurs clients en transformation digitale, stratégie, ou management et vos infos sont dispersées. Vous perdez 4h/jour avant vos rendez-vous client.</p>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="business-card">
-                    <div class="business-icon">
+                {/* Card 2 */}
+                <div className="business-card">
+                    <div className="business-icon">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
                     <h3>Agences Marketing & Communication</h3>
-                    <p>Vous gérez 15+ comptes clients avec campagnes, livrables, feedbacks. Votre équipe jongle entre Notion, Slack, Trello. Vous ratez des deadlines parce que l'info n'était pas au bon endroit.</p>
+                    <p>Vous gérez 5+ clients avec campagnes, livrables, feedbacks et votre équipe jongle entre Notion, Slack, Trello.</p>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="business-card">
-                    <div class="business-icon">
+                {/* Card 3 */}
+                <div className="business-card">
+                    <div className="business-icon">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                     <h3>Cabinets Comptables & Experts Financiers</h3>
@@ -1956,377 +2047,377 @@
         </div>
     </section>
 
-    <!-- Testimonials Carousel -->
-    <section class="testimonials-carousel" id="temoignages">
-        <div class="container">
-            <div class="badge">Résultats</div>
-            <h2 class="section-title">
-                Nos Clients en Parlent <span class="gradient-text">Mieux Que Nous</span>
+    {/* Testimonials Carousel */}
+    <section className="testimonials-carousel" id="temoignages">
+        <div className="container">
+            <div className="badge">Résultats</div>
+            <h2 className="section-title">
+                Nos Clients en Parlent Mieux Que Nous
             </h2>
 
-            <div class="carousel-wrapper">
-                <div class="carousel-track">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas"></div>
-                            <div class="testimonial-info">
+            <div className="carousel-wrapper">
+                <div className="carousel-track">
+                    {/* Testimonial 1 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas" /></div>
+                            <div className="testimonial-info">
                                 <h4>Thomas</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                        <p className="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
                     </div>
 
-                    <!-- Testimonial 2 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie"></div>
-                            <div class="testimonial-info">
+                    {/* Testimonial 2 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie" /></div>
+                            <div className="testimonial-info">
                                 <h4>Sophie</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                        <p className="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
                     </div>
 
-                    <!-- Testimonial 3 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc"></div>
-                            <div class="testimonial-info">
+                    {/* Testimonial 3 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc" /></div>
+                            <div className="testimonial-info">
                                 <h4>Marc</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
+                        <p className="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
                     </div>
 
-                    <!-- Testimonial 4 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/claire.jpg" alt="Claire"></div>
-                            <div class="testimonial-info">
+                    {/* Testimonial 4 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/claire.jpg" alt="Claire" /></div>
+                            <div className="testimonial-info">
                                 <h4>Claire</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Je ne pensais pas qu'on pouvait gagner autant de temps. 15h par semaine récupérées pour notre équipe, c'est l'équivalent d'un recrutement évité. En plus, l'équipe d'AIOS nous a livré en 6 jours. Rapide, efficace, transformateur."</p>
+                        <p className="testimonial-text">"Je ne pensais pas qu'on pouvait gagner autant de temps. 15h par semaine récupérées pour notre équipe, c'est l'équivalent d'un recrutement évité. En plus, l'équipe d'AIOS nous a livré en 6 jours. Rapide, efficace, transformateur."</p>
                     </div>
 
-                    <!-- Testimonial 5 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/david.jpg" alt="David"></div>
-                            <div class="testimonial-info">
+                    {/* Testimonial 5 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/david.jpg" alt="David" /></div>
+                            <div className="testimonial-info">
                                 <h4>David</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Le vrai avant/après : avant, on naviguait à l'aveugle. Après AIOS, on a une vision complète de tous nos clients en temps réel. Mes consultants sont autonomes, je prends de meilleures décisions. Honnêtement, je ne comprends pas comment on faisait avant."</p>
+                        <p className="testimonial-text">"Le vrai avant/après : avant, on naviguait à l'aveugle. Après AIOS, on a une vision complète de tous nos clients en temps réel. Mes consultants sont autonomes, je prends de meilleures décisions. Honnêtement, je ne comprends pas comment on faisait avant."</p>
                     </div>
 
-                    <!-- Testimonial 6 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/julie.jpg" alt="Julie"></div>
-                            <div class="testimonial-info">
+                    {/* Testimonial 6 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/julie.jpg" alt="Julie" /></div>
+                            <div className="testimonial-info">
                                 <h4>Julie</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Mise en place rapide et résultats immédiats. En 2 semaines, toute l'équipe l'utilise quotidiennement. On a éliminé les réunions de sync inutiles. Productivité en hausse, stress en baisse. Si vous hésitez encore : foncez."</p>
+                        <p className="testimonial-text">"Mise en place rapide et résultats immédiats. En 2 semaines, toute l'équipe l'utilise quotidiennement. On a éliminé les réunions de sync inutiles. Productivité en hausse, stress en baisse. Si vous hésitez encore : foncez."</p>
                     </div>
 
-                    <!-- Duplicate for seamless loop -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas"></div>
-                            <div class="testimonial-info">
+                    {/* Duplicate for seamless loop */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas" /></div>
+                            <div className="testimonial-info">
                                 <h4>Thomas</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                        <p className="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
                     </div>
 
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie"></div>
-                            <div class="testimonial-info">
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie" /></div>
+                            <div className="testimonial-info">
                                 <h4>Sophie</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                        <p className="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
                     </div>
 
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc"></div>
-                            <div class="testimonial-info">
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc" /></div>
+                            <div className="testimonial-info">
                                 <h4>Marc</h4>
-                                <div class="testimonial-stars">
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <svg class="star" viewBox="0 0 24 24" fill="#FDB022">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <p class="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
+                        <p className="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="faq" id="faq">
-        <div class="container">
-            <div class="badge">FAQ</div>
-            <h2 class="section-title">
-                Les Questions <span class="gradient-text">Fréquentes</span>
+    {/* FAQ */}
+    <section className="faq" id="faq">
+        <div className="container">
+            <div className="badge">FAQ</div>
+            <h2 className="section-title">
+                Les Questions Fréquentes
             </h2>
 
-            <div class="faq-container">
-                <div class="faq-item">
-                    <button class="faq-question">
+            <div className="faq-container">
+                <div className="faq-item">
+                    <button className="faq-question">
                         <span>AIOS, c'est quoi concrètement ?</span>
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div class="faq-answer">
-                        AIOS, c'est votre nouvel assistant intelligent qui centralise toutes les informations de votre entreprise. On analyse en profondeur votre activité, vos clients, vos projets et vos processus, puis on configure une intelligence artificielle de pointe spécialement entraînée pour votre business. Le résultat ? Vous posez une question, vous obtenez la réponse précise en moins de 7 secondes. Plus besoin de chercher dans 5 outils différents : tout est à portée de main, instantanément.
+                    <div className="faq-answer">
+                        AIOS, c'est votre nouvel assistant intelligent qui centralise toutes les informations de votre entreprise. Le résultat ? Vous posez une question, vous obtenez la réponse précise instantanément. Plus besoin de chercher dans 5 outils différents : tout est à portée de main, instantanément.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question">
+                <div className="faq-item">
+                    <button className="faq-question">
                         <span>C'est uniquement pour le CEO ou toute l'équipe peut l'utiliser ?</span>
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div class="faq-answer">
+                    <div className="faq-answer">
                         Les deux sont possibles. AIOS peut être configuré exclusivement pour le dirigeant, ou bien pour toute l'équipe (consultants, CMO, CFO, etc.). Chaque membre accède aux informations dont il a besoin selon son rôle. Vous choisissez qui utilise l'outil et comment, on s'adapte à votre organisation.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question">
+                <div className="faq-item">
+                    <button className="faq-question">
                         <span>Qui va avoir accès à mes données ?</span>
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div class="faq-answer">
+                    <div className="faq-answer">
                         Personne d'autre que vous et votre équipe. Vos données ne sont jamais exploitées, revendues ou consultées par des tiers. Nous signons un NDA avant même de commencer. Hébergement sécurisé EU (Claude AI), conformité RGPD totale. Vos données restent votre propriété, toujours.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question">
+                <div className="faq-item">
+                    <button className="faq-question">
                         <span>Combien de temps prend la mise en place ?</span>
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div class="faq-answer">
-                        7 jours du début à la fin. Vous nous partagez de manière sécurisée les connexions à vos outils (Gmail, CRM, Drive, etc.) et vous répondez à quelques questions sur votre activité (2-3h de votre temps au total). Nous nous occupons de tout le reste. Au bout de 7 jours, votre livrable complet est prêt à l'emploi.
+                    <div className="faq-answer">
+                        2 semaines du début à la fin. Nous vous transmettons les formulaires à remplir et on s'occupe d'absolument toute la configuration interne de votre assistant. Au bout de 2 semaines, votre livrable complet est prêt à l'emploi.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question">
+                <div className="faq-item">
+                    <button className="faq-question">
                         <span>Concrètement, qu'est-ce qu'on reçoit ?</span>
-                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div class="faq-answer">
-                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise), une formation vidéo de 30 minutes pour vous et votre équipe, et 3 mois de support inclus (email/WhatsApp, réponse sous 24h). Tout est clé en main.
+                    <div className="faq-answer">
+                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise) et une courte formation vidéo pour vous aider à exploiter votre assistant à 100% de son potentiel. Tout est clé en main.
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Secondary -->
-    <section class="cta-secondary">
-        <div class="cta-box">
+    {/* CTA Secondary */}
+    <section className="cta-secondary">
+        <div className="cta-box">
             <h2>
-                Prêt à gagner <span class="gradient-text">300h/an</span> ?
+                Prêt à gagner <span className="gradient-text">300h/an</span> ?
             </h2>
 
-            <div class="cta-arrow-container">
-                <svg class="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            <div className="cta-arrow-container">
+                <svg className="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                 </svg>
-                <p style="margin: 0;">Réservez votre consultation de 30 minutes offerte maintenant</p>
-                <svg class="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                <p style={{ margin: 0 }}>Réservez votre consultation de 30 minutes offerte maintenant</p>
+                <svg className="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                 </svg>
             </div>
 
-            <a href="https://ai-os.fr/formulaire" class="cta-button">
+            <Link href="/formulaire" className="cta-button">
                 Réserver maintenant
-            </a>
+            </Link>
         </div>
     </section>
 
-    <!-- Footer -->
+    {/* Footer */}
     <footer>
-        <div class="footer-content">
-            <!-- Logo -->
-            <div class="footer-column">
-                <div class="footer-logo">
-                    <img src="logo.png" alt="AIOS Logo">
+        <div className="footer-content">
+            {/* Logo */}
+            <div className="footer-column">
+                <div className="footer-logo">
+                    <img src="logo.png" alt="AIOS Logo" />
                 </div>
             </div>
 
-            <!-- Pages -->
-            <div class="footer-column">
+            {/* Pages */}
+            <div className="footer-column">
                 <h3>Pages</h3>
                 <ul>
                     <li><a href="#solution">La Solution</a></li>
@@ -2335,8 +2426,8 @@
                 </ul>
             </div>
 
-            <!-- Légal -->
-            <div class="footer-column">
+            {/* Légal */}
+            <div className="footer-column">
                 <h3>Légal</h3>
                 <ul>
                     <li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9ebfb7f3b1adf0b8ac">Contact</a></li>
@@ -2346,122 +2437,21 @@
             </div>
         </div>
 
-        <!-- Separator -->
-        <hr class="footer-separator">
+        {/* Separator */}
+        <hr className="footer-separator" />
 
-        <!-- Bottom -->
-        <div class="footer-bottom">
-            <p style="font-weight: 600; margin-bottom: 16px;">Copyright © 2025 by AIOS</p>
-            <p style="margin-bottom: 16px;">
+        {/* Bottom */}
+        <div className="footer-bottom">
+            <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
+            <p style={{ marginBottom: 16 }}>
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
             <p>
-                Contact : <a href="mailto:contact@ai-os.fr" style="text-decoration: underline;">contact@ai-os.fr</a>
+                Contact : <a href="/cdn-cgi/l/email-protection#c2a1adacb6a3a1b682a3abefadb1eca4b0" style={{ textDecoration: "underline" }}><span className="__cf_email__" data-cfemail="f5969a9b81949681b5949cd89a86db9387">[email&#160;protected]</span></a>
             </p>
         </div>
     </footer>
 
-    <script>
-        // FAQ Accordion
-        document.querySelectorAll('.faq-question').forEach(button => {
-            button.addEventListener('click', () => {
-                const faqItem = button.parentElement;
-                const isActive = faqItem.classList.contains('active');
-                
-                // Close all FAQs
-                document.querySelectorAll('.faq-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                // Open clicked FAQ if it wasn't active
-                if (!isActive) {
-                    faqItem.classList.add('active');
-                }
-            });
-        });
-
-        // Smooth scroll for CTA links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Burger Menu Toggle
-        const burgerMenu = document.getElementById('burgerMenu');
-        const navMobile = document.getElementById('navMobile');
-
-        if (burgerMenu && navMobile) {
-            burgerMenu.addEventListener('click', () => {
-                burgerMenu.classList.toggle('active');
-                navMobile.classList.toggle('active');
-            });
-
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll('.nav-mobile-links a, .nav-mobile-cta a').forEach(link => {
-                link.addEventListener('click', () => {
-                    burgerMenu.classList.remove('active');
-                    navMobile.classList.remove('active');
-                });
-            });
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!burgerMenu.contains(e.target) && !navMobile.contains(e.target) && navMobile.classList.contains('active')) {
-                    burgerMenu.classList.remove('active');
-                    navMobile.classList.remove('active');
-                }
-            });
-        }
-
-        // Stats Counter Animation
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statCounter = entry.target;
-                    const statNumber = statCounter.closest('.stat-number');
-                    const target = parseInt(statCounter.getAttribute('data-target'));
-                    const duration = 1000; // 1 second (plus rapide)
-                    const increment = target / (duration / 16); // 60fps
-                    let current = 0;
-
-                    statNumber.classList.add('visible');
-
-                    const updateCounter = () => {
-                        current += increment;
-                        if (current < target) {
-                            statCounter.textContent = Math.ceil(current);
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            statCounter.textContent = target;
-                        }
-                    };
-
-                    updateCounter();
-                    statsObserver.unobserve(statCounter);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        // Observe all stat counters
-        document.querySelectorAll('.stat-counter').forEach(stat => {
-            statsObserver.observe(stat);
-        });
-
-        // Close mobile menu when clicking on navigation links
-        document.querySelectorAll('.nav-mobile-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMobile.classList.remove('active');
-                burgerMenu.classList.remove('active');
-            });
-        });
-    </script>
-</body>
-</html>
+    </>
+  )
+}
