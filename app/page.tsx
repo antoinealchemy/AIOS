@@ -658,10 +658,9 @@ export default function HomePage() {
           </h1>
 
           <p className="subtitle">
-            Appel 30 minutes offert : Je te donne une méthode 100% gratuite 
-            pour centraliser les informations de ton cabinet. 
-            Sans migration lourde, applicable dès maintenant. 
-            Résultats immédiats garantis.
+            Je te donne GRATUITEMENT la solution exacte pour centraliser 
+            les informations de ton cabinet. Sans migration lourde, 
+            applicable dès maintenant.
           </p>
 
           <div className="hero-cta">
