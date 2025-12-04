@@ -10,28 +10,25 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    // LOGIQUE DE QUALIFICATION SIMPLIFIEE
-    const isQualified = 
-      data.interested === 'Oui, je suis intéressé et je cherche une solution' &&
-      data.budget !== 'Moins de 1 500€'
+    // TOUS LES LEADS SONT QUALIFIÉS
+    // Pas de filtrage - tous vont vers entretien1
+    const isQualified = true
 
-    // PREPARER DONNEES POUR SUPABASE
+    // PRÉPARER DONNÉES POUR SUPABASE
     const leadData = {
       email: data.email,
       first_name: data.firstName,
       last_name: data.lastName,
       phone: data.phone,
-      interested: data.interested === 'Oui, je suis intéressé et je cherche une solution',
       activity: data.activity === 'Autre' ? data.activityOther : data.activity,
+      team_size: data.teamSize,
       website: data.noWebsite ? null : data.website,
-      role: data.role === 'Autre' ? data.roleOther : data.role,
-      budget: data.budget,
       qualified: isQualified,
       call_booked: false,
       pixel_sent: false
     }
 
-    // INSERER DANS SUPABASE
+    // INSÉRER DANS SUPABASE
     const { data: insertedLead, error } = await supabase
       .from('leads')
       .insert([leadData])
@@ -45,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ Lead inséré:', insertedLead)
 
-    // RETOURNER RESULTAT
+    // RETOURNER RÉSULTAT
     return NextResponse.json({
       success: true,
       qualified: isQualified,

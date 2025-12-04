@@ -17,18 +17,8 @@ const INITIAL_QUESTION = {
 
 const QUESTIONS = [
   {
-    id: 'interested',
-    label: '{firstName}, êtes-vous vraiment intéressé par notre solution ?',
-    type: 'radio',
-    options: [
-      'Oui, je suis intéressé et je cherche une solution',
-      'Non, je suis juste curieux',
-      'Non, je ne suis pas intéressé'
-    ]
-  },
-  {
     id: 'activity',
-    label: 'Quelle est votre activité ?',
+    label: '{firstName}, quelle est votre activité principale ?',
     type: 'radio',
     options: [
       'Cabinet de conseil (stratégie, transformation digitale, management)',
@@ -40,37 +30,23 @@ const QUESTIONS = [
     hasOther: true
   },
   {
+    id: 'teamSize',
+    label: 'Combien de personnes dans votre équipe ?',
+    type: 'radio',
+    options: [
+      'Solo (juste moi)',
+      '2-5 personnes',
+      '6-10 personnes',
+      '11-20 personnes',
+      'Plus de 20 personnes'
+    ]
+  },
+  {
     id: 'website',
     label: 'Quel est le site web de votre entreprise ?',
     type: 'website',
     placeholder: 'https://votre-entreprise.com',
     checkboxLabel: 'Je n\'ai pas de site web'
-  },
-  {
-    id: 'role',
-    label: 'Quel est votre rôle dans l\'entreprise ?',
-    type: 'radio',
-    options: [
-      'Dirigeant / CEO / Fondateur',
-      'Associé / Co-dirigeant',
-      'Directeur (Marketing, Digital, Opérations, etc.)',
-      'Manager / Employé',
-      'Autre'
-    ],
-    hasOther: true
-  },
-  {
-    id: 'budget',
-    label: 'Quel budget êtes-vous prêt à investir pour cette solution ?',
-    type: 'radio',
-    options: [
-      'Moins de 1 500€',
-      '1 500€ - 3 000€',
-      '3 000€ - 5 000€',
-      '5 000€ - 10 000€',
-      'Plus de 10 000€',
-      'Je ne sais pas encore'
-    ]
   }
 ]
 
@@ -87,14 +63,11 @@ export default function FormulairePage() {
   const [phoneError, setPhoneError] = useState('')
   const [phoneCountry, setPhoneCountry] = useState('+33')
   const [formData, setFormData] = useState<any>({
-    interested: '',
     activity: '',
     activityOther: '',
+    teamSize: '',
     website: '',
     noWebsite: false,
-    role: '',
-    roleOther: '',
-    budget: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -239,11 +212,8 @@ export default function FormulairePage() {
         phone: fullPhone
       }))
 
-      if (data.qualified) {
-        router.push('/entretien1')
-      } else {
-        router.push('/entretien2')
-      }
+      // TOUS LES LEADS VONT VERS ENTRETIEN1
+      router.push('/entretien1')
     } catch (error) {
       console.error('Erreur:', error)
       alert('Une erreur est survenue. Veuillez réessayer.')
