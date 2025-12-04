@@ -649,7 +649,7 @@ export default function HomePage() {
 
         <div className="hero-content">
           <div className="badge">
-            Cabinets de Conseil
+            Cabinets de Conseil :
           </div>
 
           <h1>
@@ -666,7 +666,7 @@ export default function HomePage() {
 
           <div className="hero-cta">
             <Link href="/formulaire" className="cta-primary">
-              Réserver l'appel gratuit
+              Réserver maintenant
             </Link>
           </div>
 
