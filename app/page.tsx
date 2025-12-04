@@ -660,7 +660,7 @@ export default function HomePage() {
           <p className="subtitle">
             Je te donne GRATUITEMENT la solution exacte pour centraliser 
             les informations de ton cabinet. Sans migration lourde, 
-            applicable dès maintenant.
+            applicable <span style={{ textDecoration: 'underline' }}>dès maintenant</span>.
           </p>
 
           <div className="hero-cta">
