@@ -13,6 +13,12 @@ export default function HomePage() {
       })
     }, 500)
 
+    // VTURB PLAYER SCRIPT
+    const vslScript = document.createElement('script')
+    vslScript.src = 'https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/6931bb2e77485fe7cdacd26b/v4/player.js'
+    vslScript.async = true
+    document.head.appendChild(vslScript)
+
     // Smooth scroll
     document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
@@ -213,6 +219,138 @@ export default function HomePage() {
             align-items: center;
         }
 
+        /* Floating Icons */
+        .floating-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            z-index: 0;
+            will-change: transform;
+        }
+
+        .floating-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Positions des icônes */
+        .icon-1 {
+            top: 24%;
+            left: 12%;
+            animation: floatIcon1 14s ease-in-out infinite;
+        }
+
+        .icon-2 {
+            top: 24%;
+            right: 12%;
+            animation: floatIcon2 16s ease-in-out infinite;
+        }
+
+        .icon-3 {
+            top: 42%;
+            left: 12%;
+            animation: floatIcon3 15s ease-in-out infinite;
+        }
+
+        .icon-4 {
+            top: 42%;
+            right: 12%;
+            animation: floatIcon4 17s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes floatIcon1 {
+            0%   { transform: translate3d(-6px, 0, 0) rotate(-4deg) scale(1); }
+            25%  { transform: translate3d(4px, -18px, 0) rotate(-1deg) scale(1.06); }
+            50%  { transform: translate3d(10px, -28px, 0) rotate(2deg) scale(1.08); }
+            75%  { transform: translate3d(2px, -12px, 0) rotate(0deg) scale(1.04); }
+            100% { transform: translate3d(-6px, 0, 0) rotate(-4deg) scale(1); }
+        }
+
+        @keyframes floatIcon2 {
+            0%   { transform: translate3d(6px, 0, 0) rotate(4deg) scale(1); }
+            25%  { transform: translate3d(-4px, -20px, 0) rotate(0deg) scale(1.05); }
+            50%  { transform: translate3d(-10px, -30px, 0) rotate(-3deg) scale(1.08); }
+            75%  { transform: translate3d(-2px, -14px, 0) rotate(1deg) scale(1.04); }
+            100% { transform: translate3d(6px, 0, 0) rotate(4deg) scale(1); }
+        }
+
+        @keyframes floatIcon3 {
+            0%   { transform: translate3d(-4px, 0, 0) rotate(-3deg) scale(1); }
+            25%  { transform: translate3d(3px, 18px, 0) rotate(-1deg) scale(1.05); }
+            50%  { transform: translate3d(8px, 28px, 0) rotate(2deg) scale(1.08); }
+            75%  { transform: translate3d(0px, 12px, 0) rotate(0deg) scale(1.03); }
+            100% { transform: translate3d(-4px, 0, 0) rotate(-3deg) scale(1); }
+        }
+
+        @keyframes floatIcon4 {
+            0%   { transform: translate3d(6px, 0, 0) rotate(3deg) scale(1); }
+            25%  { transform: translate3d(-3px, 20px, 0) rotate(0deg) scale(1.05); }
+            50%  { transform: translate3d(-10px, 30px, 0) rotate(-2deg) scale(1.08); }
+            75%  { transform: translate3d(-1px, 14px, 0) rotate(1deg) scale(1.04); }
+            100% { transform: translate3d(6px, 0, 0) rotate(3deg) scale(1); }
+        }
+
+        @media (max-width: 1024px) {
+            .floating-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .floating-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .icon-1 {
+                top: 32%;
+                left: 3%;
+            }
+
+            .icon-2 {
+                top: 32%;
+                right: 3%;
+            }
+
+            .icon-3 {
+                top: 52%;
+                left: 3%;
+            }
+
+            .icon-4 {
+                top: 52%;
+                right: 3%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .icon-1 {
+                top: 18%;
+                left: 4%;
+            }
+
+            .icon-2 {
+                top: 18%;
+                right: 4%;
+            }
+
+            .icon-3 {
+                top: 37%;
+                left: 4%;
+            }
+
+            .icon-4 {
+                top: 37%;
+                right: 4%;
+            }
+        }
+
         .hero-content {
             position: relative;
             z-index: 10;
@@ -273,56 +411,6 @@ export default function HomePage() {
             margin: 0 auto 32px;
             border-radius: 16px;
             overflow: hidden;
-        }
-
-        .vsl-placeholder {
-            position: relative;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, #2C3E50 0%, #1a252f 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .vsl-placeholder:hover {
-            transform: scale(1.02);
-        }
-
-        .play-button {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-        }
-
-        .vsl-placeholder:hover .play-button {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
-        }
-
-        .play-icon {
-            width: 0;
-            height: 0;
-            border-left: 24px solid white;
-            border-top: 14px solid transparent;
-            border-bottom: 14px solid transparent;
-            margin-left: 6px;
-        }
-
-        .vsl-text {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            width: 100%;
-            color: #9CA3AF;
-            font-size: 14px;
         }
 
         /* CTA Button */
@@ -510,6 +598,55 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="hero">
+        {/* Floating Icons */}
+        <div className="floating-icon icon-1">
+          <svg fill="none" stroke="url(#gradient1)" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+        </div>
+
+        <div className="floating-icon icon-2">
+          <svg fill="none" stroke="url(#gradient2)" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+
+        <div className="floating-icon icon-3">
+          <svg fill="none" stroke="url(#gradient3)" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+
+        <div className="floating-icon icon-4">
+          <svg fill="none" stroke="url(#gradient4)" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="1" />
+                <stop offset="100%" stopColor="#06B6D4" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+
         <div className="hero-content">
           <div className="badge">
             Cabinets de Conseil
@@ -531,27 +668,14 @@ export default function HomePage() {
             <Link href="/formulaire" className="cta-primary">
               Réserver l'appel gratuit
             </Link>
-            <p className="cta-subtitle">
-              💡 Méthode complète offerte. Zéro migration technique.
-            </p>
           </div>
 
           <div className="vsl-container">
-            <div className="vsl-placeholder">
-              <div className="play-button">
-                <div className="play-icon"></div>
-              </div>
-              <p className="vsl-text">Clique pour voir la présentation (90 sec)</p>
-            </div>
-          </div>
-
-          <div style={{ marginTop: '32px' }}>
-            <Link href="/formulaire" className="cta-primary">
-              Réserver l'appel gratuit
-            </Link>
-            <p className="cta-subtitle">
-              30 minutes d'échange. Tu repars avec une solution complète.
-            </p>
+            <div 
+              dangerouslySetInnerHTML={{
+                __html: '<vturb-smartplayer id="vid-6931bb2e77485fe7cdacd26b" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
+              }}
+            />
           </div>
         </div>
       </section>
