@@ -102,7 +102,7 @@ export default function HomePage() {
 
   return (
     <>
-      <style jsx global>{`
+        <style>{`
         html {
             scroll-behavior: smooth;
         }
@@ -1878,7 +1878,7 @@ export default function HomePage() {
             </svg>
         </div>
 
-        <div className="hero-content">
+<div className="hero-content">
             <div className="badge">
                 Cabinets de conseil :
             </div>
@@ -1913,12 +1913,19 @@ export default function HomePage() {
             </div>
 
             <div className="vsl-container">
-                <div className="vsl-placeholder">
-                    <div className="play-button">
-                        <div className="play-icon"></div>
-                    </div>
-                    <p className="vsl-text">Cliquez pour voir la démo (90 sec)</p>
-                </div>
+                <div 
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            <vturb-smartplayer id="vid-6931bb2e77485fe7cdacd26b" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+                            <script type="text/javascript">
+                                var s=document.createElement("script");
+                                s.src="https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/6931bb2e77485fe7cdacd26b/v4/player.js";
+                                s.async=true;
+                                document.head.appendChild(s);
+                            </script>
+                        `
+                    }}
+                />
             </div>
         </div>
     </section>

@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AIOS',
-  description: 'Centralisez votre business sans toucher à vos outils',
+  description: 'Centralisez votre business sans toucher Ã  vos outils',
   icons: {
     icon: '/favicon.png',
   },
