@@ -21,10 +21,9 @@ const QUESTIONS = [
     label: '{firstName}, quelle est votre activité principale ?',
     type: 'radio',
     options: [
-      'Cabinet de conseil (stratégie, transformation digitale, management)',
-      'Agence web / digitale',
-      'Agence marketing / communication',
+      'Cabinet de conseil',
       'Cabinet d\'experts-comptables',
+      'Cabinet d\'avocats',
       'Autre'
     ],
     hasOther: true
@@ -34,19 +33,23 @@ const QUESTIONS = [
     label: 'Combien de personnes dans votre équipe ?',
     type: 'radio',
     options: [
-      'Solo (juste moi)',
-      '2-5 personnes',
-      '6-10 personnes',
-      '11-20 personnes',
-      'Plus de 20 personnes'
+      '2-4 personnes',
+      '5-10 personnes',
+      '11+ personnes',
+      'Solo'
     ]
   },
   {
-    id: 'website',
-    label: 'Quel est le site web de votre entreprise ?',
-    type: 'website',
-    placeholder: 'https://votre-entreprise.com',
-    checkboxLabel: 'Je n\'ai pas de site web'
+    id: 'revenue',
+    label: 'Quel est le chiffre d\'affaires approximatif que vous réalisez ?',
+    type: 'radio',
+    options: [
+      '0-100K€',
+      '100-200K€',
+      '200-500K€',
+      '500K-1M€',
+      '1M€+'
+    ]
   }
 ]
 
@@ -66,8 +69,7 @@ export default function FormulairePage() {
     activity: '',
     activityOther: '',
     teamSize: '',
-    website: '',
-    noWebsite: false,
+    revenue: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -96,10 +98,6 @@ export default function FormulairePage() {
 
     const question = currentQuestion
     const value = formData[question.id]
-
-    if (question.type === 'website') {
-      return formData.noWebsite || (formData.website && formData.website.trim())
-    }
 
     if (question.type === 'radio') {
       if (!value) return false
@@ -212,8 +210,12 @@ export default function FormulairePage() {
         phone: fullPhone
       }))
 
-      // TOUS LES LEADS VONT VERS ENTRETIEN1
-      router.push('/entretien1')
+      // REDIRECTION SELON QUALIFICATION
+      if (data.qualified) {
+        router.push('/entretien1')
+      } else {
+        router.push('/entretien2')
+      }
     } catch (error) {
       console.error('Erreur:', error)
       alert('Une erreur est survenue. Veuillez réessayer.')
@@ -367,28 +369,6 @@ export default function FormulairePage() {
             onChange={(e) => handleChange(`${question.id}Other`, e.target.value)}
             className="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
           />
-        )}
-
-        {question.type === 'website' && (
-          <div>
-            <input
-              type="text"
-              placeholder={question.placeholder}
-              value={formData.website}
-              onChange={(e) => handleChange('website', e.target.value)}
-              disabled={formData.noWebsite}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            />
-            <label className="flex items-center mt-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.noWebsite}
-                onChange={(e) => handleChange('noWebsite', e.target.checked)}
-                className="w-5 h-5 text-blue-600 rounded"
-              />
-              <span className="ml-3 text-gray-700">{question.checkboxLabel}</span>
-            </label>
-          </div>
         )}
       </div>
     )

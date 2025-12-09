@@ -10,9 +10,19 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    // TOUS LES LEADS SONT QUALIFIÉS
-    // Pas de filtrage - tous vont vers entretien1
-    const isQualified = true
+    // LOGIQUE QUALIFICATION
+    // Qualifié SI : Activité = Cabinet (conseil/expert-comptable/avocat) ET CA >= 200K€
+    const isQualifiedActivity = 
+      data.activity === 'Cabinet de conseil' || 
+      data.activity === 'Cabinet d\'experts-comptables' || 
+      data.activity === 'Cabinet d\'avocats'
+    
+    const isQualifiedRevenue = 
+      data.revenue === '200-500K€' || 
+      data.revenue === '500K-1M€' || 
+      data.revenue === '1M€+'
+
+    const isQualified = isQualifiedActivity && isQualifiedRevenue
 
     // PRÉPARER DONNÉES POUR SUPABASE
     const leadData = {
@@ -22,7 +32,7 @@ export async function POST(request: NextRequest) {
       phone: data.phone,
       activity: data.activity === 'Autre' ? data.activityOther : data.activity,
       team_size: data.teamSize,
-      website: data.noWebsite ? null : data.website,
+      revenue: data.revenue,
       qualified: isQualified,
       call_booked: false,
       pixel_sent: false
