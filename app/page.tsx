@@ -1880,30 +1880,31 @@ export default function HomePage() {
 
 <div className="hero-content">
             <div className="badge">
-                Cabinets de conseil :
+                Cabinets professionnels :
             </div>
 
             <h1 className="title-desktop">
-                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span> à Chercher<br />
-                Avant Vos Rendez-vous Client
+                Découvrez Comment Gagner <span className="gradient-text">108 000€/an</span><br />
+                (ou 1 725h) Sans Embaucher Personne
             </h1>
 
             <h1 className="title-mobile">
-                <span className="gradient-text">Arrêtez de Perdre 4h/jour</span><br />
-                à Chercher Avant Vos<br />
-                Rendez-vous Client
+                Découvrez Comment Gagner<br />
+                <span className="gradient-text">108 000€/an</span> (ou 1 725h)<br />
+                Sans Embaucher Personne
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                Votre équipe pose une question sur n'importe quel client et obtient<br />
-                réponse instantanée : emails, docs, historique, <u>tout est centralisé</u>.
+                On recherche 5 cabinets (conseil, expertise comptable, avocats) pour implémenter<br />
+                gratuitement notre système IA (valeur 5 000€). En échange : votre témoignage et feedback.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Votre équipe pose une question<br />
-                sur n'importe quel client et obtient<br />
-                réponse instantanée : emails, docs,<br />
-                historique, <u>tout est centralisé</u>.
+                On recherche 5 cabinets (conseil,<br />
+                expertise comptable, avocats) pour<br />
+                implémenter gratuitement notre<br />
+                système IA (valeur 5 000€).<br />
+                En échange : votre témoignage et feedback.
             </p>
 
             <div className="hero-cta">
@@ -1937,9 +1938,9 @@ export default function HomePage() {
             <div className="stats-grid">
                 <div className="stat-item">
                     <div className="stat-number">
-                        <span className="stat-counter" data-target="20">0</span><span className="stat-suffix">min</span>
+                        <span className="stat-counter" data-target="1725">0</span><span className="stat-suffix">h/an</span>
                     </div>
-                    <div className="stat-label">économisées avant chaque appel client</div>
+                    <div className="stat-label">gagnées pour nos clients</div>
                 </div>
                 <div className="stat-item">
                     <div className="stat-number">
@@ -1949,9 +1950,9 @@ export default function HomePage() {
                 </div>
                 <div className="stat-item">
                     <div className="stat-number">
-                        <span className="stat-counter" data-target="100">0</span><span className="stat-suffix">%</span>
+                        <span className="stat-counter" data-target="108">0</span><span className="stat-suffix">K€</span>
                     </div>
-                    <div className="stat-label">de vos infos clients centralisées</div>
+                    <div className="stat-label">Gagnés supplémentaires par an</div>
                 </div>
             </div>
         </div>
