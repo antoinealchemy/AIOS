@@ -1916,10 +1916,10 @@ export default function HomePage() {
                 <div 
                     dangerouslySetInnerHTML={{
                         __html: `
-                            <vturb-smartplayer id="vid-6931bb2e77485fe7cdacd26b" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+                            <vturb-smartplayer id="vid-69389a550934249b3714ed2f" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
                             <script type="text/javascript">
                                 var s=document.createElement("script");
-                                s.src="https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/6931bb2e77485fe7cdacd26b/v4/player.js";
+                                s.src="https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/69389a550934249b3714ed2f/v4/player.js";
                                 s.async=true;
                                 document.head.appendChild(s);
                             </script>
