@@ -98,6 +98,24 @@ export default function HomePage() {
         }
       })
     })
+
+    // Modals - Close on outside click
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active')
+        }
+      })
+    })
+
+    // Modals - Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+          modal.classList.remove('active')
+        })
+      }
+    })
   }, [])
 
   return (
@@ -1784,6 +1802,111 @@ export default function HomePage() {
                 padding-top: 12px !important;  /* avant : 30px */
             }
         }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .modal-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .modal-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: #2d2d2d;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: #4a4a4a;
+        }
+
+        .modal-content ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .modal-content li {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: #4a4a4a;
+        }
+
+        .modal-content a {
+            color: #3B82F6;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 24px;
+                max-height: 85vh;
+            }
+
+            .modal-content h2 {
+                font-size: 24px;
+            }
+
+            .modal-content h3 {
+                font-size: 18px;
+            }
+        }
       `}</style>
     {/* Header */}
     <header>
@@ -1884,8 +2007,9 @@ export default function HomePage() {
             </div>
 
             <h1 className="title-desktop">
-                Découvrez Comment Gagner <span className="gradient-text">108 000€/an</span><br />
-                (ou 1 725h) Sans Embaucher Personne
+                Découvrez Comment Gagner<br />
+                <span className="gradient-text">108 000€/an</span> (ou 1 725h)<br />
+                Sans Embaucher Personne
             </h1>
 
             <h1 className="title-mobile">
@@ -2395,7 +2519,7 @@ export default function HomePage() {
     <section className="cta-secondary">
         <div className="cta-box">
             <h2>
-                Prêt à gagner <span className="gradient-text">300h/an</span> ?
+                Prêt à gagner <span className="gradient-text">1725h/an</span> ?
             </h2>
 
             <div className="cta-arrow-container">
@@ -2413,6 +2537,207 @@ export default function HomePage() {
             </Link>
         </div>
     </section>
+
+    {/* MODALS */}
+    
+    {/* Modal Contact */}
+    <div className="modal-overlay" id="modal-contact">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-contact')?.classList.remove('active')}>×</button>
+            <h2>Contact</h2>
+            <p>Pour toute question concernant AIOS ou notre offre gratuite, contactez-nous :</p>
+            <p><strong>Email :</strong> <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+            <p>Réponse sous 24-48h ouvrées</p>
+        </div>
+    </div>
+
+    {/* Modal Mentions Légales */}
+    <div className="modal-overlay" id="modal-mentions">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-mentions')?.classList.remove('active')}>×</button>
+            <h2>Mentions Légales</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+            
+            <h3>1. Éditeur du site</h3>
+            <p><strong>Nom :</strong> Antoine Perreaut<br />
+            <strong>Statut :</strong> Micro-entreprise<br />
+            <strong>Siège social :</strong> Paris, France<br />
+            <strong>Email :</strong> <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+
+            <h3>2. Hébergement</h3>
+            <p><strong>Hébergeur :</strong> Vercel Inc.<br />
+            <strong>Adresse :</strong> 440 N Barranca Ave #4133, Covina, CA 91723, USA<br />
+            <strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">vercel.com</a></p>
+
+            <h3>3. Propriété intellectuelle</h3>
+            <p>Tous les contenus présents sur ce site (textes, images, logos, vidéos) sont protégés par les droits de propriété intellectuelle et appartiennent à AIOS / Antoine Perreaut, sauf mention contraire.</p>
+            <p>Toute reproduction, distribution, modification ou utilisation non autorisée est interdite.</p>
+
+            <h3>4. Données personnelles</h3>
+            <p>Voir notre <button onClick={() => { document.getElementById('modal-mentions')?.classList.remove('active'); document.getElementById('modal-confidentialite')?.classList.add('active'); }} style={{ background: 'none', border: 'none', color: '#3B82F6', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}>Politique de Confidentialité</button></p>
+
+            <h3>5. Contact</h3>
+            <p>Pour toute question concernant ces mentions légales :<br />
+            <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
+
+    {/* Modal Confidentialité */}
+    <div className="modal-overlay" id="modal-confidentialite">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-confidentialite')?.classList.remove('active')}>×</button>
+            <h2>Politique de Confidentialité</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+
+            <h3>1. Qui sommes-nous ?</h3>
+            <p>AIOS est un service développé par Antoine Perreaut, spécialisé dans l'implémentation d'assistants IA pour entreprises.</p>
+
+            <h3>2. Données collectées</h3>
+            <p>Lors de votre demande de call gratuit, nous collectons :</p>
+            <ul>
+                <li>Nom et prénom</li>
+                <li>Email professionnel</li>
+                <li>Nom de l'entreprise</li>
+                <li>Téléphone</li>
+                <li>Informations sur votre organisation (CA, secteur d'activité)</li>
+            </ul>
+
+            <h3>3. Utilisation de vos données</h3>
+            <p>Vos données sont utilisées uniquement pour :</p>
+            <ul>
+                <li>Vous contacter pour le call découverte</li>
+                <li>Implémenter AIOS pour votre cabinet</li>
+                <li>Assurer le support technique</li>
+            </ul>
+            <p>Nous ne vendons, ne louons, ni ne partageons vos données avec des tiers.</p>
+
+            <h3>4. Protection de vos données d'entreprise</h3>
+            <p><strong>Important :</strong> Les données sensibles de votre entreprise (emails, documents, dossiers clients) partagées pour le setup AIOS sont protégées comme suit :</p>
+            <ul>
+                <li>NDA signé avant tout accès à vos données</li>
+                <li>Hébergement sécurisé : Vos données sont hébergées sur Claude (Anthropic), conforme RGPD et SOC 2 Type II</li>
+                <li>Accès limité : Seule notre équipe technique y accède, uniquement pour configuration</li>
+                <li>Aucune utilisation commerciale : Vos données ne servent qu'à créer votre assistant IA personnalisé</li>
+                <li>Suppression sur demande : Vous pouvez demander suppression totale à tout moment</li>
+            </ul>
+
+            <h3>5. Durée de conservation</h3>
+            <ul>
+                <li>Données de contact : Conservées 3 ans après dernier contact</li>
+                <li>Données entreprise (setup AIOS) : Conservées 3 ans maximum, suppression immédiate sur simple demande</li>
+            </ul>
+
+            <h3>6. Vos droits (RGPD)</h3>
+            <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+            <ul>
+                <li>Accès : Consulter vos données</li>
+                <li>Rectification : Corriger vos données</li>
+                <li>Suppression : Effacer vos données à tout moment</li>
+                <li>Opposition : Refuser traitement</li>
+                <li>Portabilité : Récupérer vos données</li>
+            </ul>
+            <p>Pour exercer ces droits : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+
+            <h3>7. Cookies</h3>
+            <p>Notre site utilise uniquement des cookies techniques nécessaires au fonctionnement (pas de tracking publicitaire).</p>
+
+            <h3>8. Contact</h3>
+            <p>Pour toute question sur vos données : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
+
+    {/* Modal CGU */}
+    <div className="modal-overlay" id="modal-cgu">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-cgu')?.classList.remove('active')}>×</button>
+            <h2>Conditions Générales d'Utilisation (CGU)</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+
+            <h3>1. Objet</h3>
+            <p>Les présentes CGU régissent l'utilisation du service AIOS proposé par Antoine Perreaut.</p>
+
+            <h3>2. Description du service</h3>
+            <p>AIOS propose un setup gratuit d'assistant IA basé sur Claude Projects pour cabinets professionnels (conseil, expertise comptable, avocats).</p>
+            <p><strong>Offre limitée :</strong> 5 cabinets seulement.</p>
+
+            <h3>3. Conditions d'accès</h3>
+            <p>Pour bénéficier du setup gratuit, le cabinet doit :</p>
+            <ul>
+                <li>CA annuel minimum : 200 000€</li>
+                <li>Être motivé à implémenter rapidement</li>
+                <li>Accepter de partager informations organisation (sous NDA)</li>
+                <li>Fournir feedback écrit ET vidéo après utilisation</li>
+            </ul>
+            <p><strong>Important :</strong> Nous sélectionnons les cabinets avec qui nous travaillons. Une demande ne garantit pas l'acceptation.</p>
+
+            <h3>4. Engagements du cabinet</h3>
+            <p>En acceptant l'offre gratuite, le cabinet s'engage à :</p>
+            <ul>
+                <li>Fournir accès aux données nécessaires (emails, documents) pour configuration</li>
+                <li>Participer aux calls de setup et formation</li>
+                <li>Tester la solution activement pendant 30 jours minimum</li>
+                <li>Fournir feedback écrit ET vidéo honnête</li>
+                <li>Autoriser utilisation de son témoignage pour publicités, site internet et communication marketing</li>
+                <li>Autoriser affichage du logo de votre cabinet sur notre site internet</li>
+            </ul>
+            <p><strong>Clause importante :</strong> Si le feedback attendu (écrit + vidéo) n'est pas fourni dans les délais convenus, nous nous réservons le droit de retirer l'accès au système AIOS.</p>
+
+            <h3>5. Engagements AIOS</h3>
+            <p>Nous nous engageons à :</p>
+            <ul>
+                <li>Livrer setup fonctionnel sous 14 jours après réception données</li>
+                <li>Former votre équipe à l'utilisation</li>
+                <li>Assurer support technique 1 mois après livraison</li>
+                <li>Respecter confidentialité absolue (NDA signé)</li>
+                <li>Ne jamais utiliser vos données à des fins commerciales</li>
+            </ul>
+
+            <h3>6. Durée d'accès</h3>
+            <p><strong>Période d'essai beta :</strong> L'accès gratuit est fourni pendant la période de test convenue (généralement 30-60 jours).</p>
+            <p>Après cette période et réception des feedbacks :</p>
+            <ul>
+                <li>Le système reste fonctionnel sur votre compte Claude</li>
+                <li>Support technique limité (selon disponibilité)</li>
+            </ul>
+
+            <h3>7. Propriété intellectuelle</h3>
+            <ul>
+                <li>AIOS : Système, méthode, prompts restent propriété d'Antoine Perreaut</li>
+                <li>Vos données : Restent votre propriété exclusive</li>
+                <li>Output Claude Projects : Appartient au cabinet</li>
+            </ul>
+
+            <h3>8. Limitation de responsabilité</h3>
+            <p>Le service est fourni "tel quel" dans le cadre d'une offre beta gratuite.</p>
+            <p>AIOS ne peut être tenu responsable de :</p>
+            <ul>
+                <li>Interruptions temporaires du service Claude (Anthropic)</li>
+                <li>Erreurs ou imprécisions dans les réponses générées par l'IA</li>
+                <li>Décisions prises sur base des réponses fournies</li>
+            </ul>
+            <p><strong>Recommandation :</strong> Toujours vérifier informations critiques.</p>
+
+            <h3>9. Résiliation</h3>
+            <p>Chaque partie peut mettre fin à la collaboration à tout moment par email.</p>
+            <p>En cas d'arrêt :</p>
+            <ul>
+                <li>Vos données sont supprimées sous 30 jours (ou immédiatement sur demande)</li>
+                <li>Accès AIOS peut être révoqué si feedback non fourni</li>
+            </ul>
+
+            <h3>10. Données personnelles</h3>
+            <p>Voir notre <button onClick={() => { document.getElementById('modal-cgu')?.classList.remove('active'); document.getElementById('modal-confidentialite')?.classList.add('active'); }} style={{ background: 'none', border: 'none', color: '#3B82F6', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}>Politique de Confidentialité</button> pour détails sur traitement des données.</p>
+
+            <h3>11. Modification des CGU</h3>
+            <p>Nous nous réservons le droit de modifier ces CGU. Modifications communiquées par email.</p>
+
+            <h3>12. Droit applicable</h3>
+            <p>CGU soumises au droit français.</p>
+
+            <h3>13. Contact</h3>
+            <p>Pour toute question : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
 
     {/* Footer */}
     <footer>
@@ -2438,9 +2763,10 @@ export default function HomePage() {
             <div className="footer-column">
                 <h3>Légal</h3>
                 <ul>
-                    <li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9ebfb7f3b1adf0b8ac">Contact</a></li>
-                    <li><a href="#mentions">Mentions Légales</a></li>
-                    <li><a href="#confidentialite">Confidentialité</a></li>
+                    <li><button onClick={() => document.getElementById('modal-contact')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Contact</button></li>
+                    <li><button onClick={() => document.getElementById('modal-mentions')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Mentions Légales</button></li>
+                    <li><button onClick={() => document.getElementById('modal-confidentialite')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Confidentialité</button></li>
+                    <li><button onClick={() => document.getElementById('modal-cgu')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>CGU</button></li>
                 </ul>
             </div>
         </div>
@@ -2451,11 +2777,8 @@ export default function HomePage() {
         {/* Bottom */}
         <div className="footer-bottom">
             <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
-            <p style={{ marginBottom: 16 }}>
-                Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
-            </p>
             <p>
-                Contact : <a href="/cdn-cgi/l/email-protection#c2a1adacb6a3a1b682a3abefadb1eca4b0" style={{ textDecoration: "underline" }}><span className="__cf_email__" data-cfemail="f5969a9b81949681b5949cd89a86db9387">[email&#160;protected]</span></a>
+                Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
         </div>
     </footer>
