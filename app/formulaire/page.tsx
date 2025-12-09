@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
@@ -65,6 +65,7 @@ export default function FormulairePage() {
   const [emailError, setEmailError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [phoneCountry, setPhoneCountry] = useState('+33')
+  const [leadId, setLeadId] = useState<string | null>(null)
   const [formData, setFormData] = useState<any>({
     activity: '',
     activityOther: '',
@@ -83,6 +84,40 @@ export default function FormulairePage() {
 
   // CALCULER LA PROGRESSION
   const progress = Math.round(((currentStep + 1) / totalSteps) * 100)
+
+  // SAUVEGARDE AUTO À CHAQUE CHANGEMENT
+  useEffect(() => {
+    const savePartialData = async () => {
+      // Ne sauvegarder que si au moins prénom ou nom existe
+      if (!formData.firstName && !formData.lastName) return
+
+      try {
+        const response = await fetch('/api/save-partial-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            leadId: leadId, // Envoyer l'ID si existe déjà
+            currentStep: currentStep
+          })
+        })
+
+        const data = await response.json()
+        
+        // Stocker l'ID du lead pour updates futurs
+        if (data.leadId && !leadId) {
+          setLeadId(data.leadId)
+        }
+      } catch (error) {
+        console.error('Erreur sauvegarde partielle:', error)
+        // Ne pas bloquer l'utilisateur en cas d'erreur
+      }
+    }
+
+    // Debounce de 2 secondes pour éviter trop de requêtes
+    const timeoutId = setTimeout(savePartialData, 2000)
+    return () => clearTimeout(timeoutId)
+  }, [formData, currentStep, leadId])
 
   // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
   const isCurrentStepValid = () => {
@@ -197,7 +232,8 @@ export default function FormulairePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          phone: fullPhone
+          phone: fullPhone,
+          leadId: leadId // Envoyer l'ID pour update final
         })
       })
 
