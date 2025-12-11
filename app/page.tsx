@@ -1031,71 +1031,6 @@ export default function HomePage() {
             color: #60A5FA;
         }
 
-        /* Pour Vous / Pas Pour Vous */
-        /* Pour Qui Section */
-        .for-who {
-            padding: 40px 24px 20px;
-            background: #F8F8F8;
-        }
-
-        .for-who .container {
-            text-align: center;
-        }
-
-        .business-types-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .business-card {
-            background: #FFFFFF;
-            border: 1px solid #E5E7EB;
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-
-        .business-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-            border-color: #3B82F6;
-        }
-
-        .business-icon {
-            width: 56px;
-            height: 56px;
-            margin-bottom: 20px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .business-icon svg {
-            width: 28px;
-            height: 28px;
-            color: #3B82F6;
-        }
-
-        .business-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-        }
-
-        .business-card p {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #6C6C6C;
-            text-align: left;
-        }
 
         /* Qualification Section */
         .qualification {
@@ -1512,6 +1447,19 @@ export default function HomePage() {
             box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
 
+        .cta-button-large {
+            padding: 24px 60px !important;
+            font-size: 22px !important;
+            font-weight: 700 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4) !important;
+        }
+
+        .cta-button-large:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5) !important;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .faq {
@@ -1545,6 +1493,11 @@ export default function HomePage() {
             .cta-button {
                 font-size: 14px;
                 padding: 12px 32px;
+            }
+
+            .cta-button-large {
+                padding: 20px 48px !important;
+                font-size: 18px !important;
             }
         }
 
@@ -2132,60 +2085,13 @@ export default function HomePage() {
         </div>
     </section>
 
-    {/* Pour Qui */}
-    <section className="for-who">
-        <div className="container">
-            <div className="badge">Pour qui ?</div>
-            <h2 className="section-title" style={{ marginBottom: 16 }}>
-                AI<span className="gradient-text">OS</span> N'est Pas Pour Tout Le Monde
-            </h2>
-            <p className="section-subtitle">
-                C'est pour les entreprises de services qui gèrent plusieurs clients et veulent économiser leur temps en centralisant leurs informations.
-            </p>
-
-            <div className="business-types-grid">
-                {/* Card 1 */}
-                <div className="business-card">
-                    <div className="business-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <h3>Cabinets de Conseil & Stratégie</h3>
-                    <p>Vous accompagnez plusieurs clients en transformation digitale, stratégie, ou management et vos infos sont dispersées. Vous perdez 4h/jour avant vos rendez-vous client.</p>
-                </div>
-
-                {/* Card 2 */}
-                <div className="business-card">
-                    <div className="business-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                        </svg>
-                    </div>
-                    <h3>Agences Marketing & Communication</h3>
-                    <p>Vous gérez 5+ clients avec campagnes, livrables, feedbacks et votre équipe jongle entre Notion, Slack, Trello.</p>
-                </div>
-
-                {/* Card 3 */}
-                <div className="business-card">
-                    <div className="business-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3>Cabinets Comptables & Experts Financiers</h3>
-                    <p>Vous suivez 20-50 dossiers clients (compta, fiscalité, audit). Chaque dossier a son historique, ses spécificités. Vous passez 2h/jour à retrouver des docs, des échanges, des décisions passées.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     {/* Testimonials Carousel */}
     <section className="testimonials-carousel" id="temoignages">
         <div className="container">
             <div className="badge">Résultats</div>
             <h2 className="section-title">
-                Nos Clients en Parlent Mieux Que Nous
+                Nos Testeurs en Parlent Mieux Que Nous
             </h2>
 
             <div className="carousel-wrapper">
@@ -2519,21 +2425,7 @@ export default function HomePage() {
     {/* CTA Secondary */}
     <section className="cta-secondary">
         <div className="cta-box">
-            <h2>
-                Prêt à gagner <span className="gradient-text">1725h/an</span> ?
-            </h2>
-
-            <div className="cta-arrow-container">
-                <svg className="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                </svg>
-                <p style={{ margin: 0 }}>Réservez votre consultation de 30 minutes offerte maintenant</p>
-                <svg className="cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                </svg>
-            </div>
-
-            <Link href="/formulaire" className="cta-button">
+            <Link href="/formulaire" className="cta-button cta-button-large">
                 Réserver maintenant
             </Link>
         </div>
