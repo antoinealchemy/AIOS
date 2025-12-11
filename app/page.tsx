@@ -2008,13 +2008,14 @@ export default function HomePage() {
 
             <h1 className="title-desktop">
                 Découvrez Comment Gagner<br />
-                <span className="gradient-text">5, 10, 20h</span> (ou plus) Par Semaine<br />
+                <span className="gradient-text">5h, 10h, 20h (ou plus)</span> par semaine<br />
                 Sans Embaucher Personne
             </h1>
 
             <h1 className="title-mobile">
                 Découvrez Comment Gagner<br />
-                <span className="gradient-text">5h, 10h, 20h (ou plus)</span> par semaine<br />
+                <span className="gradient-text">5h, 10h, 20h (ou plus)</span><br />
+                Par Semaine<br />
                 Sans Embaucher Personne
             </h1>
 
