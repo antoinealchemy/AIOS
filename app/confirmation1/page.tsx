@@ -22,6 +22,13 @@ export default function Confirmation1Page() {
       content_name: 'Lead Qualifié AIOS - Call Booké'
     })
 
+    // 🎯 CONVERSION PERSONNALISÉE - CALLBOOKED
+    fbq.event('CallBooked', {
+      value: 2000,
+      currency: 'EUR',
+      content_name: 'Rendez-vous confirmé'
+    })
+
     const urlParams = new URLSearchParams(window.location.search)
     
     const eventTypeName = urlParams.get('event_type_name')
