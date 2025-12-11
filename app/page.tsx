@@ -2020,16 +2020,16 @@ export default function HomePage() {
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                On recherche 5 cabinets (conseil, expertise comptable, avocats) pour implémenter<br />
-                gratuitement notre système IA (valeur 5 000€). En échange : votre témoignage.
+                On prend 5 cabinets (conseil, expertise comptable, avocats) pour implémenter<br />
+                GRATUITEMENT notre système IA (valeur 5 000€) contre votre témoignage.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                On recherche 5 cabinets (conseil,<br />
+                On prend 5 cabinets (conseil,<br />
                 expertise comptable, avocats) pour<br />
-                implémenter gratuitement notre<br />
-                système IA (valeur 5 000€).<br />
-                En échange : votre témoignage.
+                implémenter GRATUITEMENT notre<br />
+                système IA (valeur 5 000€)<br />
+                contre votre témoignage.
             </p>
 
             <div className="hero-cta">
