@@ -246,12 +246,8 @@ export default function FormulairePage() {
         phone: fullPhone
       }))
 
-      // REDIRECTION SELON QUALIFICATION
-      if (data.qualified) {
-        router.push('/entretien1')
-      } else {
-        router.push('/entretien2')
-      }
+      // REDIRECTION VERS ENTRETIEN 1 POUR TOUS
+      router.push('/entretien1')
     } catch (error) {
       console.error('Erreur:', error)
       alert('Une erreur est survenue. Veuillez réessayer.')
