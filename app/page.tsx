@@ -1961,14 +1961,14 @@ export default function HomePage() {
 
             <h1 className="title-desktop">
                 Voici Comment Récupérer<br />
-                <span className="gradient-text">Jusqu'à 40 Heures par Semaine</span><br />
-                de Temps Non Facturable Sans Recruter de Junior
+                <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
+                Non Facturable Sans Recruter de Junior
             </h1>
 
             <h1 className="title-mobile">
                 Voici Comment Récupérer<br />
-                <span className="gradient-text">Jusqu'à 40 Heures<br />par Semaine</span><br />
-                de Temps Non Facturable<br />
+                <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
+                Non Facturable<br />
                 Sans Recruter de Junior
             </h1>
 
