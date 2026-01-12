@@ -2009,6 +2009,629 @@ export default function HomePage() {
         </div>
     </section>
 
+    {/* Stats Section */}
+    <section className="stats-section">
+        <div className="container">
+            <h2 className="stats-title">AIOS en quelques chiffres</h2>
+            <div className="stats-grid">
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="1725">0</span><span className="stat-suffix">h/an</span>
+                    </div>
+                    <div className="stat-label">gagnées pour nos clients</div>
+                </div>
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="98">0</span><span className="stat-suffix">%</span>
+                    </div>
+                    <div className="stat-label">de taux de réponse précise</div>
+                </div>
+                <div className="stat-item">
+                    <div className="stat-number">
+                        <span className="stat-counter" data-target="108">0</span><span className="stat-suffix">K€</span>
+                    </div>
+                    <div className="stat-label">Gagnés supplémentaires par an</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* AIOS Features Section */}
+    <section className="aios-features" id="solution">
+        <div className="container" style={{ textAlign: "center" }}>
+            <a href="#solution" className="features-badge">
+                En savoir plus
+            </a>
+            
+            <h2 className="features-title">AI<span className="gradient-text">OS</span> C'est Quoi ?</h2>
+
+            <div className="features-grid">
+                {/* Feature 1 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image1.png" alt="Cerveau IA" className="feature-image" />
+                    </div>
+                    <h3>Votre Mémoire d'Entreprise Centralisée</h3>
+                    <p>On installe et personnalisons pour vous un assistant IA qui connaît votre entreprise en profondeur. Accessible par toute l'équipe. Question → Réponse instantanée.</p>
+                </div>
+
+                {/* Feature 2 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image2.png" alt="ROI" className="feature-image" />
+                    </div>
+                    <h3>ROI immédiatement mesurable</h3>
+                    <p>Temps gagné = Argent gagné. Moins de recherche, plus de production. Chaque heure récupérée augmente votre capacité facturable. ROI visible dès J1.</p>
+                </div>
+
+                {/* Feature 3 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image3.png" alt="Recherche instantanée" className="feature-image" />
+                    </div>
+                    <h3>Zéro temps perdu à chercher</h3>
+                    <p>Informations sur un client ? Historique d'un projet ? Décision passée ? Ne perdez plus jamais 20 min à chercher l'information.</p>
+                </div>
+
+                {/* Feature 4 */}
+                <div className="feature-card">
+                    <div className="feature-image-wrapper">
+                        <img src="image4.png" alt="Analyse 24/7" className="feature-image" />
+                    </div>
+                    <h3>Vision 360° Sur Votre Entreprise</h3>
+                    <p>Interrogez votre base de données complète pour obtenir une vue d'ensemble instantanée.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {/* Testimonials Carousel */}
+    <section className="testimonials-carousel" id="temoignages">
+        <div className="container">
+            <div className="badge">Résultats</div>
+            <h2 className="section-title">
+                Nos Testeurs en Parlent Mieux Que Nous
+            </h2>
+
+            <div className="carousel-wrapper">
+                <div className="carousel-track">
+                    {/* Testimonial 1 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas" /></div>
+                            <div className="testimonial-info">
+                                <h4>Thomas</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                    </div>
+
+                    {/* Testimonial 2 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie" /></div>
+                            <div className="testimonial-info">
+                                <h4>Sophie</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                    </div>
+
+                    {/* Testimonial 3 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc" /></div>
+                            <div className="testimonial-info">
+                                <h4>Marc</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
+                    </div>
+
+                    {/* Testimonial 4 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/claire.jpg" alt="Claire" /></div>
+                            <div className="testimonial-info">
+                                <h4>Claire</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Je ne pensais pas qu'on pouvait gagner autant de temps. 15h par semaine récupérées pour notre équipe, c'est l'équivalent d'un recrutement évité. En plus, l'équipe d'AIOS nous a livré en 6 jours. Rapide, efficace, transformateur."</p>
+                    </div>
+
+                    {/* Testimonial 5 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/david.jpg" alt="David" /></div>
+                            <div className="testimonial-info">
+                                <h4>David</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Le vrai avant/après : avant, on naviguait à l'aveugle. Après AIOS, on a une vision complète de tous nos clients en temps réel. Mes consultants sont autonomes, je prends de meilleures décisions. Honnêtement, je ne comprends pas comment on faisait avant."</p>
+                    </div>
+
+                    {/* Testimonial 6 */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/julie.jpg" alt="Julie" /></div>
+                            <div className="testimonial-info">
+                                <h4>Julie</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Mise en place rapide et résultats immédiats. En 2 semaines, toute l'équipe l'utilise quotidiennement. On a éliminé les réunions de sync inutiles. Productivité en hausse, stress en baisse. Si vous hésitez encore : foncez."</p>
+                    </div>
+
+                    {/* Duplicate for seamless loop */}
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/thomas.jpg" alt="Thomas" /></div>
+                            <div className="testimonial-info">
+                                <h4>Thomas</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Avant AIOS, on perdait de précieuses heures par jour à chercher des infos dispersées entre Gmail, Drive et Notion. Maintenant, on pose une question et on a la réponse en quelques secondes. Mon équipe a gagné 15h par semaine. C'est simple : sans AIOS, on ne pourrait plus travailler."</p>
+                    </div>
+
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/sophie.jpg" alt="Sophie" /></div>
+                            <div className="testimonial-info">
+                                <h4>Sophie</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Dès la première semaine, j'ai préparé 4 appels clients en 10 minutes au lieu de 2h. Le ROI est immédiat. Pour nous, c'est un game changer absolu. On ne reviendrait en arrière pour rien au monde."</p>
+                    </div>
+
+                    <div className="testimonial-card">
+                        <div className="testimonial-header">
+                            <div className="testimonial-avatar"><img src="profile/marc.jpg" alt="Marc" /></div>
+                            <div className="testimonial-info">
+                                <h4>Marc</h4>
+                                <div className="testimonial-stars">
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <svg className="star" viewBox="0 0 24 24" fill="#FDB022">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="testimonial-text">"Avant : chaos total. Après : clarté absolue. AIOS connaît tous nos clients mieux que nous. Mon équipe est bien plus productive. Meilleur investissement business de l'année."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* FAQ */}
+    <section className="faq" id="faq">
+        <div className="container">
+            <div className="badge">FAQ</div>
+            <h2 className="section-title">
+                Les Questions Fréquentes
+            </h2>
+
+            <div className="faq-container">
+                <div className="faq-item">
+                    <button className="faq-question">
+                        <span>AIOS, c'est quoi concrètement ?</span>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div className="faq-answer">
+                        AIOS, c'est votre nouvel assistant intelligent qui centralise toutes les informations de votre entreprise. Le résultat ? Vous posez une question, vous obtenez la réponse précise instantanément. Plus besoin de chercher dans 5 outils différents : tout est à portée de main, instantanément.
+                    </div>
+                </div>
+
+                <div className="faq-item">
+                    <button className="faq-question">
+                        <span>C'est uniquement pour le CEO ou toute l'équipe peut l'utiliser ?</span>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div className="faq-answer">
+                        Les deux sont possibles. AIOS peut être configuré exclusivement pour le dirigeant, ou bien pour toute l'équipe (consultants, CMO, CFO, etc.). Chaque membre accède aux informations dont il a besoin selon son rôle. Vous choisissez qui utilise l'outil et comment, on s'adapte à votre organisation.
+                    </div>
+                </div>
+
+                <div className="faq-item">
+                    <button className="faq-question">
+                        <span>Qui va avoir accès à mes données ?</span>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div className="faq-answer">
+                        Personne d'autre que vous et votre équipe. Vos données ne sont jamais exploitées, revendues ou consultées par des tiers. Nous signons un NDA avant même de commencer. Hébergement sécurisé EU (Claude AI), conformité RGPD totale. Vos données restent votre propriété, toujours.
+                    </div>
+                </div>
+
+                <div className="faq-item">
+                    <button className="faq-question">
+                        <span>Combien de temps prend la mise en place ?</span>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div className="faq-answer">
+                        2 semaines du début à la fin. Nous vous transmettons les formulaires à remplir et on s'occupe d'absolument toute la configuration interne de votre assistant. Au bout de 2 semaines, votre livrable complet est prêt à l'emploi.
+                    </div>
+                </div>
+
+                <div className="faq-item">
+                    <button className="faq-question">
+                        <span>Concrètement, qu'est-ce qu'on reçoit ?</span>
+                        <svg className="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div className="faq-answer">
+                        Votre Assistant IA personnalisé (Claude Project configuré sur-mesure pour votre entreprise) et une courte formation vidéo pour vous aider à exploiter votre assistant à 100% de son potentiel. Tout est clé en main.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* CTA Secondary */}
+    <section className="cta-secondary">
+        <div className="cta-box">
+            <Link href="/formulaire" className="cta-button cta-button-large">
+                Réserver maintenant
+            </Link>
+        </div>
+    </section>
+
+    {/* MODALS */}
+    
+    {/* Modal Contact */}
+    <div className="modal-overlay" id="modal-contact">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-contact')?.classList.remove('active')}>×</button>
+            <h2>Contact</h2>
+            <p>Pour toute question concernant AIOS ou notre offre gratuite, contactez-nous :</p>
+            <p><strong>Email :</strong> <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+            <p>Réponse sous 24-48h ouvrées</p>
+        </div>
+    </div>
+
+    {/* Modal Mentions Légales */}
+    <div className="modal-overlay" id="modal-mentions">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-mentions')?.classList.remove('active')}>×</button>
+            <h2>Mentions Légales</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+            
+            <h3>1. Éditeur du site</h3>
+            <p><strong>Nom :</strong> Antoine Perreaut<br />
+            <strong>Statut :</strong> Micro-entreprise<br />
+            <strong>Siège social :</strong> Paris, France<br />
+            <strong>Email :</strong> <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+
+            <h3>2. Hébergement</h3>
+            <p><strong>Hébergeur :</strong> Vercel Inc.<br />
+            <strong>Adresse :</strong> 440 N Barranca Ave #4133, Covina, CA 91723, USA<br />
+            <strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">vercel.com</a></p>
+
+            <h3>3. Propriété intellectuelle</h3>
+            <p>Tous les contenus présents sur ce site (textes, images, logos, vidéos) sont protégés par les droits de propriété intellectuelle et appartiennent à AIOS / Antoine Perreaut, sauf mention contraire.</p>
+            <p>Toute reproduction, distribution, modification ou utilisation non autorisée est interdite.</p>
+
+            <h3>4. Données personnelles</h3>
+            <p>Voir notre <button onClick={() => { document.getElementById('modal-mentions')?.classList.remove('active'); document.getElementById('modal-confidentialite')?.classList.add('active'); }} style={{ background: 'none', border: 'none', color: '#3B82F6', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}>Politique de Confidentialité</button></p>
+
+            <h3>5. Contact</h3>
+            <p>Pour toute question concernant ces mentions légales :<br />
+            <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
+
+    {/* Modal Confidentialité */}
+    <div className="modal-overlay" id="modal-confidentialite">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-confidentialite')?.classList.remove('active')}>×</button>
+            <h2>Politique de Confidentialité</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+
+            <h3>1. Qui sommes-nous ?</h3>
+            <p>AIOS est un service développé par Antoine Perreaut, spécialisé dans l'implémentation d'assistants IA pour entreprises.</p>
+
+            <h3>2. Données collectées</h3>
+            <p>Lors de votre demande de call gratuit, nous collectons :</p>
+            <ul>
+                <li>Nom et prénom</li>
+                <li>Email professionnel</li>
+                <li>Nom de l'entreprise</li>
+                <li>Téléphone</li>
+                <li>Informations sur votre organisation (CA, secteur d'activité)</li>
+            </ul>
+
+            <h3>3. Utilisation de vos données</h3>
+            <p>Vos données sont utilisées uniquement pour :</p>
+            <ul>
+                <li>Vous contacter pour le call découverte</li>
+                <li>Implémenter AIOS pour votre cabinet</li>
+                <li>Assurer le support technique</li>
+            </ul>
+            <p>Nous ne vendons, ne louons, ni ne partageons vos données avec des tiers.</p>
+
+            <h3>4. Protection de vos données d'entreprise</h3>
+            <p><strong>Important :</strong> Les données sensibles de votre entreprise (emails, documents, dossiers clients) partagées pour le setup AIOS sont protégées comme suit :</p>
+            <ul>
+                <li>NDA signé avant tout accès à vos données</li>
+                <li>Hébergement sécurisé : Vos données sont hébergées sur Claude (Anthropic), conforme RGPD et SOC 2 Type II</li>
+                <li>Accès limité : Seule notre équipe technique y accède, uniquement pour configuration</li>
+                <li>Aucune utilisation commerciale : Vos données ne servent qu'à créer votre assistant IA personnalisé</li>
+                <li>Suppression sur demande : Vous pouvez demander suppression totale à tout moment</li>
+            </ul>
+
+            <h3>5. Durée de conservation</h3>
+            <ul>
+                <li>Données de contact : Conservées 3 ans après dernier contact</li>
+                <li>Données entreprise (setup AIOS) : Conservées 3 ans maximum, suppression immédiate sur simple demande</li>
+            </ul>
+
+            <h3>6. Vos droits (RGPD)</h3>
+            <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+            <ul>
+                <li>Accès : Consulter vos données</li>
+                <li>Rectification : Corriger vos données</li>
+                <li>Suppression : Effacer vos données à tout moment</li>
+                <li>Opposition : Refuser traitement</li>
+                <li>Portabilité : Récupérer vos données</li>
+            </ul>
+            <p>Pour exercer ces droits : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+
+            <h3>7. Cookies</h3>
+            <p>Notre site utilise uniquement des cookies techniques nécessaires au fonctionnement (pas de tracking publicitaire).</p>
+
+            <h3>8. Contact</h3>
+            <p>Pour toute question sur vos données : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
+
+    {/* Modal CGU */}
+    <div className="modal-overlay" id="modal-cgu">
+        <div className="modal-content">
+            <button className="modal-close" onClick={() => document.getElementById('modal-cgu')?.classList.remove('active')}>×</button>
+            <h2>Conditions Générales d'Utilisation (CGU)</h2>
+            <p><strong>Dernière mise à jour :</strong> 9 décembre 2025</p>
+
+            <h3>1. Objet</h3>
+            <p>Les présentes CGU régissent l'utilisation du service AIOS proposé par Antoine Perreaut.</p>
+
+            <h3>2. Description du service</h3>
+            <p>AIOS propose un setup gratuit d'assistant IA basé sur Claude Projects pour cabinets professionnels (conseil, expertise comptable, avocats).</p>
+            <p><strong>Offre limitée :</strong> 5 cabinets seulement.</p>
+
+            <h3>3. Conditions d'accès</h3>
+            <p>Pour bénéficier du setup gratuit, le cabinet doit :</p>
+            <ul>
+                <li>CA annuel minimum : 200 000€</li>
+                <li>Être motivé à implémenter rapidement</li>
+                <li>Accepter de partager informations organisation (sous NDA)</li>
+                <li>Fournir feedback écrit ET vidéo après utilisation</li>
+            </ul>
+            <p><strong>Important :</strong> Nous sélectionnons les cabinets avec qui nous travaillons. Une demande ne garantit pas l'acceptation.</p>
+
+            <h3>4. Engagements du cabinet</h3>
+            <p>En acceptant l'offre gratuite, le cabinet s'engage à :</p>
+            <ul>
+                <li>Fournir accès aux données nécessaires (emails, documents) pour configuration</li>
+                <li>Participer aux calls de setup et formation</li>
+                <li>Tester la solution activement pendant 30 jours minimum</li>
+                <li>Fournir feedback écrit ET vidéo honnête</li>
+                <li>Autoriser utilisation de son témoignage pour publicités, site internet et communication marketing</li>
+                <li>Autoriser affichage du logo de votre cabinet sur notre site internet</li>
+            </ul>
+            <p><strong>Clause importante :</strong> Si le feedback attendu (écrit + vidéo) n'est pas fourni dans les délais convenus, nous nous réservons le droit de retirer l'accès au système AIOS.</p>
+
+            <h3>5. Engagements AIOS</h3>
+            <p>Nous nous engageons à :</p>
+            <ul>
+                <li>Livrer setup fonctionnel sous 14 jours après réception données</li>
+                <li>Former votre équipe à l'utilisation</li>
+                <li>Assurer support technique 1 mois après livraison</li>
+                <li>Respecter confidentialité absolue (NDA signé)</li>
+                <li>Ne jamais utiliser vos données à des fins commerciales</li>
+            </ul>
+
+            <h3>6. Durée d'accès</h3>
+            <p><strong>Période d'essai beta :</strong> L'accès gratuit est fourni pendant la période de test convenue (généralement 30-60 jours).</p>
+            <p>Après cette période et réception des feedbacks :</p>
+            <ul>
+                <li>Le système reste fonctionnel sur votre compte Claude</li>
+                <li>Support technique limité (selon disponibilité)</li>
+            </ul>
+
+            <h3>7. Propriété intellectuelle</h3>
+            <ul>
+                <li>AIOS : Système, méthode, prompts restent propriété d'Antoine Perreaut</li>
+                <li>Vos données : Restent votre propriété exclusive</li>
+                <li>Output Claude Projects : Appartient au cabinet</li>
+            </ul>
+
+            <h3>8. Limitation de responsabilité</h3>
+            <p>Le service est fourni "tel quel" dans le cadre d'une offre beta gratuite.</p>
+            <p>AIOS ne peut être tenu responsable de :</p>
+            <ul>
+                <li>Interruptions temporaires du service Claude (Anthropic)</li>
+                <li>Erreurs ou imprécisions dans les réponses générées par l'IA</li>
+                <li>Décisions prises sur base des réponses fournies</li>
+            </ul>
+            <p><strong>Recommandation :</strong> Toujours vérifier informations critiques.</p>
+
+            <h3>9. Résiliation</h3>
+            <p>Chaque partie peut mettre fin à la collaboration à tout moment par email.</p>
+            <p>En cas d'arrêt :</p>
+            <ul>
+                <li>Vos données sont supprimées sous 30 jours (ou immédiatement sur demande)</li>
+                <li>Accès AIOS peut être révoqué si feedback non fourni</li>
+            </ul>
+
+            <h3>10. Données personnelles</h3>
+            <p>Voir notre <button onClick={() => { document.getElementById('modal-cgu')?.classList.remove('active'); document.getElementById('modal-confidentialite')?.classList.add('active'); }} style={{ background: 'none', border: 'none', color: '#3B82F6', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}>Politique de Confidentialité</button> pour détails sur traitement des données.</p>
+
+            <h3>11. Modification des CGU</h3>
+            <p>Nous nous réservons le droit de modifier ces CGU. Modifications communiquées par email.</p>
+
+            <h3>12. Droit applicable</h3>
+            <p>CGU soumises au droit français.</p>
+
+            <h3>13. Contact</h3>
+            <p>Pour toute question : <a href="mailto:antoine.alchemy@gmail.com">antoine.alchemy@gmail.com</a></p>
+        </div>
+    </div>
+
     {/* Footer */}
     <footer>
         <div className="footer-content">
