@@ -16,7 +16,7 @@ export default function FormulairePage() {
     isCabinet: '',
     role: '',
     roleOther: '',
-    douleur: 5,
+    douleur: 0,
     urgence: '',
     budget: ''
   })
@@ -119,7 +119,7 @@ export default function FormulairePage() {
   const isStepValid = () => {
     if (currentStep === 1) return formData.isCabinet !== ''
     if (currentStep === 2) return formData.role !== ''
-    if (currentStep === 3) return true // Slider toujours valide
+    if (currentStep === 3) return formData.douleur !== 0
     if (currentStep === 4) return formData.budget !== ''
     if (currentStep === 5) return formData.urgence !== ''
     return false
@@ -440,7 +440,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Dirigeant
+                  👔 Dirigeant
                 </button>
 
                 <button
@@ -450,7 +450,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Associé
+                  🤝 Associé
                 </button>
 
                 <button
@@ -460,7 +460,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Collaborateur salarié
+                  💼 Collaborateur salarié
                 </button>
 
                 <button
@@ -470,7 +470,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Avocat junior
+                  📚 Avocat junior
                 </button>
 
                 <button
@@ -480,7 +480,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Autre
+                  🔧 Autre
                 </button>
               </div>
             </>
@@ -489,22 +489,48 @@ export default function FormulairePage() {
           {/* QUESTION 3 - DOULEUR */}
           {currentStep === 3 && (
             <>
-              <h2 className="question-title">Sur une échelle de 1 à 10, à quel point perdre 20-30h/semaine impacte-t-il votre cabinet ?</h2>
+              <h2 className="question-title">Sur une échelle de 1 à 10 : à quel point perdre 20-30h/semaine (minimum) impacte-t-il votre cabinet ?</h2>
               
-              <div className="slider-container">
-                <div className="slider-value">{formData.douleur}/10</div>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={formData.douleur}
-                  className="slider"
-                  onChange={(e) => setFormData({ ...formData, douleur: parseInt(e.target.value) })}
-                />
-                <div className="slider-labels">
-                  <span>1 - Pas un problème</span>
-                  <span>10 - Critique</span>
-                </div>
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.douleur === 2 ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, douleur: 2 })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  1-3 : Pas vraiment un problème
+                </button>
+
+                <button
+                  className={`option-button ${formData.douleur === 5 ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, douleur: 5 })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  4-6 : C'est gênant mais gérable
+                </button>
+
+                <button
+                  className={`option-button ${formData.douleur === 7 ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, douleur: 7 })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  7-8 : C'est un vrai problème
+                </button>
+
+                <button
+                  className={`option-button ${formData.douleur === 9 ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, douleur: 9 })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  9-10 : C'est critique, ça nous coûte cher
+                </button>
               </div>
             </>
           )}
@@ -571,7 +597,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Le plus vite possible
+                  🚀 Le plus vite possible
                 </button>
 
                 <button
@@ -581,7 +607,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  D'ici 1 mois
+                  📅 D'ici 1 mois
                 </button>
 
                 <button
@@ -591,7 +617,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Pas de timing précis, je me renseigne
+                  🤔 Pas de timing précis, je me renseigne
                 </button>
               </div>
             </>
