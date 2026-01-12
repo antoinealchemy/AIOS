@@ -162,7 +162,7 @@ export default function HomePage() {
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -1929,10 +1929,9 @@ export default function HomePage() {
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Transformez 45 minutes de recherche<br />
-                juridique en 8 secondes de réponse<br />
-                grâce à un assistant IA qui connaît<br />
-                votre documentation par cœur.
+                Transformez 45 minutes de recherche juridique<br />
+                en 8 secondes de réponse grâce à un assistant IA<br />
+                qui connaît votre documentation par cœur.
             </p>
 
             <div className="hero-cta">
@@ -1961,35 +1960,20 @@ export default function HomePage() {
 
     {/* Footer */}
     <footer>
-        <div className="footer-content">
-            {/* Logo */}
-            <div className="footer-column">
-                <div className="footer-logo">
-                    <img src="logo.png" alt="AIOS Logo" />
-                </div>
-            </div>
-
-            {/* Légal */}
-            <div className="footer-column">
-                <h3>Légal</h3>
-                <ul>
-                    <li><button onClick={() => document.getElementById('modal-contact')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Contact</button></li>
-                    <li><button onClick={() => document.getElementById('modal-mentions')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Mentions Légales</button></li>
-                    <li><button onClick={() => document.getElementById('modal-confidentialite')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>Confidentialité</button></li>
-                    <li><button onClick={() => document.getElementById('modal-cgu')?.classList.add('active')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>CGU</button></li>
-                </ul>
-            </div>
-        </div>
-
-        {/* Separator */}
-        <hr className="footer-separator" />
-
         {/* Bottom */}
         <div className="footer-bottom">
             <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
-            <p>
+            <p style={{ marginBottom: 24 }}>
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
+            
+            {/* Liens légaux */}
+            <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', fontSize: '14px' }}>
+                <button onClick={() => document.getElementById('modal-contact')?.classList.add('active')} style={{ background: 'none', border: 'none', color: '#6C6C6C', cursor: 'pointer', padding: 0, font: 'inherit', textDecoration: 'underline' }}>Contact</button>
+                <button onClick={() => document.getElementById('modal-mentions')?.classList.add('active')} style={{ background: 'none', border: 'none', color: '#6C6C6C', cursor: 'pointer', padding: 0, font: 'inherit', textDecoration: 'underline' }}>Mentions Légales</button>
+                <button onClick={() => document.getElementById('modal-confidentialite')?.classList.add('active')} style={{ background: 'none', border: 'none', color: '#6C6C6C', cursor: 'pointer', padding: 0, font: 'inherit', textDecoration: 'underline' }}>Confidentialité</button>
+                <button onClick={() => document.getElementById('modal-cgu')?.classList.add('active')} style={{ background: 'none', border: 'none', color: '#6C6C6C', cursor: 'pointer', padding: 0, font: 'inherit', textDecoration: 'underline' }}>CGU</button>
+            </div>
         </div>
     </footer>
 
