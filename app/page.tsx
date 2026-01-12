@@ -1852,40 +1852,7 @@ export default function HomePage() {
             <a href="#" className="logo">
                 <img src="logo.png" alt="AIOS Logo" style={{ height: 40, width: "auto" }} />
             </a>
-            
-            {/* Navigation Desktop */}
-            <nav className="nav-desktop">
-                <ul className="nav-links">
-                    <li><a href="#solution">La Solution</a></li>
-                    <li><a href="#temoignages">Témoignages</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                </ul>
-                <Link href="/formulaire" className="header-cta">
-                    Réserver maintenant
-                </Link>
-            </nav>
-
-            {/* Burger Menu Button */}
-            <button className="burger-menu" id="burgerMenu" aria-label="Menu">
-                <span className="burger-line" />
-                <span className="burger-line" />
-                <span className="burger-line" />
-            </button>
         </div>
-
-        {/* Navigation Mobile */}
-        <nav className="nav-mobile" id="navMobile">
-            <ul className="nav-mobile-links">
-                <li><a href="#solution">La Solution</a></li>
-                <li><a href="#temoignages">Témoignages</a></li>
-                <li><a href="#faq">FAQ</a></li>
-            </ul>
-            <div className="nav-mobile-cta">
-                <Link href="/formulaire" className="header-cta">
-                    Réserver maintenant
-                </Link>
-            </div>
-        </nav>
     </header>
 
     {/* Hero Section */}
@@ -1945,9 +1912,8 @@ export default function HomePage() {
             </div>
 
             <h1 className="title-desktop">
-                Comment Récupérer<br />
-                <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
-                Non Facturable<br />
+                Comment Récupérer Jusqu'à<br />
+                <span className="gradient-text">40h/semaine</span> Non Facturable<br />
                 Sans Recruter de Junior
             </h1>
 
@@ -1963,10 +1929,10 @@ export default function HomePage() {
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Transformez 45 minutes de<br />
-                recherche juridique en 8 secondes<br />
-                de réponse grâce à un assistant IA<br />
-                qui connaît votre documentation par cœur.
+                Transformez 45 minutes de recherche<br />
+                juridique en 8 secondes de réponse<br />
+                grâce à un assistant IA qui connaît<br />
+                votre documentation par cœur.
             </p>
 
             <div className="hero-cta">
@@ -2001,16 +1967,6 @@ export default function HomePage() {
                 <div className="footer-logo">
                     <img src="logo.png" alt="AIOS Logo" />
                 </div>
-            </div>
-
-            {/* Pages */}
-            <div className="footer-column">
-                <h3>Pages</h3>
-                <ul>
-                    <li><a href="#solution">La Solution</a></li>
-                    <li><a href="#temoignages">Témoignages</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                </ul>
             </div>
 
             {/* Légal */}
