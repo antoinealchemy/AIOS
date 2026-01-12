@@ -468,11 +468,12 @@ export default function HomePage() {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
+            padding: 14px 28px;
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 50px;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 500;
             color: #2563EB;
             margin-top: 24px;
             margin-bottom: 24px;
@@ -1934,12 +1935,6 @@ export default function HomePage() {
                 qui connaît votre documentation par cœur.
             </p>
 
-            <div className="hero-cta">
-                <Link href="/formulaire" className="cta-primary">
-                    Réserver maintenant
-                </Link>
-            </div>
-
             <div className="vsl-container">
                 <div 
                     dangerouslySetInnerHTML={{
@@ -1954,6 +1949,12 @@ export default function HomePage() {
                         `
                     }}
                 />
+            </div>
+
+            <div className="hero-cta" style={{ marginTop: '32px' }}>
+                <Link href="/formulaire" className="cta-primary">
+                    Réserver maintenant
+                </Link>
             </div>
         </div>
     </section>
