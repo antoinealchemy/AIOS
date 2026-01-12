@@ -46,7 +46,7 @@ export default function FormulairePage() {
     if (currentStep === 1) {
       if (formData.isCabinet === 'non') {
         // NON QUALIFIÉ - Pas cabinet avocat
-        router.push('/non-qualifie')
+        router.push('/nc')
         return
       }
       setCurrentStep(2)
@@ -57,7 +57,7 @@ export default function FormulairePage() {
     if (currentStep === 2) {
       if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
         // NON QUALIFIÉ - Pas décisionnaire
-        router.push('/non-qualifie')
+        router.push('/nc')
         return
       }
       setCurrentStep(3)
@@ -68,7 +68,7 @@ export default function FormulairePage() {
     if (currentStep === 3) {
       if (formData.douleur <= 3) {
         // NON QUALIFIÉ - Douleur trop faible
-        router.push('/non-qualifie')
+        router.push('/nc')
         return
       }
       setCurrentStep(4)
@@ -79,7 +79,7 @@ export default function FormulairePage() {
     if (currentStep === 4) {
       if (formData.budget === 'moins-2000') {
         // NON QUALIFIÉ - Budget trop faible
-        router.push('/non-qualifie')
+        router.push('/nc')
         return
       }
       setCurrentStep(5)
@@ -90,7 +90,7 @@ export default function FormulairePage() {
     if (currentStep === 5) {
       if (formData.urgence === 'pas-timing') {
         // NON QUALIFIÉ - Pas de timing
-        router.push('/non-qualifie')
+        router.push('/nc')
         return
       }
       
@@ -106,7 +106,7 @@ export default function FormulairePage() {
       })
       
       // Redirect Calendly
-      router.push('/entretien1')
+      router.push('/calendly')
     }
   }
 
