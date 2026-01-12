@@ -448,25 +448,10 @@ export default function HomePage() {
             }
         }
 
+        /* Responsive - masquer les icônes sur mobile */
         @media (max-width: 768px) {
-            .icon-1 {
-                top: 18%;
-                left: 4%;
-            }
-
-            .icon-2 {
-                top: 18%;
-                right: 4%;
-            }
-
-            .icon-3 {
-                top: 37%;
-                left: 4%;
-            }
-
-            .icon-4 {
-                top: 37%;
-                right: 4%;
+            .floating-icon {
+                display: none;
             }
         }
 
@@ -1967,9 +1952,8 @@ export default function HomePage() {
             </h1>
 
             <h1 className="title-mobile">
-                Comment Récupérer<br />
-                <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
-                Non Facturable<br />
+                Comment Récupérer Jusqu'à<br />
+                <span className="gradient-text">40h/semaine</span> Non Facturable<br />
                 Sans Recruter de Junior
             </h1>
 
