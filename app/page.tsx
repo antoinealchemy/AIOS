@@ -1956,33 +1956,32 @@ export default function HomePage() {
 
 <div className="hero-content">
             <div className="badge">
-                Cabinets professionnels :
+                Cabinets d'avocats :
             </div>
 
             <h1 className="title-desktop">
-                Découvrez Comment Gagner<br />
-                <span className="gradient-text">5h, 10h, 20h (ou plus)</span> par semaine<br />
-                Sans Embaucher Personne
+                Voici Comment Récupérer<br />
+                <span className="gradient-text">Jusqu'à 40 Heures par Semaine</span><br />
+                de Temps Non Facturable Sans Recruter de Junior
             </h1>
 
             <h1 className="title-mobile">
-                Découvrez Comment Gagner<br />
-                <span className="gradient-text">5h, 10h, 20h (ou plus)</span><br />
-                Par Semaine<br />
-                Sans Embaucher Personne
+                Voici Comment Récupérer<br />
+                <span className="gradient-text">Jusqu'à 40 Heures<br />par Semaine</span><br />
+                de Temps Non Facturable<br />
+                Sans Recruter de Junior
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                On prend 5 cabinets (conseil, expertise comptable, avocats) pour implémenter<br />
-                GRATUITEMENT notre système IA (valeur 5 000€) contre votre témoignage.
+                Transformez 30 minutes de recherche CCN en 8 secondes de réponse<br />
+                grâce à un assistant IA qui connaît vos documents par cœur.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                On prend 5 cabinets (conseil,<br />
-                expertise comptable, avocats) pour<br />
-                implémenter GRATUITEMENT notre<br />
-                système IA (valeur 5 000€)<br />
-                contre votre témoignage.
+                Transformez 30 minutes de<br />
+                recherche CCN en 8 secondes de<br />
+                réponse grâce à un assistant IA<br />
+                qui connaît vos documents par cœur.
             </p>
 
             <div className="hero-cta">
