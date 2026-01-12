@@ -1,481 +1,651 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
-
-// DÉFINITION DES QUESTIONS
-const INITIAL_QUESTION = {
-  id: 'nameFields',
-  label: 'Commençons par faire connaissance :',
-  type: 'name',
-  fields: [
-    { id: 'firstName', label: 'Prénom', placeholder: 'Ex: Antoine' },
-    { id: 'lastName', label: 'Nom', placeholder: 'Ex: Dubois' }
-  ]
-}
-
-const QUESTIONS = [
-  {
-    id: 'activity',
-    label: '{firstName}, quelle est votre activité principale ?',
-    type: 'radio',
-    options: [
-      'Cabinet de conseil',
-      'Cabinet d\'experts-comptables',
-      'Cabinet d\'avocats',
-      'Autre'
-    ],
-    hasOther: true
-  },
-  {
-    id: 'teamSize',
-    label: 'Combien de personnes dans votre équipe ?',
-    type: 'radio',
-    options: [
-      '2-4 personnes',
-      '5-10 personnes',
-      '11+ personnes',
-      'Solo'
-    ]
-  },
-  {
-    id: 'revenue',
-    label: 'Quel est le chiffre d\'affaires approximatif que vous réalisez ?',
-    type: 'radio',
-    options: [
-      '0-100K€',
-      '100-200K€',
-      '200-500K€',
-      '500K-1M€',
-      '1M€+'
-    ]
-  }
-]
-
-const CONTACT_FIELDS = [
-  { id: 'email', label: 'Adresse e-mail', type: 'email', required: true, validate: true },
-  { id: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true, international: true }
-]
+import { useRouter } from 'next/navigation'
+import * as fbq from '../../lib/fbPixel'
 
 export default function FormulairePage() {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [emailError, setEmailError] = useState('')
-  const [phoneError, setPhoneError] = useState('')
-  const [phoneCountry, setPhoneCountry] = useState('+33')
-  const [leadId, setLeadId] = useState<string | null>(null)
-  const [formData, setFormData] = useState<any>({
-    activity: '',
-    activityOther: '',
-    teamSize: '',
-    revenue: '',
+  const [currentStep, setCurrentStep] = useState(1)
+  const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: ''
+    phone: '',
+    isCabinet: '',
+    role: '',
+    roleOther: '',
+    douleur: 5,
+    urgence: '',
+    budget: ''
   })
 
-  const totalSteps = QUESTIONS.length + 2 // +1 pour nom/prénom, +1 pour contact
-  const isNameStep = currentStep === 0
-  const isContactStep = currentStep >= totalSteps - 1
-  const currentQuestion = !isNameStep && !isContactStep ? QUESTIONS[currentStep - 1] : null
-
-  // CALCULER LA PROGRESSION
-  const progress = Math.round(((currentStep + 1) / totalSteps) * 100)
-
-  // SAUVEGARDE AUTO À CHAQUE CHANGEMENT
   useEffect(() => {
-    const savePartialData = async () => {
-      // Ne sauvegarder que si au moins prénom ou nom existe
-      if (!formData.firstName && !formData.lastName) return
+    // Récupérer données optin
+    const leadData = sessionStorage.getItem('leadData')
+    if (leadData) {
+      const data = JSON.parse(leadData)
+      setFormData(prev => ({
+        ...prev,
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        email: data.email || '',
+        phone: data.phone || ''
+      }))
+    }
 
-      try {
-        const response = await fetch('/api/save-partial-lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            leadId: leadId, // Envoyer l'ID si existe déjà
-            currentStep: currentStep
-          })
-        })
+    // Pixel Facebook
+    fbq.customEvent('FormulairePage', {
+      content_name: 'Formulaire Qualification'
+    })
+  }, [])
 
-        const data = await response.json()
-        
-        // Stocker l'ID du lead pour updates futurs
-        if (data.leadId && !leadId) {
-          setLeadId(data.leadId)
-        }
-      } catch (error) {
-        console.error('Erreur sauvegarde partielle:', error)
-        // Ne pas bloquer l'utilisateur en cas d'erreur
+  const handleNext = () => {
+    // QUESTION 1 - Cabinet avocat
+    if (currentStep === 1) {
+      if (formData.isCabinet === 'non') {
+        // NON QUALIFIÉ - Pas cabinet avocat
+        router.push('/non-qualifie')
+        return
       }
+      setCurrentStep(2)
+      return
     }
 
-    // Debounce de 2 secondes pour éviter trop de requêtes
-    const timeoutId = setTimeout(savePartialData, 2000)
-    return () => clearTimeout(timeoutId)
-  }, [formData, currentStep, leadId])
-
-  // VÉRIFIER SI L'ÉTAPE ACTUELLE EST VALIDE
-  const isCurrentStepValid = () => {
-    if (isNameStep) {
-      return formData.firstName?.trim() && formData.lastName?.trim()
-    }
-
-    if (isContactStep) {
-      return formData.email && formData.phone && !emailError && !phoneError
-    }
-
-    if (!currentQuestion) return false
-
-    const question = currentQuestion
-    const value = formData[question.id]
-
-    if (question.type === 'radio') {
-      if (!value) return false
-      if (question.hasOther && value === 'Autre') {
-        return formData[`${question.id}Other`]?.trim()
+    // QUESTION 2 - Rôle
+    if (currentStep === 2) {
+      if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
+        // NON QUALIFIÉ - Pas décisionnaire
+        router.push('/non-qualifie')
+        return
       }
-      return true
+      setCurrentStep(3)
+      return
     }
 
+    // QUESTION 3 - Douleur
+    if (currentStep === 3) {
+      setCurrentStep(4)
+      return
+    }
+
+    // QUESTION 4 - Urgence
+    if (currentStep === 4) {
+      if (formData.urgence === 'pas-timing') {
+        // NON QUALIFIÉ - Pas de timing
+        router.push('/non-qualifie')
+        return
+      }
+      setCurrentStep(5)
+      return
+    }
+
+    // QUESTION 5 - Budget (dernière)
+    if (currentStep === 5) {
+      if (formData.budget === 'moins-1000') {
+        // NON QUALIFIÉ - Budget trop faible
+        router.push('/non-qualifie')
+        return
+      }
+      
+      // QUALIFIÉ - Toutes conditions remplies
+      // Sauvegarder données complètes
+      sessionStorage.setItem('leadQualified', JSON.stringify(formData))
+      
+      // Pixel Facebook Lead qualifié
+      fbq.event('Lead', {
+        content_name: 'Lead Qualifié',
+        value: 4500,
+        currency: 'EUR'
+      })
+      
+      // Redirect Calendly
+      router.push('/entretien1')
+    }
+  }
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
+  const isStepValid = () => {
+    if (currentStep === 1) return formData.isCabinet !== ''
+    if (currentStep === 2) return formData.role !== '' && (formData.role !== 'autre' || formData.roleOther !== '')
+    if (currentStep === 3) return true // Slider toujours valide
+    if (currentStep === 4) return formData.urgence !== ''
+    if (currentStep === 5) return formData.budget !== ''
     return false
   }
 
-  // VALIDATION EMAIL
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setEmailError('Format d\'email invalide')
-      return false
-    }
-    setEmailError('')
-    return true
-  }
-
-  // VALIDATION TÉLÉPHONE
-  const validatePhone = (phone: string, countryCode: string) => {
-    if (!phone || !countryCode) {
-      setPhoneError('')
-      return false
-    }
-    
-    const cleanPhone = phone.replace(/[\s\-\.]/g, '')
-    
-    if (countryCode === '+33') {
-      const phoneRegex = /^0?[1-9]\d{8}$/
-      if (!phoneRegex.test(cleanPhone)) {
-        setPhoneError('Numéro français invalide (10 chiffres attendus)')
-        return false
-      }
-    } else {
-      if (cleanPhone.length < 8) {
-        setPhoneError('Numéro de téléphone trop court')
-        return false
-      }
-    }
-    
-    setPhoneError('')
-    return true
-  }
-
-  const handleChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }))
-    
-    if (field === 'email' && value && typeof value === 'string') {
-      if (value.includes('@') && value.split('@')[1]?.includes('.')) {
-        validateEmail(value)
-      } else {
-        setEmailError('')
-      }
-    }
-    
-    if (field === 'phone' && value && typeof value === 'string') {
-      const cleanPhone = value.replace(/[\s\-\.]/g, '')
-      if (cleanPhone.length >= 8) {
-        validatePhone(value, phoneCountry)
-      } else {
-        setPhoneError('')
-      }
-    }
-  }
-
-  const handleNext = () => {
-    if (isCurrentStepValid()) {
-      setCurrentStep(prev => prev + 1)
-    }
-  }
-
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1)
-    }
-  }
-
-  // SOUMISSION FINALE
-  const handleSubmit = async () => {
-    if (!isCurrentStepValid()) return
-
-    const phoneValid = validatePhone(formData.phone, phoneCountry)
-    if (!phoneValid) return
-
-    setLoading(true)
-
-    try {
-      const fullPhone = `${phoneCountry}${formData.phone.replace(/^0/, '').replace(/[\s\-\.]/g, '')}`
-      
-      const response = await fetch('/api/submit-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          phone: fullPhone,
-          leadId: leadId // Envoyer l'ID pour update final
-        })
-      })
-
-      const data = await response.json()
-
-      sessionStorage.setItem('leadData', JSON.stringify({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: fullPhone
-      }))
-
-      // REDIRECTION VERS ENTRETIEN 1 POUR TOUS
-      router.push('/entretien1')
-    } catch (error) {
-      console.error('Erreur:', error)
-      alert('Une erreur est survenue. Veuillez réessayer.')
-      setLoading(false)
-    }
-  }
-
-  // RENDER QUESTION
-  const renderQuestion = () => {
-    // ÉTAPE 1 : PRÉNOM + NOM
-    if (isNameStep) {
-      return (
-        <div className="space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
-            {INITIAL_QUESTION.label}
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {INITIAL_QUESTION.fields.map((field) => (
-              <div key={field.id}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {field.label} *
-                </label>
-                <input
-                  type="text"
-                  value={formData[field.id]}
-                  onChange={(e) => handleChange(field.id, e.target.value)}
-                  placeholder={field.placeholder}
-                  required
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )
-    }
-
-    // ÉTAPE FINALE : EMAIL + TÉLÉPHONE
-    if (isContactStep) {
-      return (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {formData.firstName}, dernière étape : vos coordonnées
-          </h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Adresse e-mail *
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                placeholder="votre@email.com"
-                required
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none ${
-                  emailError 
-                    ? 'border-red-500 focus:border-red-500' 
-                    : 'border-gray-300 focus:border-blue-500'
-                }`}
-              />
-              {emailError && (
-                <p className="mt-1 text-sm text-red-600">{emailError}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Numéro de téléphone *
-              </label>
-              <div className="flex gap-2">
-                <select
-                  value={phoneCountry}
-                  onChange={(e) => setPhoneCountry(e.target.value)}
-                  className="w-28 px-3 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none appearance-none bg-white"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                  }}
-                >
-                  <option value="+33">🇫🇷 +33</option>
-                  <option value="+32">🇧🇪 +32</option>
-                  <option value="+41">🇨🇭 +41</option>
-                  <option value="+352">🇱🇺 +352</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+44">🇬🇧 +44</option>
-                </select>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => handleChange('phone', e.target.value)}
-                  placeholder="06 12 34 56 78"
-                  required
-                  className={`flex-1 px-4 py-3 border-2 rounded-lg focus:outline-none ${
-                    phoneError 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : 'border-gray-300 focus:border-blue-500'
-                  }`}
-                />
-              </div>
-              {phoneError && (
-                <p className="mt-1 text-sm text-red-600">{phoneError}</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    // QUESTIONS STANDARDS
-    if (!currentQuestion) return null
-    
-    const question = currentQuestion
-    const personalizedLabel = question.label.replace('{firstName}', formData.firstName || 'Prénom')
-
-    return (
-      <div>
-        <label className="block text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          {personalizedLabel}
-        </label>
-
-        {question.type === 'radio' && question.options && (
-          <div className="space-y-3">
-            {question.options.map((option) => (
-              <label
-                key={option}
-                className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all"
-              >
-                <input
-                  type="radio"
-                  name={question.id}
-                  value={option}
-                  checked={formData[question.id] === option}
-                  onChange={(e) => handleChange(question.id, e.target.value)}
-                  className="w-5 h-5 text-blue-600"
-                />
-                <span className="ml-3 text-gray-700">{option}</span>
-              </label>
-            ))}
-          </div>
-        )}
-
-        {question.hasOther && formData[question.id] === 'Autre' && (
-          <input
-            type="text"
-            placeholder="Précisez..."
-            value={formData[`${question.id}Other`]}
-            onChange={(e) => handleChange(`${question.id}Other`, e.target.value)}
-            className="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
-        )}
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
-      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+    <>
+      <style jsx global>{`
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: linear-gradient(135deg, #EFF6FF 0%, #ECFEFF 100%);
+          color: #1a1a1a;
+        }
+
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 24px;
+        }
+
+        .header {
+          background: white;
+          border-bottom: 1px solid #E5E7EB;
+          padding: 16px 0;
+          margin-bottom: 40px;
+        }
+
+        .logo-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px;
+          text-align: center;
+        }
+
+        .progress-bar {
+          width: 100%;
+          height: 8px;
+          background: #E5E7EB;
+          border-radius: 999px;
+          overflow: hidden;
+          margin-bottom: 32px;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #3B82F6 0%, #06B6D4 100%);
+          transition: width 0.3s ease;
+        }
+
+        .form-card {
+          background: white;
+          border-radius: 16px;
+          padding: 40px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #1a1a1a;
+        }
+
+        .question-subtitle {
+          font-size: 16px;
+          color: #6C6C6C;
+          margin-bottom: 32px;
+        }
+
+        .options-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 32px;
+        }
+
+        .option-button {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px 20px;
+          border: 2px solid #E5E7EB;
+          border-radius: 12px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-size: 16px;
+          text-align: left;
+        }
+
+        .option-button:hover {
+          border-color: #3B82F6;
+          background: #EFF6FF;
+        }
+
+        .option-button.selected {
+          border-color: #3B82F6;
+          background: #EFF6FF;
+        }
+
+        .option-button.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .radio-circle {
+          width: 24px;
+          height: 24px;
+          border: 2px solid #E5E7EB;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .option-button.selected .radio-circle {
+          border-color: #3B82F6;
+        }
+
+        .radio-circle-inner {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #3B82F6;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        .option-button.selected .radio-circle-inner {
+          opacity: 1;
+        }
+
+        .text-input {
+          width: 100%;
+          padding: 12px 16px;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          font-size: 16px;
+          margin-top: 12px;
+        }
+
+        .text-input:focus {
+          outline: none;
+          border-color: #3B82F6;
+        }
+
+        .slider-container {
+          margin: 40px 0;
+        }
+
+        .slider {
+          width: 100%;
+          height: 8px;
+          -webkit-appearance: none;
+          appearance: none;
+          background: #E5E7EB;
+          border-radius: 999px;
+          outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 24px;
+          height: 24px;
+          background: #3B82F6;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+          width: 24px;
+          height: 24px;
+          background: #3B82F6;
+          border-radius: 50%;
+          cursor: pointer;
+          border: none;
+        }
+
+        .slider-labels {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 12px;
+          font-size: 14px;
+          color: #6C6C6C;
+        }
+
+        .slider-value {
+          text-align: center;
+          font-size: 48px;
+          font-weight: 700;
+          color: #3B82F6;
+          margin-bottom: 16px;
+        }
+
+        .buttons-container {
+          display: flex;
+          gap: 12px;
+          margin-top: 32px;
+        }
+
+        .btn-back {
+          padding: 14px 28px;
+          border: 2px solid #E5E7EB;
+          border-radius: 8px;
+          background: white;
+          color: #6C6C6C;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+          border-color: #3B82F6;
+          color: #3B82F6;
+        }
+
+        .btn-next {
+          flex: 1;
+          padding: 14px 28px;
+          border: none;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-next:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-next:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        @media (max-width: 768px) {
+          .form-card {
+            padding: 24px;
+          }
+
+          .question-title {
+            font-size: 20px;
+          }
+        }
+      `}</style>
+
+      <div className="header">
+        <div className="logo-container">
           <Image 
             src="/logo.png" 
             alt="AIOS Logo" 
             width={120} 
             height={40}
-            className="h-10 w-auto"
+            className="h-10 w-auto mx-auto"
           />
         </div>
-      </header>
+      </div>
 
-      <main className="max-w-3xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-          
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-600">
-                Étape {currentStep + 1} sur {totalSteps}
-              </span>
-              <span className="text-sm font-medium text-blue-600">{progress}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div 
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="mb-8">
-            {renderQuestion()}
-          </div>
-
-          <div className="flex gap-4">
-            {currentStep > 0 && (
-              <button
-                onClick={handlePrevious}
-                disabled={loading}
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
-              >
-                ← Précédent
-              </button>
-            )}
-
-            {!isContactStep && (
-              <button
-                onClick={handleNext}
-                disabled={!isCurrentStepValid() || loading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Suivant →
-              </button>
-            )}
-
-            {isContactStep && (
-              <button
-                onClick={handleSubmit}
-                disabled={!isCurrentStepValid() || loading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Envoi en cours...' : 'Réserver mon appel →'}
-              </button>
-            )}
-          </div>
-
+      <div className="container">
+        <div className="progress-bar">
+          <div 
+            className="progress-fill" 
+            style={{ width: `${(currentStep / 5) * 100}%` }}
+          />
         </div>
-      </main>
-    </div>
+
+        <div className="form-card">
+          {/* QUESTION 1 - CABINET AVOCAT */}
+          {currentStep === 1 && (
+            <>
+              <h2 className="question-title">Travaillez-vous dans un cabinet d'avocats ?</h2>
+              <p className="question-subtitle">Cette solution est spécialement conçue pour les cabinets d'avocats</p>
+              
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.isCabinet === 'oui' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, isCabinet: 'oui' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ Oui, je travaille dans un cabinet d'avocats
+                </button>
+
+                <button
+                  className={`option-button ${formData.isCabinet === 'non' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, isCabinet: 'non' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Non, je travaille dans un autre secteur
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* QUESTION 2 - RÔLE */}
+          {currentStep === 2 && (
+            <>
+              <h2 className="question-title">Quel est votre rôle dans le cabinet ?</h2>
+              <p className="question-subtitle">Cette solution nécessite une décision au niveau direction</p>
+              
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.role === 'dirigeant' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, role: 'dirigeant' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ Dirigeant
+                </button>
+
+                <button
+                  className={`option-button ${formData.role === 'associe' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, role: 'associe' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ Associé
+                </button>
+
+                <button
+                  className={`option-button ${formData.role === 'collaborateur' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, role: 'collaborateur' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Collaborateur salarié
+                </button>
+
+                <button
+                  className={`option-button ${formData.role === 'junior' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, role: 'junior' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Avocat junior
+                </button>
+
+                <button
+                  className={`option-button ${formData.role === 'autre' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, role: 'autre' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Autre (précisez ci-dessous)
+                </button>
+
+                {formData.role === 'autre' && (
+                  <input
+                    type="text"
+                    className="text-input"
+                    placeholder="Précisez votre rôle..."
+                    value={formData.roleOther}
+                    onChange={(e) => setFormData({ ...formData, roleOther: e.target.value })}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {/* QUESTION 3 - DOULEUR */}
+          {currentStep === 3 && (
+            <>
+              <h2 className="question-title">À quel point ce problème vous impacte-t-il ?</h2>
+              <p className="question-subtitle">Perdre 20-30h/semaine en recherches non facturables</p>
+              
+              <div className="slider-container">
+                <div className="slider-value">{formData.douleur}/10</div>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={formData.douleur}
+                  className="slider"
+                  onChange={(e) => setFormData({ ...formData, douleur: parseInt(e.target.value) })}
+                />
+                <div className="slider-labels">
+                  <span>Pas un problème</span>
+                  <span>Très critique</span>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* QUESTION 4 - URGENCE */}
+          {currentStep === 4 && (
+            <>
+              <h2 className="question-title">Si cette solution ne vous demandait qu'1 heure de votre temps...</h2>
+              <p className="question-subtitle">Quand voudriez-vous résoudre ce problème ?</p>
+              
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.urgence === 'immediat' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, urgence: 'immediat' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  Le plus vite possible (moins de 2 semaines)
+                </button>
+
+                <button
+                  className={`option-button ${formData.urgence === '1-mois' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, urgence: '1-mois' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  D'ici 1 mois
+                </button>
+
+                <button
+                  className={`option-button ${formData.urgence === '3-mois' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, urgence: '3-mois' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  D'ici 3 mois
+                </button>
+
+                <button
+                  className={`option-button ${formData.urgence === 'pas-timing' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, urgence: 'pas-timing' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Pas de timing précis, je me renseigne
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* QUESTION 5 - BUDGET */}
+          {currentStep === 5 && (
+            <>
+              <h2 className="question-title">Quel budget pour récupérer 20h/semaine ?</h2>
+              <p className="question-subtitle">Soit ~100k€/an de CA additionnel potentiel</p>
+              
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.budget === 'moins-1000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: 'moins-1000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ❌ Moins de 1 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === '1000-3000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: '1000-3000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  1 000€ - 3 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === '3000-5000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: '3000-5000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ 3 000€ - 5 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === '5000-10000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: '5000-10000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ 5 000€ - 10 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === 'plus-10000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: 'plus-10000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  ✅ Plus de 10 000€
+                </button>
+              </div>
+            </>
+          )}
+
+          <div className="buttons-container">
+            {currentStep > 1 && (
+              <button className="btn-back" onClick={handleBack}>
+                Retour
+              </button>
+            )}
+            <button 
+              className="btn-next" 
+              onClick={handleNext}
+              disabled={!isStepValid()}
+            >
+              {currentStep === 5 ? 'Valider' : 'Suivant'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
