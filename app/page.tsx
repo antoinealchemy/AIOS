@@ -1960,28 +1960,29 @@ export default function HomePage() {
             </div>
 
             <h1 className="title-desktop">
-                Voici Comment Récupérer<br />
+                Comment Récupérer<br />
                 <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
-                Non Facturable Sans Recruter de Junior
+                Non Facturable<br />
+                Sans Recruter de Junior
             </h1>
 
             <h1 className="title-mobile">
-                Voici Comment Récupérer<br />
+                Comment Récupérer<br />
                 <span className="gradient-text">Jusqu'à 40h/semaine</span><br />
                 Non Facturable<br />
                 Sans Recruter de Junior
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                Transformez 30 minutes de recherche CCN en 8 secondes de réponse<br />
-                grâce à un assistant IA qui connaît vos documents par cœur.
+                Transformez 45 minutes de recherche juridique en 8 secondes de réponse<br />
+                grâce à un assistant IA qui connaît votre documentation par cœur.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Transformez 30 minutes de<br />
-                recherche CCN en 8 secondes de<br />
-                réponse grâce à un assistant IA<br />
-                qui connaît vos documents par cœur.
+                Transformez 45 minutes de<br />
+                recherche juridique en 8 secondes<br />
+                de réponse grâce à un assistant IA<br />
+                qui connaît votre documentation par cœur.
             </p>
 
             <div className="hero-cta">
