@@ -66,14 +66,19 @@ export default function FormulairePage() {
 
     // QUESTION 3 - Douleur
     if (currentStep === 3) {
+      if (formData.douleur <= 3) {
+        // NON QUALIFIÉ - Douleur trop faible
+        router.push('/non-qualifie')
+        return
+      }
       setCurrentStep(4)
       return
     }
 
-    // QUESTION 4 - Urgence
+    // QUESTION 4 - Budget
     if (currentStep === 4) {
-      if (formData.urgence === 'pas-timing') {
-        // NON QUALIFIÉ - Pas de timing
+      if (formData.budget === 'moins-2000') {
+        // NON QUALIFIÉ - Budget trop faible
         router.push('/non-qualifie')
         return
       }
@@ -81,10 +86,10 @@ export default function FormulairePage() {
       return
     }
 
-    // QUESTION 5 - Budget (dernière)
+    // QUESTION 5 - Urgence (dernière)
     if (currentStep === 5) {
-      if (formData.budget === 'moins-1000') {
-        // NON QUALIFIÉ - Budget trop faible
+      if (formData.urgence === 'pas-timing') {
+        // NON QUALIFIÉ - Pas de timing
         router.push('/non-qualifie')
         return
       }
@@ -113,10 +118,10 @@ export default function FormulairePage() {
 
   const isStepValid = () => {
     if (currentStep === 1) return formData.isCabinet !== ''
-    if (currentStep === 2) return formData.role !== '' && (formData.role !== 'autre' || formData.roleOther !== '')
+    if (currentStep === 2) return formData.role !== ''
     if (currentStep === 3) return true // Slider toujours valide
-    if (currentStep === 4) return formData.urgence !== ''
-    if (currentStep === 5) return formData.budget !== ''
+    if (currentStep === 4) return formData.budget !== ''
+    if (currentStep === 5) return formData.urgence !== ''
     return false
   }
 
@@ -180,14 +185,8 @@ export default function FormulairePage() {
         .question-title {
           font-size: 24px;
           font-weight: 700;
-          margin-bottom: 8px;
-          color: #1a1a1a;
-        }
-
-        .question-subtitle {
-          font-size: 16px;
-          color: #6C6C6C;
           margin-bottom: 32px;
+          color: #1a1a1a;
         }
 
         .options-container {
@@ -388,6 +387,9 @@ export default function FormulairePage() {
       </div>
 
       <div className="container">
+        <div style={{ marginBottom: '8px', textAlign: 'right', fontSize: '14px', fontWeight: '600', color: '#3B82F6' }}>
+          {Math.round((currentStep / 5) * 100)}%
+        </div>
         <div className="progress-bar">
           <div 
             className="progress-fill" 
@@ -399,8 +401,7 @@ export default function FormulairePage() {
           {/* QUESTION 1 - CABINET AVOCAT */}
           {currentStep === 1 && (
             <>
-              <h2 className="question-title">Travaillez-vous dans un cabinet d'avocats ?</h2>
-              <p className="question-subtitle">Cette solution est spécialement conçue pour les cabinets d'avocats</p>
+              <h2 className="question-title">Pour confirmer : travaillez-vous dans un cabinet d'avocats ?</h2>
               
               <div className="options-container">
                 <button
@@ -430,7 +431,6 @@ export default function FormulairePage() {
           {currentStep === 2 && (
             <>
               <h2 className="question-title">Quel est votre rôle dans le cabinet ?</h2>
-              <p className="question-subtitle">Cette solution nécessite une décision au niveau direction</p>
               
               <div className="options-container">
                 <button
@@ -440,7 +440,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ✅ Dirigeant
+                  Dirigeant
                 </button>
 
                 <button
@@ -450,7 +450,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ✅ Associé
+                  Associé
                 </button>
 
                 <button
@@ -460,7 +460,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ❌ Collaborateur salarié
+                  Collaborateur salarié
                 </button>
 
                 <button
@@ -470,7 +470,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ❌ Avocat junior
+                  Avocat junior
                 </button>
 
                 <button
@@ -480,18 +480,8 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ❌ Autre (précisez ci-dessous)
+                  Autre
                 </button>
-
-                {formData.role === 'autre' && (
-                  <input
-                    type="text"
-                    className="text-input"
-                    placeholder="Précisez votre rôle..."
-                    value={formData.roleOther}
-                    onChange={(e) => setFormData({ ...formData, roleOther: e.target.value })}
-                  />
-                )}
               </div>
             </>
           )}
@@ -499,8 +489,7 @@ export default function FormulairePage() {
           {/* QUESTION 3 - DOULEUR */}
           {currentStep === 3 && (
             <>
-              <h2 className="question-title">À quel point ce problème vous impacte-t-il ?</h2>
-              <p className="question-subtitle">Perdre 20-30h/semaine en recherches non facturables</p>
+              <h2 className="question-title">Sur une échelle de 1 à 10, à quel point perdre 20-30h/semaine impacte-t-il votre cabinet ?</h2>
               
               <div className="slider-container">
                 <div className="slider-value">{formData.douleur}/10</div>
@@ -513,18 +502,66 @@ export default function FormulairePage() {
                   onChange={(e) => setFormData({ ...formData, douleur: parseInt(e.target.value) })}
                 />
                 <div className="slider-labels">
-                  <span>Pas un problème</span>
-                  <span>Très critique</span>
+                  <span>1 - Pas un problème</span>
+                  <span>10 - Critique</span>
                 </div>
               </div>
             </>
           )}
 
-          {/* QUESTION 4 - URGENCE */}
+          {/* QUESTION 4 - BUDGET */}
           {currentStep === 4 && (
             <>
-              <h2 className="question-title">Si cette solution ne vous demandait qu'1 heure de votre temps...</h2>
-              <p className="question-subtitle">Quand voudriez-vous résoudre ce problème ?</p>
+              <h2 className="question-title">Si cette solution permet à votre cabinet de gagner 30h/semaine (soit ~1500h/an), quel budget seriez-vous prêt à investir ?</h2>
+              
+              <div className="options-container">
+                <button
+                  className={`option-button ${formData.budget === 'moins-2000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: 'moins-2000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  Moins de 2 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === '2000-5000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: '2000-5000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  2 000€ - 5 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === '5000-10000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: '5000-10000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  5 000€ - 10 000€
+                </button>
+
+                <button
+                  className={`option-button ${formData.budget === 'plus-10000' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, budget: 'plus-10000' })}
+                >
+                  <div className="radio-circle">
+                    <div className="radio-circle-inner" />
+                  </div>
+                  Plus de 10 000€
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* QUESTION 5 - URGENCE */}
+          {currentStep === 5 && (
+            <>
+              <h2 className="question-title">Si vous êtes sélectionné, quand seriez-vous prêt pour mettre cette solution en place ?</h2>
               
               <div className="options-container">
                 <button
@@ -534,7 +571,7 @@ export default function FormulairePage() {
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  Le plus vite possible (moins de 2 semaines)
+                  Le plus vite possible
                 </button>
 
                 <button
@@ -548,83 +585,13 @@ export default function FormulairePage() {
                 </button>
 
                 <button
-                  className={`option-button ${formData.urgence === '3-mois' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, urgence: '3-mois' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  D'ici 3 mois
-                </button>
-
-                <button
                   className={`option-button ${formData.urgence === 'pas-timing' ? 'selected' : ''}`}
                   onClick={() => setFormData({ ...formData, urgence: 'pas-timing' })}
                 >
                   <div className="radio-circle">
                     <div className="radio-circle-inner" />
                   </div>
-                  ❌ Pas de timing précis, je me renseigne
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* QUESTION 5 - BUDGET */}
-          {currentStep === 5 && (
-            <>
-              <h2 className="question-title">Quel budget pour récupérer 20h/semaine ?</h2>
-              <p className="question-subtitle">Soit ~100k€/an de CA additionnel potentiel</p>
-              
-              <div className="options-container">
-                <button
-                  className={`option-button ${formData.budget === 'moins-1000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: 'moins-1000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ❌ Moins de 1 000€
-                </button>
-
-                <button
-                  className={`option-button ${formData.budget === '1000-3000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: '1000-3000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  1 000€ - 3 000€
-                </button>
-
-                <button
-                  className={`option-button ${formData.budget === '3000-5000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: '3000-5000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ✅ 3 000€ - 5 000€
-                </button>
-
-                <button
-                  className={`option-button ${formData.budget === '5000-10000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: '5000-10000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ✅ 5 000€ - 10 000€
-                </button>
-
-                <button
-                  className={`option-button ${formData.budget === 'plus-10000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: 'plus-10000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ✅ Plus de 10 000€
+                  Pas de timing précis, je me renseigne
                 </button>
               </div>
             </>
