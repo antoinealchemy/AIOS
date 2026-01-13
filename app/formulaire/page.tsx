@@ -8,6 +8,7 @@ import * as fbq from '../../lib/fbPixel'
 export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
+  const [leadId, setLeadId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     isCabinet: '',
     role: '',
@@ -17,59 +18,56 @@ export default function FormulairePage() {
   })
 
   useEffect(() => {
+    // Générer leadId unique pour cette session
+    const sessionLeadId = `lead-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    setLeadId(sessionLeadId)
+    
     // Pixel Facebook
-    fbq.customEvent('FormulairePage', {
-      content_name: 'Formulaire Qualification'
-    })
+    try {
+      fbq.customEvent('FormulairePage', {
+        content_name: 'Formulaire Qualification'
+      })
+    } catch (e) {}
   }, [])
 
   const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
-    try {
-      const response = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: `test-${Date.now()}@temp.com`, // EMAIL TEMPORAIRE UNIQUE
-          first_name: 'Test',
-          last_name: 'User',
-          phone: null,
-          is_cabinet: formData.isCabinet === 'oui',
-          role: formData.role || null,
-          douleur_score: formData.douleur || null,
-          budget: formData.budget || null,
-          urgence: formData.urgence || null,
-          current_step: currentStepNumber,
-          completed: currentStepNumber === 5,
-          qualified: qualified,
-          pixel_sent: false
-        })
+    if (!leadId) return null
+    
+    // Pas d'await - sauvegarde en arrière-plan
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: `${leadId}@temp.com`,
+        first_name: 'Test',
+        last_name: 'User',
+        phone: null,
+        is_cabinet: formData.isCabinet === 'oui',
+        role: formData.role || null,
+        douleur_score: formData.douleur || null,
+        budget: formData.budget || null,
+        urgence: formData.urgence || null,
+        current_step: currentStepNumber,
+        completed: currentStepNumber === 5,
+        qualified: qualified,
+        pixel_sent: false
       })
-      
-      if (!response.ok) {
-        console.error('Erreur Supabase:', await response.text())
-        return null
-      }
-      
-      const result = await response.json()
-      console.log('✅ Lead sauvegardé:', result)
-      return result
-    } catch (error) {
-      console.error('Erreur saveToSupabase:', error)
-      return null
-    }
+    }).then(res => res.json())
+      .then(data => console.log('✅ Lead sauvegardé:', data))
+      .catch(err => console.error('Erreur save:', err))
   }
 
-  const handleNext = async () => {
+  const handleNext = () => {
     // QUESTION 1 - Cabinet avocat
     if (currentStep === 1) {
       if (formData.isCabinet === 'non') {
         // NON QUALIFIÉ - Pas cabinet avocat
-        await saveToSupabase(false, 1)
+        saveToSupabase(false, 1)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 1
-      await saveToSupabase(false, 1)
+      // SAUVEGARDER progression étape 1 (sans attendre)
+      saveToSupabase(false, 1)
       setCurrentStep(2)
       return
     }
@@ -78,12 +76,12 @@ export default function FormulairePage() {
     if (currentStep === 2) {
       if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
         // NON QUALIFIÉ - Pas décisionnaire
-        await saveToSupabase(false, 2)
+        saveToSupabase(false, 2)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 2
-      await saveToSupabase(false, 2)
+      // SAUVEGARDER progression étape 2 (sans attendre)
+      saveToSupabase(false, 2)
       setCurrentStep(3)
       return
     }
@@ -92,12 +90,12 @@ export default function FormulairePage() {
     if (currentStep === 3) {
       if (formData.douleur <= 3) {
         // NON QUALIFIÉ - Douleur trop faible
-        await saveToSupabase(false, 3)
+        saveToSupabase(false, 3)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 3
-      await saveToSupabase(false, 3)
+      // SAUVEGARDER progression étape 3 (sans attendre)
+      saveToSupabase(false, 3)
       setCurrentStep(4)
       return
     }
@@ -106,12 +104,12 @@ export default function FormulairePage() {
     if (currentStep === 4) {
       if (formData.budget === 'moins-2000') {
         // NON QUALIFIÉ - Budget trop faible
-        await saveToSupabase(false, 4)
+        saveToSupabase(false, 4)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 4
-      await saveToSupabase(false, 4)
+      // SAUVEGARDER progression étape 4 (sans attendre)
+      saveToSupabase(false, 4)
       setCurrentStep(5)
       return
     }
@@ -120,13 +118,13 @@ export default function FormulairePage() {
     if (currentStep === 5) {
       if (formData.urgence === 'pas-timing') {
         // NON QUALIFIÉ - Pas de timing
-        await saveToSupabase(false, 5)
+        saveToSupabase(false, 5)
         router.push('/nc')
         return
       }
       
       // QUALIFIÉ - Toutes conditions remplies
-      await saveToSupabase(true, 5)
+      saveToSupabase(true, 5)
       
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
