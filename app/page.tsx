@@ -1914,7 +1914,7 @@ export default function HomePage() {
 
             <h1 className="title-desktop">
                 Comment Récupérer Jusqu'à<br />
-                <span className="gradient-text">40h/semaine</span> Non Facturable<br />
+                <span className="gradient-text">30h/semaine</span> Non Facturable<br />
                 Sans Recruter de Junior
             </h1>
 
