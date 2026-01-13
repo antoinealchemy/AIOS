@@ -9,35 +9,63 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
-
-    // PRÉPARER DONNÉES LEAD
-    const leadData = {
+    
+    console.log('📥 Données reçues:', {
       email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      phone: data.phone,
-      is_cabinet: data.is_cabinet,
+      step: data.current_step,
+      cabinet: data.is_cabinet,
       role: data.role,
-      douleur_score: data.douleur_score,
-      budget: data.budget,
-      urgence: data.urgence,
+      qualified: data.qualified
+    })
+
+    // PRÉPARER DONNÉES LEAD (accepter null pour champs non remplis)
+    const leadData: any = {
+      email: data.email,
+      first_name: data.first_name || null,
+      last_name: data.last_name || null,
+      phone: data.phone || null,
       current_step: data.current_step,
       completed: data.completed,
       qualified: data.qualified,
       pixel_sent: data.pixel_sent || false
     }
 
+    // Ajouter champs qualification seulement s'ils existent
+    if (data.is_cabinet !== null && data.is_cabinet !== undefined) {
+      leadData.is_cabinet = data.is_cabinet
+    }
+    if (data.role) {
+      leadData.role = data.role
+    }
+    if (data.douleur_score !== null && data.douleur_score !== undefined) {
+      leadData.douleur_score = data.douleur_score
+    }
+    if (data.budget) {
+      leadData.budget = data.budget
+    }
+    if (data.urgence) {
+      leadData.urgence = data.urgence
+    }
+
+    console.log('💾 Données à sauvegarder:', leadData)
+
     // VÉRIFIER SI LEAD EXISTE DÉJÀ (par email)
-    const { data: existingLead } = await supabase
+    const { data: existingLead, error: selectError } = await supabase
       .from('leads')
       .select('id')
       .eq('email', data.email)
       .single()
 
+    if (selectError && selectError.code !== 'PGRST116') {
+      console.error('❌ Erreur SELECT:', selectError)
+    }
+
     let result
 
     if (existingLead) {
       // UPDATE lead existant
+      console.log('🔄 UPDATE lead existant:', existingLead.id)
+      
       const { data: updatedLead, error } = await supabase
         .from('leads')
         .update(leadData)
@@ -51,9 +79,11 @@ export async function POST(request: NextRequest) {
       }
 
       result = updatedLead
-      console.log('✅ Lead mis à jour:', existingLead.id)
+      console.log('✅ Lead mis à jour:', existingLead.id, 'Step:', data.current_step)
     } else {
       // INSERT nouveau lead
+      console.log('➕ INSERT nouveau lead')
+      
       const { data: newLead, error } = await supabase
         .from('leads')
         .insert([leadData])
@@ -62,12 +92,20 @@ export async function POST(request: NextRequest) {
 
       if (error) {
         console.error('❌ Erreur INSERT Supabase:', error)
+        console.error('Détails erreur:', JSON.stringify(error, null, 2))
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
 
       result = newLead
-      console.log('✅ Lead créé:', newLead.id)
+      console.log('✅ Lead créé:', newLead.id, 'Step:', data.current_step)
     }
+
+    console.log('📤 Réponse API:', {
+      success: true,
+      leadId: result.id,
+      qualified: result.qualified,
+      lead_score: result.lead_score
+    })
 
     return NextResponse.json({
       success: true,
@@ -78,7 +116,10 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('❌ Erreur API:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    console.error('❌ Erreur API (catch):', error)
+    return NextResponse.json({ 
+      error: 'Erreur serveur',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }

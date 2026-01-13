@@ -9,55 +9,37 @@ export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
     isCabinet: '',
     role: '',
-    roleOther: '',
     douleur: 0,
     urgence: '',
     budget: ''
   })
 
   useEffect(() => {
-    // Récupérer données optin
-    const leadData = sessionStorage.getItem('leadData')
-    if (leadData) {
-      const data = JSON.parse(leadData)
-      setFormData(prev => ({
-        ...prev,
-        firstName: data.firstName || '',
-        lastName: data.lastName || '',
-        email: data.email || '',
-        phone: data.phone || ''
-      }))
-    }
-
     // Pixel Facebook
     fbq.customEvent('FormulairePage', {
       content_name: 'Formulaire Qualification'
     })
   }, [])
 
-  const saveToSupabase = async (qualified: boolean) => {
+  const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
     try {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: formData.email,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          phone: formData.phone,
+          email: `test-${Date.now()}@temp.com`, // EMAIL TEMPORAIRE UNIQUE
+          first_name: 'Test',
+          last_name: 'User',
+          phone: null,
           is_cabinet: formData.isCabinet === 'oui',
-          role: formData.role,
-          douleur_score: formData.douleur,
-          budget: formData.budget,
-          urgence: formData.urgence,
-          current_step: 5,
-          completed: true,
+          role: formData.role || null,
+          douleur_score: formData.douleur || null,
+          budget: formData.budget || null,
+          urgence: formData.urgence || null,
+          current_step: currentStepNumber,
+          completed: currentStepNumber === 5,
           qualified: qualified,
           pixel_sent: false
         })
@@ -82,10 +64,12 @@ export default function FormulairePage() {
     if (currentStep === 1) {
       if (formData.isCabinet === 'non') {
         // NON QUALIFIÉ - Pas cabinet avocat
-        await saveToSupabase(false)
+        await saveToSupabase(false, 1)
         router.push('/nc')
         return
       }
+      // SAUVEGARDER progression étape 1
+      await saveToSupabase(false, 1)
       setCurrentStep(2)
       return
     }
@@ -94,10 +78,12 @@ export default function FormulairePage() {
     if (currentStep === 2) {
       if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
         // NON QUALIFIÉ - Pas décisionnaire
-        await saveToSupabase(false)
+        await saveToSupabase(false, 2)
         router.push('/nc')
         return
       }
+      // SAUVEGARDER progression étape 2
+      await saveToSupabase(false, 2)
       setCurrentStep(3)
       return
     }
@@ -106,10 +92,12 @@ export default function FormulairePage() {
     if (currentStep === 3) {
       if (formData.douleur <= 3) {
         // NON QUALIFIÉ - Douleur trop faible
-        await saveToSupabase(false)
+        await saveToSupabase(false, 3)
         router.push('/nc')
         return
       }
+      // SAUVEGARDER progression étape 3
+      await saveToSupabase(false, 3)
       setCurrentStep(4)
       return
     }
@@ -118,10 +106,12 @@ export default function FormulairePage() {
     if (currentStep === 4) {
       if (formData.budget === 'moins-2000') {
         // NON QUALIFIÉ - Budget trop faible
-        await saveToSupabase(false)
+        await saveToSupabase(false, 4)
         router.push('/nc')
         return
       }
+      // SAUVEGARDER progression étape 4
+      await saveToSupabase(false, 4)
       setCurrentStep(5)
       return
     }
@@ -130,13 +120,13 @@ export default function FormulairePage() {
     if (currentStep === 5) {
       if (formData.urgence === 'pas-timing') {
         // NON QUALIFIÉ - Pas de timing
-        await saveToSupabase(false)
+        await saveToSupabase(false, 5)
         router.push('/nc')
         return
       }
       
       // QUALIFIÉ - Toutes conditions remplies
-      await saveToSupabase(true)
+      await saveToSupabase(true, 5)
       
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
