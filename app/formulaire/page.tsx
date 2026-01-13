@@ -41,11 +41,48 @@ export default function FormulairePage() {
     })
   }, [])
 
-  const handleNext = () => {
+  const saveToSupabase = async (qualified: boolean) => {
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone: formData.phone,
+          is_cabinet: formData.isCabinet === 'oui',
+          role: formData.role,
+          douleur_score: formData.douleur,
+          budget: formData.budget,
+          urgence: formData.urgence,
+          current_step: 5,
+          completed: true,
+          qualified: qualified,
+          pixel_sent: false
+        })
+      })
+      
+      if (!response.ok) {
+        console.error('Erreur Supabase:', await response.text())
+        return null
+      }
+      
+      const result = await response.json()
+      console.log('✅ Lead sauvegardé:', result)
+      return result
+    } catch (error) {
+      console.error('Erreur saveToSupabase:', error)
+      return null
+    }
+  }
+
+  const handleNext = async () => {
     // QUESTION 1 - Cabinet avocat
     if (currentStep === 1) {
       if (formData.isCabinet === 'non') {
         // NON QUALIFIÉ - Pas cabinet avocat
+        await saveToSupabase(false)
         router.push('/nc')
         return
       }
@@ -57,6 +94,7 @@ export default function FormulairePage() {
     if (currentStep === 2) {
       if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
         // NON QUALIFIÉ - Pas décisionnaire
+        await saveToSupabase(false)
         router.push('/nc')
         return
       }
@@ -68,6 +106,7 @@ export default function FormulairePage() {
     if (currentStep === 3) {
       if (formData.douleur <= 3) {
         // NON QUALIFIÉ - Douleur trop faible
+        await saveToSupabase(false)
         router.push('/nc')
         return
       }
@@ -79,6 +118,7 @@ export default function FormulairePage() {
     if (currentStep === 4) {
       if (formData.budget === 'moins-2000') {
         // NON QUALIFIÉ - Budget trop faible
+        await saveToSupabase(false)
         router.push('/nc')
         return
       }
@@ -90,11 +130,14 @@ export default function FormulairePage() {
     if (currentStep === 5) {
       if (formData.urgence === 'pas-timing') {
         // NON QUALIFIÉ - Pas de timing
+        await saveToSupabase(false)
         router.push('/nc')
         return
       }
       
       // QUALIFIÉ - Toutes conditions remplies
+      await saveToSupabase(true)
+      
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
       

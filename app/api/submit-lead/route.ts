@@ -10,55 +10,50 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    // LOGIQUE QUALIFICATION
-    const isQualifiedActivity = 
-      data.activity === 'Cabinet de conseil' || 
-      data.activity === 'Cabinet d\'experts-comptables' || 
-      data.activity === 'Cabinet d\'avocats'
-    
-    const isQualifiedRevenue = 
-      data.revenue === '200-500K€' || 
-      data.revenue === '500K-1M€' || 
-      data.revenue === '1M€+'
-
-    const isQualified = isQualifiedActivity && isQualifiedRevenue
-
-    // PRÉPARER DONNÉES COMPLÈTES
+    // PRÉPARER DONNÉES LEAD
     const leadData = {
       email: data.email,
-      first_name: data.firstName,
-      last_name: data.lastName,
+      first_name: data.first_name,
+      last_name: data.last_name,
       phone: data.phone,
-      activity: data.activity === 'Autre' ? data.activityOther : data.activity,
-      team_size: data.teamSize,
-      revenue: data.revenue,
-      qualified: isQualified,
-      completed: true,
-      call_booked: false,
-      pixel_sent: false
+      is_cabinet: data.is_cabinet,
+      role: data.role,
+      douleur_score: data.douleur_score,
+      budget: data.budget,
+      urgence: data.urgence,
+      current_step: data.current_step,
+      completed: data.completed,
+      qualified: data.qualified,
+      pixel_sent: data.pixel_sent || false
     }
 
-    let leadId = data.leadId
-    let insertedLead
+    // VÉRIFIER SI LEAD EXISTE DÉJÀ (par email)
+    const { data: existingLead } = await supabase
+      .from('leads')
+      .select('id')
+      .eq('email', data.email)
+      .single()
 
-    if (leadId) {
-      // UPDATE si lead existe déjà (sauvegarde partielle)
+    let result
+
+    if (existingLead) {
+      // UPDATE lead existant
       const { data: updatedLead, error } = await supabase
         .from('leads')
         .update(leadData)
-        .eq('id', leadId)
+        .eq('id', existingLead.id)
         .select()
         .single()
 
       if (error) {
-        console.error('Erreur UPDATE Supabase:', error)
+        console.error('❌ Erreur UPDATE Supabase:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
 
-      insertedLead = updatedLead
-      console.log('✅ Lead complété (UPDATE):', leadId)
+      result = updatedLead
+      console.log('✅ Lead mis à jour:', existingLead.id)
     } else {
-      // INSERT nouveau lead complet (rare, si sauvegarde partielle n'a pas fonctionné)
+      // INSERT nouveau lead
       const { data: newLead, error } = await supabase
         .from('leads')
         .insert([leadData])
@@ -66,23 +61,24 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (error) {
-        console.error('Erreur INSERT Supabase:', error)
+        console.error('❌ Erreur INSERT Supabase:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
 
-      insertedLead = newLead
-      console.log('✅ Lead créé (INSERT):', insertedLead.id)
+      result = newLead
+      console.log('✅ Lead créé:', newLead.id)
     }
 
-    // RETOURNER RÉSULTAT
     return NextResponse.json({
       success: true,
-      qualified: isQualified,
-      leadId: insertedLead.id
+      leadId: result.id,
+      qualified: result.qualified,
+      lead_score: result.lead_score,
+      disqualification_reason: result.disqualification_reason
     })
 
   } catch (error) {
-    console.error('Erreur API:', error)
+    console.error('❌ Erreur API:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
