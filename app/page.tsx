@@ -2105,21 +2105,13 @@ export default function OptinPage() {
 
             {!submitSuccess ? (
               <>
-                <h2 style={{
-                  fontSize: '28px',
-                  fontWeight: 700,
-                  marginBottom: '24px',
-                  color: '#1a1a1a',
-                  textAlign: 'center'
-                }}>Dernière étape 🔓</h2>
-
                 {/* Pourcentage au-dessus de la barre */}
                 <div style={{
                   textAlign: 'center',
                   fontSize: '14px',
                   fontWeight: 600,
                   color: '#3B82F6',
-                  marginBottom: '8px'
+                  marginBottom: '6px'
                 }}>50%</div>
 
                 {/* Barre de progression animée */}
@@ -2129,7 +2121,7 @@ export default function OptinPage() {
                   background: '#e5e7eb',
                   borderRadius: '999px',
                   overflow: 'hidden',
-                  marginBottom: '16px'
+                  marginBottom: '20px'
                 }}>
                   <div style={{
                     width: '50%',
@@ -2150,11 +2142,19 @@ export default function OptinPage() {
                   </div>
                 </div>
 
-                {/* Sub-headline sous la barre */}
+                <h2 style={{
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  marginBottom: '12px',
+                  color: '#1a1a1a',
+                  textAlign: 'center'
+                }}>Dernière étape 🔓</h2>
+
+                {/* Sub-headline sous le titre */}
                 <p style={{
                   fontSize: '16px',
                   color: '#666',
-                  marginBottom: '32px',
+                  marginBottom: '24px',
                   textAlign: 'center',
                   fontWeight: 500
                 }}>
