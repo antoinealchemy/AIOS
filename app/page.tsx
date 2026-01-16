@@ -207,6 +207,11 @@ export default function OptinPage() {
         content_name: 'Formation Optin Completed'
       })
 
+      // Sauvegarder les données pour le formulaire
+      localStorage.setItem('user_email', formData.email)
+      localStorage.setItem('user_first_name', formData.prenom)
+      localStorage.setItem('user_phone', fullPhone)
+
       setTimeout(() => {
         window.location.href = '/formation'
       }, 2000)
