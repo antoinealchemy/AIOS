@@ -25,7 +25,10 @@ export async function POST(request: NextRequest) {
       last_name: data.last_name || null,
       phone: data.phone || null,
       current_step: data.current_step,
-      completed: data.completed,
+      
+      // ⭐ NOUVEAU: Distinction form_completed vs completed (rétrocompatibilité)
+      form_completed: data.form_completed !== undefined ? data.form_completed : data.completed,
+      
       qualified: data.qualified,
       pixel_sent: data.pixel_sent || false
     }
@@ -38,7 +41,10 @@ export async function POST(request: NextRequest) {
       leadData.role = data.role
     }
     if (data.douleur_score !== null && data.douleur_score !== undefined) {
-      leadData.douleur_score = data.douleur_score
+      // ⭐ NOUVEAU: Convertir en string si number (schéma unifié)
+      leadData.douleur_score = typeof data.douleur_score === 'number' 
+        ? data.douleur_score.toString() 
+        : data.douleur_score
     }
     if (data.budget) {
       leadData.budget = data.budget
@@ -47,12 +53,30 @@ export async function POST(request: NextRequest) {
       leadData.urgence = data.urgence
     }
 
+    // ⭐ NOUVEAU: Tracking optin (système unifié)
+    if (data.optin_completed !== undefined) {
+      leadData.optin_completed = data.optin_completed
+    }
+    if (data.optin_source) {
+      leadData.optin_source = data.optin_source
+    }
+
+    // ⭐ NOUVEAU: Lead score
+    if (data.lead_score) {
+      leadData.lead_score = data.lead_score
+    }
+
+    // ⭐ NOUVEAU: UTM tracking
+    if (data.utm_source) leadData.utm_source = data.utm_source
+    if (data.utm_medium) leadData.utm_medium = data.utm_medium
+    if (data.utm_campaign) leadData.utm_campaign = data.utm_campaign
+
     console.log('💾 Données à sauvegarder:', leadData)
 
     // VÉRIFIER SI LEAD EXISTE DÉJÀ (par email)
     const { data: existingLead, error: selectError } = await supabase
       .from('leads')
-      .select('id')
+      .select('id, optin_completed, first_name, phone')
       .eq('email', data.email)
       .single()
 
@@ -65,6 +89,22 @@ export async function POST(request: NextRequest) {
     if (existingLead) {
       // UPDATE lead existant
       console.log('🔄 UPDATE lead existant:', existingLead.id)
+      
+      // ⭐ NOUVEAU: Protection données optin
+      // Ne pas écraser données optin si elles existent déjà
+      if (existingLead.optin_completed && !data.optin_completed) {
+        delete leadData.optin_completed
+        delete leadData.optin_source
+      }
+
+      // ⭐ NOUVEAU: Protection données personnelles
+      // Ne pas écraser first_name/phone si déjà remplis et nouveaux sont génériques
+      if (existingLead.first_name && data.first_name === 'Test') {
+        delete leadData.first_name
+      }
+      if (existingLead.phone && !data.phone) {
+        delete leadData.phone
+      }
       
       const { data: updatedLead, error } = await supabase
         .from('leads')
@@ -83,6 +123,12 @@ export async function POST(request: NextRequest) {
     } else {
       // INSERT nouveau lead
       console.log('➕ INSERT nouveau lead')
+      
+      // ⭐ NOUVEAU: Par défaut, si pas précisé, lead vient du formulaire direct
+      if (leadData.optin_completed === undefined) {
+        leadData.optin_completed = false
+        leadData.optin_source = 'direct_form'
+      }
       
       const { data: newLead, error } = await supabase
         .from('leads')
@@ -104,7 +150,8 @@ export async function POST(request: NextRequest) {
       success: true,
       leadId: result.id,
       qualified: result.qualified,
-      lead_score: result.lead_score
+      lead_score: result.lead_score,
+      optin_completed: result.optin_completed
     })
 
     return NextResponse.json({
@@ -112,7 +159,10 @@ export async function POST(request: NextRequest) {
       leadId: result.id,
       qualified: result.qualified,
       lead_score: result.lead_score,
-      disqualification_reason: result.disqualification_reason
+      disqualification_reason: result.disqualification_reason,
+      // ⭐ NOUVEAU: Retour infos système unifié
+      optin_completed: result.optin_completed,
+      form_completed: result.form_completed
     })
 
   } catch (error) {

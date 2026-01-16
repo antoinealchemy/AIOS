@@ -45,29 +45,53 @@ export default function OptinPage() {
     setIsSubmitting(true)
 
     try {
-      // Insertion dans Supabase
-      const { error } = await supabase
-        .from('leads_formation')
-        .insert([
-          {
-            prenom: formData.prenom,
-            email: formData.email,
-            telephone: formData.telephone,
-            created_at: new Date().toISOString()
-          }
-        ])
+      // Vérifier si email existe déjà
+      const { data: existingLead } = await supabase
+        .from('leads')
+        .select('id, email')
+        .eq('email', formData.email)
+        .single()
 
-      if (error) throw error
+      if (existingLead) {
+        // Lead existe déjà → juste update optin_completed
+        const { error } = await supabase
+          .from('leads')
+          .update({
+            optin_completed: true,
+            optin_source: 'formation',
+            updated_at: new Date().toISOString()
+          })
+          .eq('email', formData.email)
+
+        if (error) throw error
+      } else {
+        // Nouveau lead → insert avec données optin
+        const { error } = await supabase
+          .from('leads')
+          .insert([
+            {
+              email: formData.email,
+              first_name: formData.prenom,
+              phone: formData.telephone,
+              optin_completed: true,
+              optin_source: 'formation',
+              form_completed: false,
+              created_at: new Date().toISOString()
+            }
+          ])
+
+        if (error) throw error
+      }
 
       // Succès
       setSubmitSuccess(true)
       fbq.event('Lead', {
-        content_name: 'Formation Lead Submitted'
+        content_name: 'Formation Optin Completed'
       })
 
       // Redirection après 2 secondes
       setTimeout(() => {
-        window.location.href = '/formation-video' // À créer
+        window.location.href = '/formation-video'
       }, 2000)
 
     } catch (error) {
