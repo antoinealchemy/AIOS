@@ -13,6 +13,7 @@ const supabase = createClient(
 export default function OptinPage() {
   const [showCTA, setShowCTA] = useState(true) // Toujours visible pour optin
   const [showPopup, setShowPopup] = useState(false)
+  const [countryCode, setCountryCode] = useState('+33')
   const [formData, setFormData] = useState({
     prenom: '',
     email: '',
@@ -149,6 +150,22 @@ export default function OptinPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
+    // Validation téléphone français
+    const phoneDigits = formData.telephone.replace(/\s/g, '')
+    if (countryCode === '+33') {
+      // Format attendu: 06/07 suivi de 8 chiffres (total 10 chiffres)
+      if (!/^0[67]\d{8}$/.test(phoneDigits)) {
+        alert('Numéro de téléphone français invalide. Format attendu: 06 12 34 56 78')
+        setIsSubmitting(false)
+        return
+      }
+    }
+
+    // Construire le numéro complet international
+    const fullPhone = countryCode === '+33' 
+      ? countryCode + phoneDigits.substring(1) // Enlever le 0 initial
+      : countryCode + phoneDigits
+
     try {
       const { data: existingLead } = await supabase
         .from('leads')
@@ -174,7 +191,7 @@ export default function OptinPage() {
             {
               email: formData.email,
               first_name: formData.prenom,
-              phone: formData.telephone,
+              phone: fullPhone,
               optin_completed: true,
               optin_source: 'formation',
               form_completed: false,
@@ -2265,21 +2282,56 @@ export default function OptinPage() {
                       color: '#1a1a1a',
                       fontSize: '14px'
                     }}>Téléphone *</label>
-                    <input
-                      type="tel"
-                      placeholder="06 12 34 56 78"
-                      required
-                      value={formData.telephone}
-                      onChange={(e) => setFormData({...formData, telephone: e.target.value})}
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: '10px',
-                        fontSize: '16px',
-                        fontFamily: 'inherit'
-                      }}
-                    />
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {/* Sélecteur de pays */}
+                      <select
+                        value={countryCode}
+                        onChange={(e) => setCountryCode(e.target.value)}
+                        style={{
+                          width: '100px',
+                          padding: '14px 8px',
+                          border: '2px solid #e5e7eb',
+                          borderRadius: '10px',
+                          fontSize: '16px',
+                          fontFamily: 'inherit',
+                          cursor: 'pointer',
+                          backgroundColor: 'white'
+                        }}
+                      >
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+32">🇧🇪 +32</option>
+                        <option value="+41">🇨🇭 +41</option>
+                        <option value="+352">🇱🇺 +352</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+39">🇮🇹 +39</option>
+                      </select>
+                      
+                      {/* Champ numéro */}
+                      <input
+                        type="tel"
+                        placeholder="06 12 34 56 78"
+                        required
+                        value={formData.telephone}
+                        onChange={(e) => {
+                          // Autoriser uniquement chiffres et espaces
+                          const value = e.target.value.replace(/[^\d\s]/g, '')
+                          setFormData({...formData, telephone: value})
+                        }}
+                        pattern={countryCode === '+33' ? '0[67]\\d{8}|0[67](\\s?\\d{2}){4}' : undefined}
+                        title={countryCode === '+33' ? 'Format: 06 12 34 56 78 (10 chiffres)' : 'Numéro de téléphone'}
+                        style={{
+                          flex: 1,
+                          padding: '14px 16px',
+                          border: '2px solid #e5e7eb',
+                          borderRadius: '10px',
+                          fontSize: '16px',
+                          fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
                   </div>
 
                   <button type="submit" disabled={isSubmitting} style={{
