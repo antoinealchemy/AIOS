@@ -1,39 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
-  const [showCTA, setShowCTA] = useState(false)
-
-  useEffect(() => {
-    // Timer pour afficher le CTA après 30 secondes
-    const ctaTimer = setTimeout(() => {
-      setShowCTA(true)
-    }, 30000) // 30 secondes
-
-    // Charger le script SmartPlayer
-    const script = document.createElement('script')
-    script.src = 'https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js'
-    script.async = true
-    document.head.appendChild(script)
-
-    // Forcer la vidéo à rester visible toujours
-    const keepVideoVisible = setInterval(() => {
-      const player = document.getElementById('vid-696a299445237c230be3aba5')
-      if (player) {
-        player.style.setProperty('display', 'block', 'important')
-        player.style.setProperty('visibility', 'visible', 'important')
-        player.style.setProperty('opacity', '1', 'important')
-      }
-    }, 500)
-
-    return () => {
-      clearTimeout(ctaTimer)
-      clearInterval(keepVideoVisible)
-    }
-  }, [])
 
   useEffect(() => {
     // 👁️ PIXEL FACEBOOK - VIEWCONTENT
@@ -43,6 +14,12 @@ export default function HomePage() {
         content_name: 'Landing Page AIOS'
       })
     }, 500)
+
+    // Charger le script SmartPlayer
+    const script = document.createElement('script')
+    script.src = 'https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js'
+    script.async = true
+    document.head.appendChild(script)
 
     // Smooth scroll
     document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
@@ -1992,19 +1969,19 @@ export default function HomePage() {
                 qui connaît votre documentation par cœur.
             </p>
 
+            {/* VIDÉO */}
             <div className="vsl-container" style={{ marginBottom: '24px' }}>
                 <div dangerouslySetInnerHTML={{
                     __html: '<vturb-smartplayer id="vid-696a299445237c230be3aba5" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
                 }} />
             </div>
 
-            {showCTA && (
-                <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
-                    <Link href="/formulaire" className="cta-primary">
-                        Réserver mon appel maintenant
-                    </Link>
-                </div>
-            )}
+            {/* BOUTON CTA - Toujours visible */}
+            <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
+                <Link href="/formulaire" className="cta-primary">
+                    Réserver mon appel maintenant
+                </Link>
+            </div>
         </div>
     </section>
 
