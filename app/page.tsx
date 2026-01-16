@@ -2082,7 +2082,7 @@ export default function OptinPage() {
           <div style={{
             background: 'white',
             borderRadius: '20px',
-            padding: '48px',
+            padding: '32px 48px',
             maxWidth: '500px',
             width: '100%',
             position: 'relative'
@@ -2111,8 +2111,8 @@ export default function OptinPage() {
                   fontSize: '14px',
                   fontWeight: 600,
                   color: '#3B82F6',
-                  marginBottom: '6px'
-                }}>50%</div>
+                  marginBottom: '4px'
+                }} className="progress-percent">50%</div>
 
                 {/* Barre de progression animée */}
                 <div style={{
@@ -2121,8 +2121,8 @@ export default function OptinPage() {
                   background: '#e5e7eb',
                   borderRadius: '999px',
                   overflow: 'hidden',
-                  marginBottom: '20px'
-                }}>
+                  marginBottom: '16px'
+                }} className="progress-bar-container">
                   <div style={{
                     width: '50%',
                     height: '100%',
@@ -2145,19 +2145,19 @@ export default function OptinPage() {
                 <h2 style={{
                   fontSize: '28px',
                   fontWeight: 700,
-                  marginBottom: '12px',
+                  marginBottom: '8px',
                   color: '#1a1a1a',
                   textAlign: 'center'
-                }}>Dernière étape 🔓</h2>
+                }} className="popup-title">Dernière étape 🔓</h2>
 
                 {/* Sub-headline sous le titre */}
                 <p style={{
                   fontSize: '16px',
                   color: '#666',
-                  marginBottom: '24px',
+                  marginBottom: '20px',
                   textAlign: 'center',
                   fontWeight: 500
-                }}>
+                }} className="popup-subtitle">
                   Où devons-nous envoyer la formation ?
                 </p>
 
@@ -2166,10 +2166,48 @@ export default function OptinPage() {
                     from { transform: translateX(0); }
                     to { transform: translateX(20px); }
                   }
+
+                  /* Desktop: espacements normaux */
+                  @media (min-width: 769px) {
+                    .progress-percent {
+                      margin-bottom: 6px !important;
+                    }
+                    .progress-bar-container {
+                      margin-bottom: 20px !important;
+                    }
+                    .popup-title {
+                      margin-bottom: 12px !important;
+                    }
+                    .popup-subtitle {
+                      margin-bottom: 24px !important;
+                    }
+                    .form-field {
+                      margin-bottom: 20px !important;
+                    }
+                  }
+
+                  /* Mobile: espacements réduits (défaut) */
+                  @media (max-width: 768px) {
+                    .progress-percent {
+                      margin-bottom: 4px !important;
+                    }
+                    .progress-bar-container {
+                      margin-bottom: 16px !important;
+                    }
+                    .popup-title {
+                      margin-bottom: 8px !important;
+                    }
+                    .popup-subtitle {
+                      margin-bottom: 20px !important;
+                    }
+                    .form-field {
+                      margin-bottom: 16px !important;
+                    }
+                  }
                 `}</style>
 
                 <form onSubmit={handleSubmit}>
-                  <div style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: '16px' }} className="form-field">
                     <label style={{
                       display: 'block',
                       fontWeight: 600,
@@ -2194,7 +2232,7 @@ export default function OptinPage() {
                     />
                   </div>
 
-                  <div style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: '16px' }} className="form-field">
                     <label style={{
                       display: 'block',
                       fontWeight: 600,
@@ -2219,7 +2257,7 @@ export default function OptinPage() {
                     />
                   </div>
 
-                  <div style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: '16px' }} className="form-field">
                     <label style={{
                       display: 'block',
                       fontWeight: 600,
