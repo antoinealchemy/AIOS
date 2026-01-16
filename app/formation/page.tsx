@@ -1,10 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
+  const [showCTA, setShowCTA] = useState(false)
+
+  useEffect(() => {
+    // Timer pour afficher le CTA après 30 secondes
+    const ctaTimer = setTimeout(() => {
+      setShowCTA(true)
+    }, 30000) // 30 secondes
+
+    return () => clearTimeout(ctaTimer)
+  }, [])
+
   useEffect(() => {
     // 👁️ PIXEL FACEBOOK - VIEWCONTENT
     // Attendre 500ms que le script Facebook soit chargé
@@ -627,6 +638,18 @@ export default function HomePage() {
 
         .hero-cta {
             margin-bottom: 48px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Social Proof Section */
@@ -1951,11 +1974,13 @@ export default function HomePage() {
                 />
             </div>
 
-            <div className="hero-cta" style={{ marginTop: '32px' }}>
-                <Link href="/formulaire" className="cta-primary">
-                    Réserver mon appel maintenant
-                </Link>
-            </div>
+            {showCTA && (
+                <div className="hero-cta" style={{ marginTop: '32px' }}>
+                    <Link href="/formulaire" className="cta-primary">
+                        Réserver mon appel maintenant
+                    </Link>
+                </div>
+            )}
         </div>
     </section>
 
