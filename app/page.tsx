@@ -2037,7 +2037,7 @@ export default function OptinPage() {
 
             {showCTA && (
                 <div className="hero-cta" style={{ marginTop: '32px' }}>
-                    <button onClick={handleOpenPopup} className="cta-primary" style={{ border: 'none', font: 'inherit' }}>
+                    <button onClick={handleOpenPopup} className="cta-primary" style={{ border: 'none', font: 'inherit', fontWeight: 800 }}>
                         Accéder à la formation gratuite
                     </button>
                 </div>
@@ -2105,6 +2105,23 @@ export default function OptinPage() {
 
             {!submitSuccess ? (
               <>
+                <h2 style={{
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  marginBottom: '16px',
+                  color: '#1a1a1a',
+                  textAlign: 'center'
+                }}>Dernière étape 🔓</h2>
+
+                {/* Indicateur 50% */}
+                <div style={{
+                  textAlign: 'center',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#3B82F6',
+                  marginBottom: '8px'
+                }}>50%</div>
+
                 {/* Barre de progression animée */}
                 <div style={{
                   width: '100%',
@@ -2139,14 +2156,6 @@ export default function OptinPage() {
                     to { transform: translateX(20px); }
                   }
                 `}</style>
-
-                <h2 style={{
-                  fontSize: '28px',
-                  fontWeight: 700,
-                  marginBottom: '32px',
-                  color: '#1a1a1a',
-                  textAlign: 'center'
-                }}>Dernière étape 🔓</h2>
 
                 <form onSubmit={handleSubmit}>
                   <div style={{ marginBottom: '20px' }}>
