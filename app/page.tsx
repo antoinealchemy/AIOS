@@ -1953,7 +1953,7 @@ export default function HomePage() {
 
             <div className="hero-cta" style={{ marginTop: '32px' }}>
                 <Link href="/formulaire" className="cta-primary">
-                    Réserver maintenant
+                    Prendre rendez-vous gratuit
                 </Link>
             </div>
         </div>
