@@ -1939,10 +1939,10 @@ export default function HomePage() {
                 <div 
                     dangerouslySetInnerHTML={{
                         __html: `
-                            <vturb-smartplayer id="vid-69389fe12d3bc2eda4ce04c2" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+                            <vturb-smartplayer id="vid-696a299445237c230be3aba5" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
                             <script type="text/javascript">
                                 var s=document.createElement("script");
-                                s.src="https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/69389fe12d3bc2eda4ce04c2/v4/player.js";
+                                s.src="https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js";
                                 s.async=true;
                                 document.head.appendChild(s);
                             </script>

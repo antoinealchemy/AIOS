@@ -32,9 +32,9 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preload" href="https://scripts.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/players/69389fe12d3bc2eda4ce04c2/v4/player.js" as="script" />
+        <link rel="preload" href="https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js" as="script" />
         <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script" />
-        <link rel="preload" href="https://cdn.converteai.net/c0135ce6-524c-4d83-9601-c2d9acd8de6f/69389f350934249b3714f37a/main.m3u8" as="fetch" />
+        <link rel="preload" href="https://cdn.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/696a28def33e5e7eba7883db/main.m3u8" as="fetch" />
         <link rel="dns-prefetch" href="https://cdn.converteai.net" />
         <link rel="dns-prefetch" href="https://scripts.converteai.net" />
         <link rel="dns-prefetch" href="https://images.converteai.net" />
