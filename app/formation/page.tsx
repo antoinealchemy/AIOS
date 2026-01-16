@@ -552,6 +552,21 @@ export default function HomePage() {
             margin: 0 auto 16px;
             border-radius: 16px;
             overflow: hidden;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .vsl-container * {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        vturb-smartplayer {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         .vsl-placeholder {
@@ -1968,6 +1983,16 @@ export default function HomePage() {
                                 s.src="https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js";
                                 s.async=true;
                                 document.head.appendChild(s);
+                                
+                                // Forcer la vidéo à rester visible toujours
+                                setInterval(function() {
+                                    var player = document.getElementById('vid-696a299445237c230be3aba5');
+                                    if (player) {
+                                        player.style.setProperty('display', 'block', 'important');
+                                        player.style.setProperty('visibility', 'visible', 'important');
+                                        player.style.setProperty('opacity', '1', 'important');
+                                    }
+                                }, 500);
                             </script>
                         `
                     }}
