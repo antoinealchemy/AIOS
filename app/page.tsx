@@ -2105,21 +2105,48 @@ export default function OptinPage() {
 
             {!submitSuccess ? (
               <>
+                {/* Barre de progression animée */}
+                <div style={{
+                  width: '100%',
+                  height: '8px',
+                  background: '#e5e7eb',
+                  borderRadius: '999px',
+                  overflow: 'hidden',
+                  marginBottom: '32px'
+                }}>
+                  <div style={{
+                    width: '50%',
+                    height: '100%',
+                    background: 'linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 20px)',
+                      animation: 'slideStripes 1s linear infinite'
+                    }}></div>
+                  </div>
+                </div>
+
+                <style>{`
+                  @keyframes slideStripes {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(20px); }
+                  }
+                `}</style>
+
                 <h2 style={{
                   fontSize: '28px',
                   fontWeight: 700,
-                  marginBottom: '12px',
+                  marginBottom: '32px',
                   color: '#1a1a1a',
                   textAlign: 'center'
-                }}>Accédez à la formation</h2>
-                <p style={{
-                  fontSize: '16px',
-                  color: '#666',
-                  marginBottom: '32px',
-                  textAlign: 'center'
-                }}>
-                  Entrez vos coordonnées pour regarder la vidéo complète
-                </p>
+                }}>Dernière étape 🔓</h2>
 
                 <form onSubmit={handleSubmit}>
                   <div style={{ marginBottom: '20px' }}>
@@ -2154,7 +2181,7 @@ export default function OptinPage() {
                       marginBottom: '8px',
                       color: '#1a1a1a',
                       fontSize: '14px'
-                    }}>Email *</label>
+                    }}>Email * <span style={{ fontWeight: 400, fontSize: '14px', color: '#666' }}>(promis, pas de spam 😉)</span></label>
                     <input
                       type="email"
                       placeholder="votre@email.com"
@@ -2202,15 +2229,17 @@ export default function OptinPage() {
                     padding: '16px',
                     background: 'linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%)',
                     color: 'white',
-                    fontWeight: 700,
+                    fontWeight: 800,
                     fontSize: '18px',
                     border: 'none',
                     borderRadius: '12px',
                     cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     opacity: isSubmitting ? 0.6 : 1,
-                    marginTop: '8px'
+                    marginTop: '8px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
                   }}>
-                    {isSubmitting ? 'Envoi en cours...' : 'Accéder à la formation'}
+                    {isSubmitting ? 'ENVOI EN COURS...' : 'REGARDER MAINTENANT'}
                   </button>
                 </form>
               </>
