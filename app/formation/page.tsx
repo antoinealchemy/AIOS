@@ -1958,7 +1958,7 @@ export default function HomePage() {
                 qui connaît votre documentation par cœur.
             </p>
 
-            <div className="vsl-container">
+            <div className="vsl-container" style={{ marginBottom: '24px' }}>
                 <div 
                     dangerouslySetInnerHTML={{
                         __html: `
@@ -1975,7 +1975,7 @@ export default function HomePage() {
             </div>
 
             {showCTA && (
-                <div className="hero-cta" style={{ marginTop: '32px' }}>
+                <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
                     <Link href="/formulaire" className="cta-primary">
                         Réserver mon appel maintenant
                     </Link>
