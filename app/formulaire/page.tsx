@@ -8,8 +8,8 @@ import * as fbq from '../../lib/fbPixel'
 export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
-  const [leadId, setLeadId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
+    email: '',
     isCabinet: '',
     role: '',
     douleur: 0,
@@ -18,9 +18,17 @@ export default function FormulairePage() {
   })
 
   useEffect(() => {
-    // Générer leadId unique pour cette session
-    const sessionLeadId = `lead-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-    setLeadId(sessionLeadId)
+    // Récupérer email depuis localStorage
+    const storedEmail = localStorage.getItem('user_email')
+    
+    if (storedEmail) {
+      setFormData(prev => ({
+        ...prev,
+        email: storedEmail
+      }))
+    } else {
+      console.warn('❌ Aucun email trouvé dans localStorage')
+    }
     
     // Pixel Facebook
     try {
@@ -31,17 +39,20 @@ export default function FormulairePage() {
   }, [])
 
   const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
-    if (!leadId) return null
+    if (!formData.email) {
+      console.error('❌ Email manquant - abandon save')
+      return null
+    }
     
     // Pas d'await - sauvegarde en arrière-plan
     fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: `${leadId}@temp.com`,
-        first_name: 'Test',
+        email: formData.email,
+        first_name: localStorage.getItem('user_first_name') || 'User',
         last_name: 'User',
-        phone: null,
+        phone: localStorage.getItem('user_phone') || null,
         is_cabinet: formData.isCabinet === 'oui',
         role: formData.role || null,
         douleur_score: formData.douleur || null,
