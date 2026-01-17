@@ -2031,26 +2031,25 @@ export default function OptinPage() {
             </div>
 
             <h1 className="title-desktop">
-                Comment Récupérer Jusqu'à<br />
-                <span className="gradient-text">30h/semaine</span> Facturables<br />
-                Pour Votre Cabinet
+                Combien d'Heures Perdez-Vous<br />
+                Chaque Semaine en Recherche<br />
+                Documentaire Non Facturable ?
             </h1>
 
             <h1 className="title-mobile">
-                Comment Récupérer Jusqu'à<br />
-                <span className="gradient-text">30h/semaine</span> Facturables<br />
-                Pour Votre Cabinet
+                Combien d'Heures Perdez-Vous<br />
+                Chaque Semaine en Recherche<br />
+                Documentaire Non Facturable ?
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                Transformez 45 minutes de recherche juridique en 8 secondes de réponse<br />
-                grâce à un assistant IA qui connaît votre documentation par cœur.
+                Découvrez dans cette présentation de 7 minutes<br />
+                comment des cabinets français ont réduit ce temps de 70 à 90%.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Transformez 45 minutes de recherche juridique<br />
-                en 8 secondes de réponse grâce à un assistant IA<br />
-                qui connaît votre documentation par cœur.
+                Découvrez dans cette présentation de 7 minutes<br />
+                comment des cabinets français ont réduit ce temps de 70 à 90%.
             </p>
 
             <div className="vsl-container" onClick={handleOpenPopup} style={{ cursor: 'pointer' }}>
