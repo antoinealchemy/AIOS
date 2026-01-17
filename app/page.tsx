@@ -592,9 +592,9 @@ export default function OptinPage() {
         }
 
         h1 {
-            font-size: clamp(28px, 5vw, 60px);
+            font-size: clamp(26px, 4.5vw, 54px);
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1.15;
             margin-bottom: 16px;
             letter-spacing: -0.03em;
         }
@@ -2032,14 +2032,14 @@ export default function OptinPage() {
 
             <h1 className="title-desktop">
                 Combien d'Heures Perdez-Vous<br />
-                Chaque Semaine en Recherche<br />
-                Documentaire Non Facturable ?
+                Chaque Semaine en <span className="gradient-text">Recherche<br />
+                Documentaire Non Facturable</span> ?
             </h1>
 
             <h1 className="title-mobile">
                 Combien d'Heures Perdez-Vous<br />
-                Chaque Semaine en Recherche<br />
-                Documentaire Non Facturable ?
+                Chaque Semaine en <span className="gradient-text">Recherche<br />
+                Documentaire Non Facturable</span> ?
             </h1>
 
             <p className="subtitle subtitle-desktop">
