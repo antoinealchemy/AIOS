@@ -2032,14 +2032,14 @@ export default function OptinPage() {
 
             <h1 className="title-desktop">
                 Comment Récupérer Jusqu'à<br />
-                <span className="gradient-text">30h/semaine</span> Non Facturable<br />
-                Sans Recruter de Junior
+                <span className="gradient-text">30h/semaine</span> Facturables<br />
+                Pour Votre Cabinet
             </h1>
 
             <h1 className="title-mobile">
                 Comment Récupérer Jusqu'à<br />
-                <span className="gradient-text">40h/semaine</span> Non Facturable<br />
-                Sans Recruter de Junior
+                <span className="gradient-text">30h/semaine</span> Facturables<br />
+                Pour Votre Cabinet
             </h1>
 
             <p className="subtitle subtitle-desktop">
