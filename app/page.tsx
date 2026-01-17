@@ -2032,14 +2032,14 @@ export default function OptinPage() {
 
             <h1 className="title-desktop">
                 Combien d'Heures Perdez-Vous<br />
-                Chaque Semaine en <span className="gradient-text">Recherche<br />
-                Documentaire Non Facturable</span> ?
+                Chaque Semaine en <span className="gradient-text">Recherche</span><br />
+                <span className="gradient-text">Documentaire Non Facturable</span> ?
             </h1>
 
             <h1 className="title-mobile">
                 Combien d'Heures Perdez-Vous<br />
-                Chaque Semaine en <span className="gradient-text">Recherche<br />
-                Documentaire Non Facturable</span> ?
+                Chaque Semaine en <span className="gradient-text">Recherche</span><br />
+                <span className="gradient-text">Documentaire Non Facturable</span> ?
             </h1>
 
             <p className="subtitle subtitle-desktop">
