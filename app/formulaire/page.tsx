@@ -10,6 +10,7 @@ export default function FormulairePage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     email: '',
+    firstName: '',
     isCabinet: '',
     role: '',
     douleur: 0,
@@ -18,18 +19,6 @@ export default function FormulairePage() {
   })
 
   useEffect(() => {
-    // Récupérer email depuis localStorage
-    const storedEmail = localStorage.getItem('user_email')
-    
-    if (storedEmail) {
-      setFormData(prev => ({
-        ...prev,
-        email: storedEmail
-      }))
-    } else {
-      console.warn('❌ Aucun email trouvé dans localStorage')
-    }
-    
     // Pixel Facebook
     try {
       fbq.customEvent('FormulairePage', {
@@ -39,8 +28,8 @@ export default function FormulairePage() {
   }, [])
 
   const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
-    if (!formData.email) {
-      console.error('❌ Email manquant - abandon save')
+    if (!formData.email || !formData.firstName) {
+      console.error('❌ Email ou prénom manquant - abandon save')
       return null
     }
     
@@ -50,16 +39,16 @@ export default function FormulairePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: formData.email,
-        first_name: localStorage.getItem('user_first_name') || 'User',
-        last_name: 'User',
-        phone: localStorage.getItem('user_phone') || null,
+        first_name: formData.firstName,
+        last_name: '',
+        phone: null,
         is_cabinet: formData.isCabinet === 'oui',
         role: formData.role || null,
         douleur_score: formData.douleur || null,
         budget: formData.budget || null,
         urgence: formData.urgence || null,
         current_step: currentStepNumber,
-        completed: currentStepNumber === 5,
+        completed: currentStepNumber === 7,
         qualified: qualified,
         pixel_sent: false
       })
@@ -69,73 +58,93 @@ export default function FormulairePage() {
   }
 
   const handleNext = () => {
-    // QUESTION 1 - Cabinet avocat
+    // QUESTION 1 - Email
     if (currentStep === 1) {
-      if (formData.isCabinet === 'non') {
-        // NON QUALIFIÉ - Pas cabinet avocat
-        saveToSupabase(false, 1)
-        router.push('/nc')
+      // Validation email basique
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        alert('Veuillez entrer une adresse email valide')
         return
       }
-      // SAUVEGARDER progression étape 1 (sans attendre)
-      saveToSupabase(false, 1)
       setCurrentStep(2)
       return
     }
 
-    // QUESTION 2 - Rôle
+    // QUESTION 2 - Prénom
     if (currentStep === 2) {
-      if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
-        // NON QUALIFIÉ - Pas décisionnaire
-        saveToSupabase(false, 2)
-        router.push('/nc')
+      if (formData.firstName.trim().length < 2) {
+        alert('Veuillez entrer votre prénom')
         return
       }
-      // SAUVEGARDER progression étape 2 (sans attendre)
+      // Première sauvegarde avec email + prénom
       saveToSupabase(false, 2)
       setCurrentStep(3)
       return
     }
 
-    // QUESTION 3 - Douleur
+    // QUESTION 3 - Cabinet avocat
     if (currentStep === 3) {
-      if (formData.douleur <= 3) {
-        // NON QUALIFIÉ - Douleur trop faible
+      if (formData.isCabinet === 'non') {
+        // NON QUALIFIÉ - Pas cabinet avocat
         saveToSupabase(false, 3)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 3 (sans attendre)
       saveToSupabase(false, 3)
       setCurrentStep(4)
       return
     }
 
-    // QUESTION 4 - Budget
+    // QUESTION 4 - Rôle
     if (currentStep === 4) {
-      if (formData.budget === 'moins-2000') {
-        // NON QUALIFIÉ - Budget trop faible
+      if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
+        // NON QUALIFIÉ - Pas décisionnaire
         saveToSupabase(false, 4)
         router.push('/nc')
         return
       }
-      // SAUVEGARDER progression étape 4 (sans attendre)
       saveToSupabase(false, 4)
       setCurrentStep(5)
       return
     }
 
-    // QUESTION 5 - Urgence (dernière)
+    // QUESTION 5 - Douleur
     if (currentStep === 5) {
+      if (formData.douleur <= 3) {
+        // NON QUALIFIÉ - Douleur trop faible
+        saveToSupabase(false, 5)
+        router.push('/nc')
+        return
+      }
+      saveToSupabase(false, 5)
+      setCurrentStep(6)
+      return
+    }
+
+    // QUESTION 6 - Budget
+    if (currentStep === 6) {
+      if (formData.budget === 'moins-2000') {
+        // NON QUALIFIÉ - Budget trop faible
+        saveToSupabase(false, 6)
+        router.push('/nc')
+        return
+      }
+      saveToSupabase(false, 6)
+      setCurrentStep(7)
+      return
+    }
+
+    // QUESTION 7 - Urgence (dernière)
+    if (currentStep === 7) {
       if (formData.urgence === 'pas-timing') {
         // NON QUALIFIÉ - Pas de timing
-        saveToSupabase(false, 5)
+        saveToSupabase(false, 7)
         router.push('/nc')
         return
       }
       
       // QUALIFIÉ - Toutes conditions remplies
-      saveToSupabase(true, 5)
+      saveToSupabase(true, 7)
       
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
@@ -159,13 +168,18 @@ export default function FormulairePage() {
   }
 
   const isStepValid = () => {
-    if (currentStep === 1) return formData.isCabinet !== ''
-    if (currentStep === 2) return formData.role !== ''
-    if (currentStep === 3) return formData.douleur !== 0
-    if (currentStep === 4) return formData.budget !== ''
-    if (currentStep === 5) return formData.urgence !== ''
+    if (currentStep === 1) return formData.email !== ''
+    if (currentStep === 2) return formData.firstName !== ''
+    if (currentStep === 3) return formData.isCabinet !== ''
+    if (currentStep === 4) return formData.role !== ''
+    if (currentStep === 5) return formData.douleur !== 0
+    if (currentStep === 6) return formData.budget !== ''
+    if (currentStep === 7) return formData.urgence !== ''
     return false
   }
+
+  // Calcul progression (7 étapes au total)
+  const progressPercentage = (currentStep / 7) * 100
 
   return (
     <>
@@ -241,52 +255,53 @@ export default function FormulairePage() {
         .option-button {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 16px 20px;
+          gap: 16px;
+          padding: 20px 24px;
+          background: #F9FAFB;
           border: 2px solid #E5E7EB;
           border-radius: 12px;
-          background: white;
           cursor: pointer;
           transition: all 0.2s;
           font-size: 16px;
+          color: #1a1a1a;
           text-align: left;
+          width: 100%;
         }
 
         .option-button:hover {
+          background: #F3F4F6;
           border-color: #3B82F6;
-          background: #EFF6FF;
+          transform: translateY(-2px);
         }
 
         .option-button.selected {
-          border-color: #3B82F6;
           background: #EFF6FF;
-        }
-
-        .option-button.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
+          border-color: #3B82F6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .radio-circle {
           width: 24px;
           height: 24px;
-          border: 2px solid #E5E7EB;
+          border: 2px solid #D1D5DB;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
+          transition: all 0.2s;
         }
 
         .option-button.selected .radio-circle {
           border-color: #3B82F6;
+          background: #3B82F6;
         }
 
         .radio-circle-inner {
-          width: 12px;
-          height: 12px;
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
-          background: #3B82F6;
+          background: white;
           opacity: 0;
           transition: opacity 0.2s;
         }
@@ -295,123 +310,86 @@ export default function FormulairePage() {
           opacity: 1;
         }
 
-        .text-input {
+        .input-field {
           width: 100%;
-          padding: 12px 16px;
-          border: 2px solid #E5E7EB;
-          border-radius: 8px;
+          padding: 16px 20px;
           font-size: 16px;
-          margin-top: 12px;
+          border: 2px solid #E5E7EB;
+          border-radius: 12px;
+          background: #F9FAFB;
+          transition: all 0.2s;
+          margin-bottom: 32px;
         }
 
-        .text-input:focus {
+        .input-field:focus {
           outline: none;
           border-color: #3B82F6;
-        }
-
-        .slider-container {
-          margin: 40px 0;
-        }
-
-        .slider {
-          width: 100%;
-          height: 8px;
-          -webkit-appearance: none;
-          appearance: none;
-          background: #E5E7EB;
-          border-radius: 999px;
-          outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 24px;
-          height: 24px;
-          background: #3B82F6;
-          border-radius: 50%;
-          cursor: pointer;
-        }
-
-        .slider::-moz-range-thumb {
-          width: 24px;
-          height: 24px;
-          background: #3B82F6;
-          border-radius: 50%;
-          cursor: pointer;
-          border: none;
-        }
-
-        .slider-labels {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 12px;
-          font-size: 14px;
-          color: #6C6C6C;
-        }
-
-        .slider-value {
-          text-align: center;
-          font-size: 48px;
-          font-weight: 700;
-          color: #3B82F6;
-          margin-bottom: 16px;
+          background: white;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .buttons-container {
           display: flex;
           gap: 12px;
-          margin-top: 32px;
+          justify-content: space-between;
         }
 
         .btn-back {
-          padding: 14px 28px;
-          border: 2px solid #E5E7EB;
-          border-radius: 8px;
-          background: white;
-          color: #6C6C6C;
+          padding: 16px 32px;
           font-size: 16px;
           font-weight: 600;
+          border: 2px solid #E5E7EB;
+          background: white;
+          color: #6B7280;
+          border-radius: 12px;
           cursor: pointer;
           transition: all 0.2s;
         }
 
         .btn-back:hover {
-          border-color: #3B82F6;
-          color: #3B82F6;
+          border-color: #D1D5DB;
+          background: #F9FAFB;
         }
 
         .btn-next {
-          flex: 1;
-          padding: 14px 28px;
-          border: none;
-          border-radius: 8px;
-          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
-          color: white;
+          padding: 16px 32px;
           font-size: 16px;
           font-weight: 600;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          color: white;
+          border: none;
+          border-radius: 12px;
           cursor: pointer;
           transition: all 0.2s;
+          flex: 1;
         }
 
-        .btn-next:hover {
+        .btn-next:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
         }
 
         .btn-next:disabled {
           opacity: 0.5;
           cursor: not-allowed;
-          transform: none;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
+          .container {
+            padding: 16px;
+          }
+
           .form-card {
             padding: 24px;
           }
 
           .question-title {
             font-size: 20px;
+          }
+
+          .option-button {
+            padding: 16px;
+            font-size: 14px;
           }
         }
       `}</style>
@@ -423,25 +401,61 @@ export default function FormulairePage() {
             alt="AIOS Logo" 
             width={120} 
             height={40}
-            className="h-10 w-auto mx-auto"
+            priority
           />
         </div>
       </div>
 
       <div className="container">
-        <div style={{ marginBottom: '8px', textAlign: 'right', fontSize: '14px', fontWeight: '600', color: '#3B82F6' }}>
-          {Math.round((currentStep / 5) * 100)}%
-        </div>
         <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${(currentStep / 5) * 100}%` }}
-          />
+          <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
         </div>
 
         <div className="form-card">
-          {/* QUESTION 1 - CABINET AVOCAT */}
+          {/* QUESTION 1 - EMAIL */}
           {currentStep === 1 && (
+            <>
+              <h2 className="question-title">Quelle est votre adresse email ?</h2>
+              
+              <input
+                type="email"
+                className="input-field"
+                placeholder="votre.email@cabinet.fr"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && isStepValid()) {
+                    handleNext()
+                  }
+                }}
+                autoFocus
+              />
+            </>
+          )}
+
+          {/* QUESTION 2 - PRÉNOM */}
+          {currentStep === 2 && (
+            <>
+              <h2 className="question-title">Et votre prénom ?</h2>
+              
+              <input
+                type="text"
+                className="input-field"
+                placeholder="Votre prénom"
+                value={formData.firstName}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && isStepValid()) {
+                    handleNext()
+                  }
+                }}
+                autoFocus
+              />
+            </>
+          )}
+
+          {/* QUESTION 3 - CABINET AVOCAT */}
+          {currentStep === 3 && (
             <>
               <h2 className="question-title">Pour confirmer : travaillez-vous dans un cabinet d'avocats ?</h2>
               
@@ -469,8 +483,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 2 - RÔLE */}
-          {currentStep === 2 && (
+          {/* QUESTION 4 - RÔLE */}
+          {currentStep === 4 && (
             <>
               <h2 className="question-title">Quel est votre rôle dans le cabinet ?</h2>
               
@@ -528,8 +542,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 3 - DOULEUR */}
-          {currentStep === 3 && (
+          {/* QUESTION 5 - DOULEUR */}
+          {currentStep === 5 && (
             <>
               <h2 className="question-title">Sur une échelle de 1 à 10 : à quel point perdre 20-30h/semaine (minimum) impacte-t-il votre cabinet ?</h2>
               
@@ -577,8 +591,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 4 - BUDGET */}
-          {currentStep === 4 && (
+          {/* QUESTION 6 - BUDGET */}
+          {currentStep === 6 && (
             <>
               <h2 className="question-title">Si cette solution permet à votre cabinet de gagner 30h/semaine (soit ~1500h/an), quel budget seriez-vous prêt à investir ?</h2>
               
@@ -626,8 +640,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 5 - URGENCE */}
-          {currentStep === 5 && (
+          {/* QUESTION 7 - URGENCE */}
+          {currentStep === 7 && (
             <>
               <h2 className="question-title">Si vous êtes sélectionné, quand seriez-vous prêt pour mettre cette solution en place ?</h2>
               
@@ -676,7 +690,7 @@ export default function FormulairePage() {
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 5 ? 'Valider' : 'Suivant'}
+              {currentStep === 7 ? 'Valider' : 'Suivant'}
             </button>
           </div>
         </div>
