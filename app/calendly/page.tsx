@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import * as fbq from '../../lib/fbPixel'
 
-export default function CalendlyPage() {
+function CalendlyContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('sid')
   const [calendlyUrl, setCalendlyUrl] = useState('')
@@ -59,5 +59,13 @@ export default function CalendlyPage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function CalendlyPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50" />}>
+      <CalendlyContent />
+    </Suspense>
   )
 }
