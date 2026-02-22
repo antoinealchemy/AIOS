@@ -1,18 +1,11 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
-  const [showCTA, setShowCTA] = React.useState(false)
-
   useEffect(() => {
-    // Afficher le CTA après 60 secondes
-    const ctaTimer = setTimeout(() => {
-      setShowCTA(true)
-    }, 60000)
-
     // 👁️ PIXEL FACEBOOK - VIEWCONTENT
     // Attendre 500ms que le script Facebook soit chargé
     setTimeout(() => {
@@ -133,8 +126,6 @@ export default function HomePage() {
       }
     })
 
-    // Cleanup
-    return () => clearTimeout(ctaTimer)
   }, [])
 
   return (
@@ -1991,14 +1982,12 @@ export default function HomePage() {
                 }} />
             </div>
 
-            {/* BOUTON CTA - Visible après 60 secondes */}
-            {showCTA && (
-              <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
-                  <Link href="/formulaire" className="cta-primary cta-large">
-                      Prendre RDV
-                  </Link>
-              </div>
-            )}
+            {/* BOUTON CTA */}
+            <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
+                <Link href="/formulaire" className="cta-primary cta-large">
+                    Prendre RDV
+                </Link>
+            </div>
         </div>
     </section>
 
