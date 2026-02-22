@@ -17,7 +17,7 @@ export default function HomePage() {
 
     // Charger le script SmartPlayer
     const script = document.createElement('script')
-    script.src = 'https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js'
+    script.src = 'https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699b8a317016a923cccf2012/v4/player.js'
     script.async = true
     document.head.appendChild(script)
 
@@ -1970,7 +1970,7 @@ export default function HomePage() {
             {/* VIDÉO */}
             <div className="vsl-container" style={{ marginBottom: '24px' }}>
                 <div dangerouslySetInnerHTML={{
-                    __html: '<vturb-smartplayer id="vid-696a299445237c230be3aba5" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
+                    __html: '<vturb-smartplayer id="vid-699b8a317016a923cccf2012" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
                 }} />
             </div>
 
