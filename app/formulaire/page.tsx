@@ -25,21 +25,17 @@ export default function FormulairePage() {
     } catch (e) {}
   }, [])
 
-  // Fonction pour sauvegarder dans Supabase
+  // Sauvegarder dans Supabase
   const saveToSupabase = async () => {
     const dataToSend = {
-      email: 'formulaire_qualification@temp.com', // Email temporaire, sera mis à jour via Calendly
+      email: `lead_${Date.now()}@qualification.temp`,
       secteur: formData.secteur,
       secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
       chiffre_affaires: formData.chiffreAffaires,
       nombre_employes: formData.nombreEmployes,
       intensite_probleme: formData.intensiteProbleme,
-      current_step: 4,
-      form_completed: true,
       qualified: true
     }
-
-    console.log('📤 [FORMULAIRE] Données envoyées à Supabase:', JSON.stringify(dataToSend, null, 2))
 
     try {
       const response = await fetch('/api/leads', {
@@ -47,19 +43,10 @@ export default function FormulairePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend)
       })
-
       const result = await response.json()
-      console.log('📥 [FORMULAIRE] Réponse Supabase:', JSON.stringify(result, null, 2))
-
-      if (!response.ok) {
-        console.error('❌ [FORMULAIRE] Erreur Supabase:', result.error)
-        return null
-      }
-
-      console.log('✅ [FORMULAIRE] Lead sauvegardé avec ID:', result.leadId)
       return result
     } catch (error) {
-      console.error('❌ [FORMULAIRE] Erreur fetch:', error)
+      console.error('Erreur:', error)
       return null
     }
   }
@@ -101,25 +88,15 @@ export default function FormulairePage() {
 
     // QUESTION 4 - Intensité du problème (dernière)
     if (currentStep === 4) {
-      console.log('🚀 [FORMULAIRE] Soumission finale - FormData:', JSON.stringify(formData, null, 2))
+      await saveToSupabase()
 
-      // Sauvegarder dans Supabase
-      const result = await saveToSupabase()
-
-      // Sauvegarder données complètes en local aussi
-      sessionStorage.setItem('leadQualified', JSON.stringify({
-        ...formData,
-        leadId: result?.leadId
-      }))
-
-      // Pixel Facebook Lead qualifié
+      // Pixel Facebook
       fbq.event('Lead', {
         content_name: 'Lead Qualifié',
         value: 4500,
         currency: 'EUR'
       })
 
-      // Redirect Calendly
       router.push('/calendly')
     }
   }
