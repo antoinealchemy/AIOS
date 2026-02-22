@@ -44,30 +44,27 @@ export default function HomePage() {
     })
 
     // Burger Menu
-    const burgerMenu = document.getElementById('burgerMenu')
-    const navMobile = document.getElementById('navMobile')
+    const burgerMenu = document.getElementById('burgerMenu') as HTMLElement | null
+    const navMobile = document.getElementById('navMobile') as HTMLElement | null
 
     if (burgerMenu && navMobile) {
-      const burger = burgerMenu
-      const nav = navMobile
-
-      burger.addEventListener('click', () => {
-        burger.classList.toggle('active')
-        nav.classList.toggle('active')
+      burgerMenu.addEventListener('click', () => {
+        burgerMenu!.classList.toggle('active')
+        navMobile!.classList.toggle('active')
       })
 
       document.querySelectorAll('.nav-mobile-links a, .nav-mobile-cta a').forEach(link => {
         link.addEventListener('click', () => {
-          burger.classList.remove('active')
-          nav.classList.remove('active')
+          burgerMenu!.classList.remove('active')
+          navMobile!.classList.remove('active')
         })
       })
 
       document.addEventListener('click', (e) => {
         const target = e.target as Node
-        if (!burger.contains(target) && !nav.contains(target) && nav.classList.contains('active')) {
-          burger.classList.remove('active')
-          nav.classList.remove('active')
+        if (!burgerMenu!.contains(target) && !navMobile!.contains(target) && navMobile!.classList.contains('active')) {
+          burgerMenu!.classList.remove('active')
+          navMobile!.classList.remove('active')
         }
       })
     }
