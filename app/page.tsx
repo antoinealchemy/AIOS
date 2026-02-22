@@ -505,7 +505,7 @@ export default function HomePage() {
         }
 
         h1 {
-            font-size: clamp(28px, 5vw, 60px);
+            font-size: clamp(32px, 5vw, 60px);
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 16px;
