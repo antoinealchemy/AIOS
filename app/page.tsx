@@ -1681,7 +1681,7 @@ export default function HomePage() {
 
             .subtitle {
                 margin-bottom: 20px;
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .section-title {
