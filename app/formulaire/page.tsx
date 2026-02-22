@@ -191,13 +191,26 @@ export default function FormulairePage() {
           text-align: center;
         }
 
+        .progress-container {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 32px;
+        }
+
         .progress-bar {
-          width: 100%;
+          flex: 1;
           height: 8px;
           background: #E5E7EB;
           border-radius: 999px;
           overflow: hidden;
-          margin-bottom: 32px;
+        }
+
+        .progress-text {
+          font-size: 14px;
+          font-weight: 600;
+          color: #3B82F6;
+          min-width: 45px;
         }
 
         .progress-fill {
@@ -456,8 +469,11 @@ export default function FormulairePage() {
       </div>
 
       <div className="container">
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
+        <div className="progress-container">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
+          </div>
+          <span className="progress-text">{progressPercentage}%</span>
         </div>
 
         <div className="form-card">
@@ -580,7 +596,7 @@ export default function FormulairePage() {
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 4 ? 'Valider' : 'Suivant'}
+              {currentStep === 4 ? 'Valider' : 'Suivant →'}
             </button>
           </div>
         </div>
