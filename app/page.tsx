@@ -1977,7 +1977,7 @@ export default function HomePage() {
             {/* BOUTON CTA - Toujours visible */}
             <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
                 <Link href="/formulaire" className="cta-primary">
-                    Réserver mon appel maintenant
+                    Prendre RDV
                 </Link>
             </div>
         </div>

@@ -11,11 +11,11 @@ export default function FormulairePage() {
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
-    isCabinet: '',
-    role: '',
-    douleur: 0,
-    urgence: '',
-    budget: ''
+    secteur: '',
+    secteurAutre: '',
+    chiffreAffaires: '',
+    nombreEmployes: '',
+    intensiteProbleme: 5
   })
 
   useEffect(() => {
@@ -29,11 +29,10 @@ export default function FormulairePage() {
 
   const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
     if (!formData.email || !formData.firstName) {
-      console.error('❌ Email ou prénom manquant - abandon save')
+      console.error('Email ou prénom manquant - abandon save')
       return null
     }
-    
-    // Pas d'await - sauvegarde en arrière-plan
+
     fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -42,25 +41,24 @@ export default function FormulairePage() {
         first_name: formData.firstName,
         last_name: '',
         phone: null,
-        is_cabinet: formData.isCabinet === 'oui',
-        role: formData.role || null,
-        douleur_score: formData.douleur || null,
-        budget: formData.budget || null,
-        urgence: formData.urgence || null,
+        secteur: formData.secteur || null,
+        secteur_autre: formData.secteurAutre || null,
+        chiffre_affaires: formData.chiffreAffaires || null,
+        nombre_employes: formData.nombreEmployes || null,
+        intensite_probleme: formData.intensiteProbleme || null,
         current_step: currentStepNumber,
-        completed: currentStepNumber === 7,
+        completed: currentStepNumber === 6,
         qualified: qualified,
         pixel_sent: false
       })
     }).then(res => res.json())
-      .then(data => console.log('✅ Lead sauvegardé:', data))
+      .then(data => console.log('Lead sauvegardé:', data))
       .catch(err => console.error('Erreur save:', err))
   }
 
   const handleNext = () => {
     // QUESTION 1 - Email
     if (currentStep === 1) {
-      // Validation email basique
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!emailRegex.test(formData.email)) {
         alert('Veuillez entrer une adresse email valide')
@@ -76,18 +74,19 @@ export default function FormulairePage() {
         alert('Veuillez entrer votre prénom')
         return
       }
-      // Première sauvegarde avec email + prénom
       saveToSupabase(false, 2)
       setCurrentStep(3)
       return
     }
 
-    // QUESTION 3 - Cabinet avocat
+    // QUESTION 3 - Secteur d'activité
     if (currentStep === 3) {
-      if (formData.isCabinet === 'non') {
-        // NON QUALIFIÉ - Pas cabinet avocat
-        saveToSupabase(false, 3)
-        router.push('/nc')
+      if (!formData.secteur) {
+        alert('Veuillez sélectionner votre secteur d\'activité')
+        return
+      }
+      if (formData.secteur === 'autre' && !formData.secteurAutre.trim()) {
+        alert('Veuillez préciser votre secteur d\'activité')
         return
       }
       saveToSupabase(false, 3)
@@ -95,12 +94,10 @@ export default function FormulairePage() {
       return
     }
 
-    // QUESTION 4 - Rôle
+    // QUESTION 4 - Chiffre d'affaires
     if (currentStep === 4) {
-      if (formData.role !== 'dirigeant' && formData.role !== 'associe') {
-        // NON QUALIFIÉ - Pas décisionnaire
-        saveToSupabase(false, 4)
-        router.push('/nc')
+      if (!formData.chiffreAffaires) {
+        alert('Veuillez sélectionner votre chiffre d\'affaires')
         return
       }
       saveToSupabase(false, 4)
@@ -108,12 +105,10 @@ export default function FormulairePage() {
       return
     }
 
-    // QUESTION 5 - Douleur
+    // QUESTION 5 - Nombre d'employés
     if (currentStep === 5) {
-      if (formData.douleur <= 3) {
-        // NON QUALIFIÉ - Douleur trop faible
-        saveToSupabase(false, 5)
-        router.push('/nc')
+      if (!formData.nombreEmployes) {
+        alert('Veuillez sélectionner le nombre d\'employés')
         return
       }
       saveToSupabase(false, 5)
@@ -121,41 +116,21 @@ export default function FormulairePage() {
       return
     }
 
-    // QUESTION 6 - Budget
+    // QUESTION 6 - Intensité du problème (dernière)
     if (currentStep === 6) {
-      if (formData.budget === 'moins-2000') {
-        // NON QUALIFIÉ - Budget trop faible
-        saveToSupabase(false, 6)
-        router.push('/nc')
-        return
-      }
-      saveToSupabase(false, 6)
-      setCurrentStep(7)
-      return
-    }
-
-    // QUESTION 7 - Urgence (dernière)
-    if (currentStep === 7) {
-      if (formData.urgence === 'pas-timing') {
-        // NON QUALIFIÉ - Pas de timing
-        saveToSupabase(false, 7)
-        router.push('/nc')
-        return
-      }
-      
       // QUALIFIÉ - Toutes conditions remplies
-      saveToSupabase(true, 7)
-      
+      saveToSupabase(true, 6)
+
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
-      
+
       // Pixel Facebook Lead qualifié
       fbq.event('Lead', {
         content_name: 'Lead Qualifié',
         value: 4500,
         currency: 'EUR'
       })
-      
+
       // Redirect Calendly
       router.push('/calendly')
     }
@@ -170,16 +145,43 @@ export default function FormulairePage() {
   const isStepValid = () => {
     if (currentStep === 1) return formData.email !== ''
     if (currentStep === 2) return formData.firstName !== ''
-    if (currentStep === 3) return formData.isCabinet !== ''
-    if (currentStep === 4) return formData.role !== ''
-    if (currentStep === 5) return formData.douleur !== 0
-    if (currentStep === 6) return formData.budget !== ''
-    if (currentStep === 7) return formData.urgence !== ''
+    if (currentStep === 3) {
+      if (formData.secteur === 'autre') return formData.secteurAutre.trim() !== ''
+      return formData.secteur !== ''
+    }
+    if (currentStep === 4) return formData.chiffreAffaires !== ''
+    if (currentStep === 5) return formData.nombreEmployes !== ''
+    if (currentStep === 6) return true
     return false
   }
 
-  // Calcul progression (7 étapes au total)
-  const progressPercentage = (currentStep / 7) * 100
+  // Calcul progression (6 étapes au total)
+  const progressPercentage = (currentStep / 6) * 100
+
+  const secteurOptions = [
+    { value: 'cabinet-avocats', label: 'Cabinet d\'avocats' },
+    { value: 'cabinet-comptable', label: 'Cabinet comptable' },
+    { value: 'cabinet-conseil', label: 'Cabinet de conseil' },
+    { value: 'medical-sante', label: 'Entreprise médicale / santé' },
+    { value: 'agence-immobiliere', label: 'Agence immobilière' },
+    { value: 'bureau-etudes', label: 'Bureau d\'études / ingénierie' },
+    { value: 'services-b2b', label: 'Entreprise de services B2B' },
+    { value: 'rh-recrutement', label: 'Ressources humaines / recrutement' },
+    { value: 'autre', label: 'Autre' }
+  ]
+
+  const caOptions = [
+    { value: 'moins-250k', label: 'Moins de 250 000€' },
+    { value: '250k-500k', label: 'Entre 250 000€ et 500 000€' },
+    { value: 'plus-500k', label: 'Plus de 500 000€' }
+  ]
+
+  const employesOptions = [
+    { value: '1-10', label: '1 à 10' },
+    { value: '11-50', label: '11 à 50' },
+    { value: '51-200', label: '51 à 200' },
+    { value: 'plus-200', label: 'Plus de 200' }
+  ]
 
   return (
     <>
@@ -328,6 +330,11 @@ export default function FormulairePage() {
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .input-field-small {
+          margin-top: 16px;
+          margin-bottom: 0;
+        }
+
         .buttons-container {
           display: flex;
           gap: 12px;
@@ -374,6 +381,71 @@ export default function FormulairePage() {
           cursor: not-allowed;
         }
 
+        /* Slider styles */
+        .slider-container {
+          margin-bottom: 32px;
+        }
+
+        .slider-labels {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 16px;
+          font-size: 14px;
+          color: #6B7280;
+        }
+
+        .slider-value {
+          text-align: center;
+          font-size: 48px;
+          font-weight: 700;
+          color: #3B82F6;
+          margin-bottom: 24px;
+        }
+
+        .slider {
+          width: 100%;
+          height: 8px;
+          border-radius: 4px;
+          background: #E5E7EB;
+          outline: none;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+          transition: transform 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .slider-scale {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 8px;
+          font-size: 12px;
+          color: #9CA3AF;
+        }
+
         @media (max-width: 640px) {
           .container {
             padding: 16px;
@@ -391,15 +463,19 @@ export default function FormulairePage() {
             padding: 16px;
             font-size: 14px;
           }
+
+          .slider-value {
+            font-size: 36px;
+          }
         }
       `}</style>
 
       <div className="header">
         <div className="logo-container">
-          <Image 
-            src="/logo.png" 
-            alt="AIOS Logo" 
-            width={120} 
+          <Image
+            src="/logo.png"
+            alt="AIOS Logo"
+            width={120}
             height={40}
             priority
           />
@@ -416,11 +492,11 @@ export default function FormulairePage() {
           {currentStep === 1 && (
             <>
               <h2 className="question-title">Quelle est votre adresse email ?</h2>
-              
+
               <input
                 type="email"
                 className="input-field"
-                placeholder="votre.email@cabinet.fr"
+                placeholder="votre.email@entreprise.fr"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 onKeyDown={(e) => {
@@ -437,7 +513,7 @@ export default function FormulairePage() {
           {currentStep === 2 && (
             <>
               <h2 className="question-title">Et votre prénom ?</h2>
-              
+
               <input
                 type="text"
                 className="input-field"
@@ -454,227 +530,110 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 3 - CABINET AVOCAT */}
+          {/* QUESTION 3 - SECTEUR D'ACTIVITÉ */}
           {currentStep === 3 && (
             <>
-              <h2 className="question-title">Pour confirmer : travaillez-vous dans un cabinet d'avocats ?</h2>
-              
-              <div className="options-container">
-                <button
-                  className={`option-button ${formData.isCabinet === 'oui' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, isCabinet: 'oui' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ✅ Oui, je travaille dans un cabinet d'avocats
-                </button>
+              <h2 className="question-title">Quel est votre secteur d'activité ?</h2>
 
-                <button
-                  className={`option-button ${formData.isCabinet === 'non' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, isCabinet: 'non' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  ❌ Non, je travaille dans un autre secteur
-                </button>
+              <div className="options-container">
+                {secteurOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`option-button ${formData.secteur === option.value ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, secteur: option.value, secteurAutre: option.value !== 'autre' ? '' : formData.secteurAutre })}
+                  >
+                    <div className="radio-circle">
+                      <div className="radio-circle-inner" />
+                    </div>
+                    {option.label}
+                  </button>
+                ))}
               </div>
+
+              {formData.secteur === 'autre' && (
+                <input
+                  type="text"
+                  className="input-field input-field-small"
+                  placeholder="Précisez votre secteur d'activité"
+                  value={formData.secteurAutre}
+                  onChange={(e) => setFormData({ ...formData, secteurAutre: e.target.value })}
+                  autoFocus
+                />
+              )}
             </>
           )}
 
-          {/* QUESTION 4 - RÔLE */}
+          {/* QUESTION 4 - CHIFFRE D'AFFAIRES */}
           {currentStep === 4 && (
             <>
-              <h2 className="question-title">Quel est votre rôle dans le cabinet ?</h2>
-              
+              <h2 className="question-title">Quel est votre chiffre d'affaires annuel ?</h2>
+
               <div className="options-container">
-                <button
-                  className={`option-button ${formData.role === 'dirigeant' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, role: 'dirigeant' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  👔 Dirigeant
-                </button>
-
-                <button
-                  className={`option-button ${formData.role === 'associe' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, role: 'associe' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  🤝 Associé
-                </button>
-
-                <button
-                  className={`option-button ${formData.role === 'collaborateur' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, role: 'collaborateur' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  💼 Collaborateur salarié
-                </button>
-
-                <button
-                  className={`option-button ${formData.role === 'junior' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, role: 'junior' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  📚 Avocat junior
-                </button>
-
-                <button
-                  className={`option-button ${formData.role === 'autre' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, role: 'autre' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  🔧 Autre
-                </button>
+                {caOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`option-button ${formData.chiffreAffaires === option.value ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, chiffreAffaires: option.value })}
+                  >
+                    <div className="radio-circle">
+                      <div className="radio-circle-inner" />
+                    </div>
+                    {option.label}
+                  </button>
+                ))}
               </div>
             </>
           )}
 
-          {/* QUESTION 5 - DOULEUR */}
+          {/* QUESTION 5 - NOMBRE D'EMPLOYÉS */}
           {currentStep === 5 && (
             <>
-              <h2 className="question-title">Sur une échelle de 1 à 10 : à quel point perdre 20-30h/semaine (minimum) impacte-t-il votre cabinet ?</h2>
-              
+              <h2 className="question-title">Combien d'employés compte votre entreprise ?</h2>
+
               <div className="options-container">
-                <button
-                  className={`option-button ${formData.douleur === 2 ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, douleur: 2 })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  1-3 : Pas vraiment un problème
-                </button>
-
-                <button
-                  className={`option-button ${formData.douleur === 5 ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, douleur: 5 })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  4-6 : C'est gênant mais gérable
-                </button>
-
-                <button
-                  className={`option-button ${formData.douleur === 7 ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, douleur: 7 })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  7-8 : C'est un vrai problème
-                </button>
-
-                <button
-                  className={`option-button ${formData.douleur === 9 ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, douleur: 9 })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  9-10 : C'est critique, ça nous coûte cher
-                </button>
+                {employesOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`option-button ${formData.nombreEmployes === option.value ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, nombreEmployes: option.value })}
+                  >
+                    <div className="radio-circle">
+                      <div className="radio-circle-inner" />
+                    </div>
+                    {option.label}
+                  </button>
+                ))}
               </div>
             </>
           )}
 
-          {/* QUESTION 6 - BUDGET */}
+          {/* QUESTION 6 - INTENSITÉ DU PROBLÈME */}
           {currentStep === 6 && (
             <>
-              <h2 className="question-title">Si cette solution permet à votre cabinet de gagner 30h/semaine (soit ~1500h/an), quel budget seriez-vous prêt à investir ?</h2>
-              
-              <div className="options-container">
-                <button
-                  className={`option-button ${formData.budget === 'moins-2000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: 'moins-2000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  Moins de 2 000€
-                </button>
+              <h2 className="question-title">À quel point le temps perdu à chercher des informations est-il un problème pour votre entreprise ?</h2>
 
-                <button
-                  className={`option-button ${formData.budget === '2000-5000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: '2000-5000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  2 000€ - 5 000€
-                </button>
+              <div className="slider-container">
+                <div className="slider-value">{formData.intensiteProbleme}</div>
 
-                <button
-                  className={`option-button ${formData.budget === '5000-10000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: '5000-10000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  5 000€ - 10 000€
-                </button>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={formData.intensiteProbleme}
+                  onChange={(e) => setFormData({ ...formData, intensiteProbleme: parseInt(e.target.value) })}
+                  className="slider"
+                />
 
-                <button
-                  className={`option-button ${formData.budget === 'plus-10000' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, budget: 'plus-10000' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  Plus de 10 000€
-                </button>
-              </div>
-            </>
-          )}
+                <div className="slider-labels">
+                  <span>Pas un problème</span>
+                  <span>Problème critique</span>
+                </div>
 
-          {/* QUESTION 7 - URGENCE */}
-          {currentStep === 7 && (
-            <>
-              <h2 className="question-title">Si vous êtes sélectionné, quand seriez-vous prêt pour mettre cette solution en place ?</h2>
-              
-              <div className="options-container">
-                <button
-                  className={`option-button ${formData.urgence === 'immediat' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, urgence: 'immediat' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  🚀 Le plus vite possible
-                </button>
-
-                <button
-                  className={`option-button ${formData.urgence === '1-mois' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, urgence: '1-mois' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  📅 D'ici 1 mois
-                </button>
-
-                <button
-                  className={`option-button ${formData.urgence === 'pas-timing' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, urgence: 'pas-timing' })}
-                >
-                  <div className="radio-circle">
-                    <div className="radio-circle-inner" />
-                  </div>
-                  🤔 Pas de timing précis, je me renseigne
-                </button>
+                <div className="slider-scale">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                    <span key={n}>{n}</span>
+                  ))}
+                </div>
               </div>
             </>
           )}
@@ -685,12 +644,12 @@ export default function FormulairePage() {
                 Retour
               </button>
             )}
-            <button 
-              className="btn-next" 
+            <button
+              className="btn-next"
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 7 ? 'Valider' : 'Suivant'}
+              {currentStep === 6 ? 'Valider' : 'Suivant'}
             </button>
           </div>
         </div>

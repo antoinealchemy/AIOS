@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
       leadData.role = data.role
     }
     if (data.douleur_score !== null && data.douleur_score !== undefined) {
-      // ⭐ NOUVEAU: Convertir en string si number (schéma unifié)
-      leadData.douleur_score = typeof data.douleur_score === 'number' 
-        ? data.douleur_score.toString() 
+      // Convertir en string si number (schéma unifié)
+      leadData.douleur_score = typeof data.douleur_score === 'number'
+        ? data.douleur_score.toString()
         : data.douleur_score
     }
     if (data.budget) {
@@ -51,6 +51,23 @@ export async function POST(request: NextRequest) {
     }
     if (data.urgence) {
       leadData.urgence = data.urgence
+    }
+
+    // NOUVEAUX CHAMPS - Formulaire v2
+    if (data.secteur) {
+      leadData.secteur = data.secteur
+    }
+    if (data.secteur_autre) {
+      leadData.secteur_autre = data.secteur_autre
+    }
+    if (data.chiffre_affaires) {
+      leadData.chiffre_affaires = data.chiffre_affaires
+    }
+    if (data.nombre_employes) {
+      leadData.nombre_employes = data.nombre_employes
+    }
+    if (data.intensite_probleme !== null && data.intensite_probleme !== undefined) {
+      leadData.intensite_probleme = data.intensite_probleme
     }
 
     // ⭐ NOUVEAU: Tracking optin (système unifié)
