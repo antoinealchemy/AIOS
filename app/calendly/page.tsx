@@ -15,23 +15,28 @@ function CalendlyContent() {
       content_name: 'Page Calendly'
     })
 
-    // Passer session_id à Calendly via utm_content
-    const params = new URLSearchParams()
-    if (sessionId) {
-      params.set('utm_content', sessionId)
-    }
-
-    setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${params.toString()}`)
+    setCalendlyUrl('https://calendly.com/antoinealchemy/presentation')
 
     const script = document.createElement('script')
     script.src = 'https://assets.calendly.com/assets/external/widget.js'
     script.async = true
     document.body.appendChild(script)
 
+    // Écouter quand le RDV est pris
+    const handleCalendlyEvent = (e: MessageEvent) => {
+      if (e.data.event === 'calendly.event_scheduled') {
+        // Rediriger vers la page de confirmation
+        window.location.href = `/confirmation?sid=${sessionId}`
+      }
+    }
+
+    window.addEventListener('message', handleCalendlyEvent)
+
     return () => {
       if (document.body.contains(script)) {
         document.body.removeChild(script)
       }
+      window.removeEventListener('message', handleCalendlyEvent)
     }
   }, [sessionId])
 
