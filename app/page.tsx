@@ -21,8 +21,6 @@ export default function HomePage() {
       })
     }, 500)
 
-    return () => clearTimeout(ctaTimer)
-
     // Charger le script SmartPlayer
     const script = document.createElement('script')
     script.src = 'https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699b8a317016a923cccf2012/v4/player.js'
@@ -134,6 +132,9 @@ export default function HomePage() {
         })
       }
     })
+
+    // Cleanup
+    return () => clearTimeout(ctaTimer)
   }, [])
 
   return (
