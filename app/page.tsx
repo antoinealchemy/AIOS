@@ -48,23 +48,26 @@ export default function HomePage() {
     const navMobile = document.getElementById('navMobile')
 
     if (burgerMenu && navMobile) {
-      burgerMenu.addEventListener('click', () => {
-        burgerMenu.classList.toggle('active')
-        navMobile.classList.toggle('active')
+      const burger = burgerMenu
+      const nav = navMobile
+
+      burger.addEventListener('click', () => {
+        burger.classList.toggle('active')
+        nav.classList.toggle('active')
       })
 
       document.querySelectorAll('.nav-mobile-links a, .nav-mobile-cta a').forEach(link => {
         link.addEventListener('click', () => {
-          burgerMenu.classList.remove('active')
-          navMobile.classList.remove('active')
+          burger.classList.remove('active')
+          nav.classList.remove('active')
         })
       })
 
       document.addEventListener('click', (e) => {
         const target = e.target as Node
-        if (!burgerMenu.contains(target) && !navMobile.contains(target) && navMobile.classList.contains('active')) {
-          burgerMenu.classList.remove('active')
-          navMobile.classList.remove('active')
+        if (!burger.contains(target) && !nav.contains(target) && nav.classList.contains('active')) {
+          burger.classList.remove('active')
+          nav.classList.remove('active')
         }
       })
     }
