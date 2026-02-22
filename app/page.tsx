@@ -1943,7 +1943,7 @@ export default function HomePage() {
 
 <div className="hero-content">
             <div className="badge">
-                Cabinets d'avocats :
+                Entreprise de services :
             </div>
 
             <h1 className="title-desktop">
