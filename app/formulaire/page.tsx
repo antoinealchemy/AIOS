@@ -733,7 +733,19 @@ export default function FormulairePage() {
                       className="phone-number"
                       placeholder="6 12 34 56 78"
                       value={formData.phoneNumber}
-                      onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value.replace(/[^\d\s]/g, '') })}
+                      onChange={(e) => {
+                        // Garder seulement les chiffres
+                        const digits = e.target.value.replace(/\D/g, '').slice(0, 10)
+                        // Formater : X XX XX XX XX
+                        let formatted = ''
+                        for (let i = 0; i < digits.length; i++) {
+                          if (i === 1 || (i > 1 && (i - 1) % 2 === 0)) {
+                            formatted += ' '
+                          }
+                          formatted += digits[i]
+                        }
+                        setFormData({ ...formData, phoneNumber: formatted })
+                      }}
                     />
                   </div>
                 </div>
