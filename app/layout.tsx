@@ -32,9 +32,9 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preload" href="https://scripts.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/players/696a299445237c230be3aba5/v4/player.js" as="script" />
+        <link rel="preload" href="https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699b8a317016a923cccf2012/v4/player.js" as="script" />
         <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script" />
-        <link rel="preload" href="https://cdn.converteai.net/4961ad08-9491-4070-afb2-787bda99269b/696a28def33e5e7eba7883db/main.m3u8" as="fetch" />
+        <link rel="preload" href="https://cdn.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/699b88f4c89dd0b2f5817171/main.m3u8" as="fetch" />
         <link rel="dns-prefetch" href="https://cdn.converteai.net" />
         <link rel="dns-prefetch" href="https://scripts.converteai.net" />
         <link rel="dns-prefetch" href="https://images.converteai.net" />
@@ -54,7 +54,7 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '1366441428564831');
+              fbq('init', '26332268233035902');
             `,
           }}
         />
@@ -65,7 +65,7 @@ export default function RootLayout({
             height="1"
             width="1"
             style={{ display: 'none' }}
-            src="https://www.facebook.com/tr?id=1366441428564831&ev=PageView&noscript=1"
+            src="https://www.facebook.com/tr?id=26332268233035902&ev=PageView&noscript=1"
           />
         </noscript>
         {children}
