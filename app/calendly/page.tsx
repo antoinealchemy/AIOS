@@ -15,30 +15,30 @@ function CalendlyContent() {
       content_name: 'Page Calendly'
     })
 
-    setCalendlyUrl('https://calendly.com/antoinealchemy/presentation')
+    // Récupérer les données du formulaire
+    const name = searchParams.get('name') || ''
+    const email = searchParams.get('email') || ''
+    const phone = searchParams.get('a1') || ''
+
+    // Construire l'URL Calendly avec préremplissage
+    const calendlyParams = new URLSearchParams()
+    if (name) calendlyParams.set('name', name)
+    if (email) calendlyParams.set('email', email)
+    if (phone) calendlyParams.set('a1', phone)
+
+    setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${calendlyParams.toString()}`)
 
     const script = document.createElement('script')
     script.src = 'https://assets.calendly.com/assets/external/widget.js'
     script.async = true
     document.body.appendChild(script)
 
-    // Écouter quand le RDV est pris
-    const handleCalendlyEvent = (e: MessageEvent) => {
-      if (e.data.event === 'calendly.event_scheduled') {
-        // Rediriger vers la page de confirmation
-        window.location.href = `/confirmation?sid=${sessionId}`
-      }
-    }
-
-    window.addEventListener('message', handleCalendlyEvent)
-
     return () => {
       if (document.body.contains(script)) {
         document.body.removeChild(script)
       }
-      window.removeEventListener('message', handleCalendlyEvent)
     }
-  }, [sessionId])
+  }, [searchParams])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">

@@ -14,7 +14,11 @@ export default function FormulairePage() {
     secteurAutre: '',
     chiffreAffaires: '',
     nombreEmployes: '',
-    intensiteProbleme: 5
+    intensiteProbleme: 5,
+    prenom: '',
+    email: '',
+    phonePrefix: '+33',
+    phoneNumber: ''
   })
 
   useEffect(() => {
@@ -42,7 +46,10 @@ export default function FormulairePage() {
       secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
       chiffre_affaires: formData.chiffreAffaires || null,
       nombre_employes: formData.nombreEmployes || null,
-      intensite_probleme: formData.intensiteProbleme
+      intensite_probleme: formData.intensiteProbleme,
+      name: formData.prenom || null,
+      email: formData.email || null,
+      phone: formData.phoneNumber ? `${formData.phonePrefix}${formData.phoneNumber}` : null
     }
 
     try {
@@ -95,9 +102,30 @@ export default function FormulairePage() {
       return
     }
 
-    // QUESTION 4 - Intensité du problème (dernière)
+    // QUESTION 4 - Intensité du problème
     if (currentStep === 4) {
-      await saveToSupabase(4, true)
+      await saveToSupabase(4)
+      setCurrentStep(5)
+      return
+    }
+
+    // QUESTION 5 - Coordonnées (dernière)
+    if (currentStep === 5) {
+      // Validation email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        alert('Veuillez entrer un email valide')
+        return
+      }
+
+      // Validation téléphone (9 ou 10 chiffres)
+      const phoneDigits = formData.phoneNumber.replace(/\D/g, '')
+      if (phoneDigits.length < 9 || phoneDigits.length > 10) {
+        alert('Le numéro de téléphone doit contenir 9 ou 10 chiffres')
+        return
+      }
+
+      await saveToSupabase(5, true)
 
       // Pixel Facebook
       fbq.event('Lead', {
@@ -106,8 +134,13 @@ export default function FormulairePage() {
         currency: 'EUR'
       })
 
-      // Redirect vers Calendly avec session_id
-      router.push(`/calendly?sid=${sessionId}`)
+      // Redirect vers Calendly avec données préremplies
+      const params = new URLSearchParams({
+        name: formData.prenom,
+        email: formData.email,
+        a1: `${formData.phonePrefix}${formData.phoneNumber}`
+      })
+      router.push(`/calendly?${params.toString()}`)
     }
   }
 
@@ -125,11 +158,17 @@ export default function FormulairePage() {
     if (currentStep === 2) return formData.chiffreAffaires !== ''
     if (currentStep === 3) return formData.nombreEmployes !== ''
     if (currentStep === 4) return true
+    if (currentStep === 5) {
+      const phoneDigits = formData.phoneNumber.replace(/\D/g, '')
+      return formData.prenom.trim() !== '' &&
+             formData.email.includes('@') &&
+             phoneDigits.length >= 9 && phoneDigits.length <= 10
+    }
     return false
   }
 
-  // Calcul progression (4 étapes au total)
-  const progressPercentage = (currentStep / 4) * 100
+  // Calcul progression (5 étapes au total)
+  const progressPercentage = (currentStep / 5) * 100
 
   const secteurOptions = [
     { value: 'cabinet-avocats', label: 'Cabinet d\'avocats' },
@@ -319,6 +358,67 @@ export default function FormulairePage() {
         .input-field-small {
           margin-top: 16px;
           margin-bottom: 0;
+        }
+
+        .fields-container {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          margin-bottom: 32px;
+        }
+
+        .field-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .field-label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        .field-group .input-field {
+          margin-bottom: 0;
+        }
+
+        .phone-input {
+          display: flex;
+          gap: 8px;
+        }
+
+        .phone-prefix {
+          width: 90px;
+          padding: 16px 12px;
+          font-size: 16px;
+          border: 2px solid #E5E7EB;
+          border-radius: 12px;
+          background: #F9FAFB;
+          cursor: pointer;
+          outline: none;
+        }
+
+        .phone-prefix:focus {
+          border-color: #3B82F6;
+          background: white;
+        }
+
+        .phone-number {
+          flex: 1;
+          padding: 16px 20px;
+          font-size: 16px;
+          border: 2px solid #E5E7EB;
+          border-radius: 12px;
+          background: #F9FAFB;
+          transition: all 0.2s;
+        }
+
+        .phone-number:focus {
+          outline: none;
+          border-color: #3B82F6;
+          background: white;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .buttons-container {
@@ -585,6 +685,62 @@ export default function FormulairePage() {
             </>
           )}
 
+          {/* QUESTION 5 - COORDONNÉES */}
+          {currentStep === 5 && (
+            <>
+              <h2 className="question-title">Quelles sont vos coordonnées ?</h2>
+
+              <div className="fields-container">
+                <div className="field-group">
+                  <label className="field-label">Prénom</label>
+                  <input
+                    type="text"
+                    className="input-field"
+                    placeholder="Votre prénom"
+                    value={formData.prenom}
+                    onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="field-group">
+                  <label className="field-label">Email</label>
+                  <input
+                    type="email"
+                    className="input-field"
+                    placeholder="votre@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="field-group">
+                  <label className="field-label">Téléphone</label>
+                  <div className="phone-input">
+                    <select
+                      className="phone-prefix"
+                      value={formData.phonePrefix}
+                      onChange={(e) => setFormData({ ...formData, phonePrefix: e.target.value })}
+                    >
+                      <option value="+33">+33</option>
+                      <option value="+32">+32</option>
+                      <option value="+41">+41</option>
+                      <option value="+352">+352</option>
+                      <option value="+1">+1</option>
+                    </select>
+                    <input
+                      type="tel"
+                      className="phone-number"
+                      placeholder="6 12 34 56 78"
+                      value={formData.phoneNumber}
+                      onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value.replace(/[^\d\s]/g, '') })}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="buttons-container">
             {currentStep > 1 && (
               <button className="btn-back" onClick={handleBack}>
@@ -596,7 +752,7 @@ export default function FormulairePage() {
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 4 ? 'Valider' : 'Suivant →'}
+              {currentStep === 5 ? 'Accéder au calendrier →' : 'Suivant →'}
             </button>
           </div>
         </div>

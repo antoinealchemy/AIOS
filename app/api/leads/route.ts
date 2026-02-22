@@ -18,15 +18,10 @@ export async function POST(request: NextRequest) {
       secteur_autre: data.secteur_autre,
       chiffre_affaires: data.chiffre_affaires,
       nombre_employes: data.nombre_employes,
-      intensite_probleme: data.intensite_probleme
-    }
-
-    // Si email fourni (via webhook Calendly)
-    if (data.email) {
-      leadData.email = data.email
-    }
-    if (data.name) {
-      leadData.name = data.name
+      intensite_probleme: data.intensite_probleme,
+      email: data.email || null,
+      name: data.name || null,
+      phone: data.phone || null
     }
 
     // Chercher lead existant par session_id
