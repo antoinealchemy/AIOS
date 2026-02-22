@@ -1,12 +1,18 @@
 'use client'
 
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function HomePage() {
+  const [showCTA, setShowCTA] = React.useState(false)
 
   useEffect(() => {
+    // Afficher le CTA après 60 secondes
+    const ctaTimer = setTimeout(() => {
+      setShowCTA(true)
+    }, 60000)
+
     // 👁️ PIXEL FACEBOOK - VIEWCONTENT
     // Attendre 500ms que le script Facebook soit chargé
     setTimeout(() => {
@@ -14,6 +20,8 @@ export default function HomePage() {
         content_name: 'Landing Page AIOS'
       })
     }, 500)
+
+    return () => clearTimeout(ctaTimer)
 
     // Charger le script SmartPlayer
     const script = document.createElement('script')
@@ -634,6 +642,12 @@ export default function HomePage() {
         .cta-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5);
+        }
+
+        .cta-large {
+            padding: 18px 48px;
+            font-size: 20px;
+            font-weight: 700;
         }
 
         .cta-icon {
@@ -1663,7 +1677,7 @@ export default function HomePage() {
 
             .subtitle {
                 margin-bottom: 20px;
-                font-size: 18px;
+                font-size: 14px;
             }
 
             .section-title {
@@ -1952,8 +1966,9 @@ export default function HomePage() {
             </h1>
 
             <h1 className="title-mobile">
-                Trouvez n'importe quelle information<br />
-                en moins de <span className="gradient-text">20 secondes</span>.
+                Trouvez n'importe quelle<br />
+                information en moins<br />
+                de <span className="gradient-text">20 secondes</span>.
             </h1>
 
             <p className="subtitle subtitle-desktop">
@@ -1974,12 +1989,14 @@ export default function HomePage() {
                 }} />
             </div>
 
-            {/* BOUTON CTA - Toujours visible */}
-            <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
-                <Link href="/formulaire" className="cta-primary">
-                    Prendre RDV
-                </Link>
-            </div>
+            {/* BOUTON CTA - Visible après 60 secondes */}
+            {showCTA && (
+              <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
+                  <Link href="/formulaire" className="cta-primary cta-large">
+                      Prendre RDV
+                  </Link>
+              </div>
+            )}
         </div>
     </section>
 
