@@ -25,7 +25,46 @@ export default function FormulairePage() {
     } catch (e) {}
   }, [])
 
-  const handleNext = () => {
+  // Fonction pour sauvegarder dans Supabase
+  const saveToSupabase = async () => {
+    const dataToSend = {
+      email: 'formulaire_qualification@temp.com', // Email temporaire, sera mis à jour via Calendly
+      secteur: formData.secteur,
+      secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
+      chiffre_affaires: formData.chiffreAffaires,
+      nombre_employes: formData.nombreEmployes,
+      intensite_probleme: formData.intensiteProbleme,
+      current_step: 4,
+      form_completed: true,
+      qualified: true
+    }
+
+    console.log('📤 [FORMULAIRE] Données envoyées à Supabase:', JSON.stringify(dataToSend, null, 2))
+
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend)
+      })
+
+      const result = await response.json()
+      console.log('📥 [FORMULAIRE] Réponse Supabase:', JSON.stringify(result, null, 2))
+
+      if (!response.ok) {
+        console.error('❌ [FORMULAIRE] Erreur Supabase:', result.error)
+        return null
+      }
+
+      console.log('✅ [FORMULAIRE] Lead sauvegardé avec ID:', result.leadId)
+      return result
+    } catch (error) {
+      console.error('❌ [FORMULAIRE] Erreur fetch:', error)
+      return null
+    }
+  }
+
+  const handleNext = async () => {
     // QUESTION 1 - Secteur d'activité
     if (currentStep === 1) {
       if (!formData.secteur) {
@@ -62,8 +101,16 @@ export default function FormulairePage() {
 
     // QUESTION 4 - Intensité du problème (dernière)
     if (currentStep === 4) {
-      // Sauvegarder données complètes
-      sessionStorage.setItem('leadQualified', JSON.stringify(formData))
+      console.log('🚀 [FORMULAIRE] Soumission finale - FormData:', JSON.stringify(formData, null, 2))
+
+      // Sauvegarder dans Supabase
+      const result = await saveToSupabase()
+
+      // Sauvegarder données complètes en local aussi
+      sessionStorage.setItem('leadQualified', JSON.stringify({
+        ...formData,
+        leadId: result?.leadId
+      }))
 
       // Pixel Facebook Lead qualifié
       fbq.event('Lead', {
