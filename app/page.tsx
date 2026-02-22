@@ -1976,14 +1976,12 @@ export default function HomePage() {
             </h1>
 
             <p className="subtitle subtitle-desktop">
-                Un système sur mesure connecté à toute votre documentation interne.<br />
-                Vos équipes posent une question, obtiennent une réponse précise instantanément.
+                Découvrez le système sur mesure connecté à toute votre documentation interne.<br />
+                Vos équipes posent une question et obtiennent une réponse précise instantanément sans hallucination.
             </p>
 
             <p className="subtitle subtitle-mobile">
-                Un système sur mesure connecté à toute<br />
-                votre documentation interne. Vos équipes posent<br />
-                une question, obtiennent une réponse précise instantanément.
+                Découvrez le système sur mesure connecté à toute votre documentation interne. Vos équipes posent une question et obtiennent une réponse précise instantanément sans hallucination.
             </p>
 
             {/* VIDÉO */}
