@@ -10,25 +10,30 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    console.log('📥 Lead reçu:', data.email)
-
-    const leadData = {
-      email: data.email,
-      secteur: data.secteur || null,
-      secteur_autre: data.secteur_autre || null,
-      chiffre_affaires: data.chiffre_affaires || null,
-      nombre_employes: data.nombre_employes || null,
-      intensite_probleme: data.intensite_probleme || null,
-      qualified: data.qualified || false
+    const leadData: any = {
+      session_id: data.session_id,
+      step: data.step,
+      completed: data.completed || false,
+      secteur: data.secteur,
+      secteur_autre: data.secteur_autre,
+      chiffre_affaires: data.chiffre_affaires,
+      nombre_employes: data.nombre_employes,
+      intensite_probleme: data.intensite_probleme
     }
 
-    console.log('💾 Données:', leadData)
+    // Si email fourni (via webhook Calendly)
+    if (data.email) {
+      leadData.email = data.email
+    }
+    if (data.name) {
+      leadData.name = data.name
+    }
 
-    // Vérifier si lead existe
+    // Chercher lead existant par session_id
     const { data: existingLead } = await supabase
       .from('leads')
       .select('id')
-      .eq('email', data.email)
+      .eq('session_id', data.session_id)
       .single()
 
     let result
@@ -43,11 +48,10 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (error) {
-        console.error('❌ Erreur UPDATE:', error)
+        console.error('❌ UPDATE:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
       result = updated
-      console.log('✅ Lead mis à jour:', existingLead.id)
     } else {
       // Insert
       const { data: created, error } = await supabase
@@ -57,17 +61,13 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (error) {
-        console.error('❌ Erreur INSERT:', error)
+        console.error('❌ INSERT:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
       result = created
-      console.log('✅ Lead créé:', created.id)
     }
 
-    return NextResponse.json({
-      success: true,
-      leadId: result.id
-    })
+    return NextResponse.json({ success: true, leadId: result.id })
 
   } catch (error) {
     console.error('❌ Erreur:', error)

@@ -8,6 +8,7 @@ import * as fbq from '../../lib/fbPixel'
 export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
+  const [sessionId, setSessionId] = useState('')
   const [formData, setFormData] = useState({
     secteur: '',
     secteurAutre: '',
@@ -17,6 +18,10 @@ export default function FormulairePage() {
   })
 
   useEffect(() => {
+    // Générer session_id unique
+    const id = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    setSessionId(id)
+
     // Pixel Facebook
     try {
       fbq.customEvent('FormulairePage', {
@@ -25,16 +30,19 @@ export default function FormulairePage() {
     } catch (e) {}
   }, [])
 
-  // Sauvegarder dans Supabase
-  const saveToSupabase = async () => {
+  // Sauvegarder dans Supabase (à chaque étape)
+  const saveToSupabase = async (step: number, completed: boolean = false) => {
+    if (!sessionId) return null
+
     const dataToSend = {
-      email: `lead_${Date.now()}@qualification.temp`,
-      secteur: formData.secteur,
+      session_id: sessionId,
+      step: step,
+      completed: completed,
+      secteur: formData.secteur || null,
       secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
-      chiffre_affaires: formData.chiffreAffaires,
-      nombre_employes: formData.nombreEmployes,
-      intensite_probleme: formData.intensiteProbleme,
-      qualified: true
+      chiffre_affaires: formData.chiffreAffaires || null,
+      nombre_employes: formData.nombreEmployes || null,
+      intensite_probleme: formData.intensiteProbleme
     }
 
     try {
@@ -43,10 +51,8 @@ export default function FormulairePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend)
       })
-      const result = await response.json()
-      return result
+      return await response.json()
     } catch (error) {
-      console.error('Erreur:', error)
       return null
     }
   }
@@ -62,6 +68,7 @@ export default function FormulairePage() {
         alert('Veuillez préciser votre secteur d\'activité')
         return
       }
+      await saveToSupabase(1)
       setCurrentStep(2)
       return
     }
@@ -72,6 +79,7 @@ export default function FormulairePage() {
         alert('Veuillez sélectionner votre chiffre d\'affaires')
         return
       }
+      await saveToSupabase(2)
       setCurrentStep(3)
       return
     }
@@ -82,13 +90,14 @@ export default function FormulairePage() {
         alert('Veuillez sélectionner le nombre d\'employés')
         return
       }
+      await saveToSupabase(3)
       setCurrentStep(4)
       return
     }
 
     // QUESTION 4 - Intensité du problème (dernière)
     if (currentStep === 4) {
-      await saveToSupabase()
+      await saveToSupabase(4, true)
 
       // Pixel Facebook
       fbq.event('Lead', {
@@ -97,7 +106,8 @@ export default function FormulairePage() {
         currency: 'EUR'
       })
 
-      router.push('/calendly')
+      // Redirect vers Calendly avec session_id
+      router.push(`/calendly?sid=${sessionId}`)
     }
   }
 
