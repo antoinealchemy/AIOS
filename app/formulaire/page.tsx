@@ -9,8 +9,6 @@ export default function FormulairePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
-    email: '',
-    firstName: '',
     secteur: '',
     secteurAutre: '',
     chiffreAffaires: '',
@@ -27,60 +25,9 @@ export default function FormulairePage() {
     } catch (e) {}
   }, [])
 
-  const saveToSupabase = async (qualified: boolean, currentStepNumber: number) => {
-    if (!formData.email || !formData.firstName) {
-      console.error('Email ou prénom manquant - abandon save')
-      return null
-    }
-
-    fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: formData.email,
-        first_name: formData.firstName,
-        last_name: '',
-        phone: null,
-        secteur: formData.secteur || null,
-        secteur_autre: formData.secteurAutre || null,
-        chiffre_affaires: formData.chiffreAffaires || null,
-        nombre_employes: formData.nombreEmployes || null,
-        intensite_probleme: formData.intensiteProbleme || null,
-        current_step: currentStepNumber,
-        completed: currentStepNumber === 6,
-        qualified: qualified,
-        pixel_sent: false
-      })
-    }).then(res => res.json())
-      .then(data => console.log('Lead sauvegardé:', data))
-      .catch(err => console.error('Erreur save:', err))
-  }
-
   const handleNext = () => {
-    // QUESTION 1 - Email
+    // QUESTION 1 - Secteur d'activité
     if (currentStep === 1) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(formData.email)) {
-        alert('Veuillez entrer une adresse email valide')
-        return
-      }
-      setCurrentStep(2)
-      return
-    }
-
-    // QUESTION 2 - Prénom
-    if (currentStep === 2) {
-      if (formData.firstName.trim().length < 2) {
-        alert('Veuillez entrer votre prénom')
-        return
-      }
-      saveToSupabase(false, 2)
-      setCurrentStep(3)
-      return
-    }
-
-    // QUESTION 3 - Secteur d'activité
-    if (currentStep === 3) {
       if (!formData.secteur) {
         alert('Veuillez sélectionner votre secteur d\'activité')
         return
@@ -89,38 +36,32 @@ export default function FormulairePage() {
         alert('Veuillez préciser votre secteur d\'activité')
         return
       }
-      saveToSupabase(false, 3)
-      setCurrentStep(4)
+      setCurrentStep(2)
       return
     }
 
-    // QUESTION 4 - Chiffre d'affaires
-    if (currentStep === 4) {
+    // QUESTION 2 - Chiffre d'affaires
+    if (currentStep === 2) {
       if (!formData.chiffreAffaires) {
         alert('Veuillez sélectionner votre chiffre d\'affaires')
         return
       }
-      saveToSupabase(false, 4)
-      setCurrentStep(5)
+      setCurrentStep(3)
       return
     }
 
-    // QUESTION 5 - Nombre d'employés
-    if (currentStep === 5) {
+    // QUESTION 3 - Nombre d'employés
+    if (currentStep === 3) {
       if (!formData.nombreEmployes) {
         alert('Veuillez sélectionner le nombre d\'employés')
         return
       }
-      saveToSupabase(false, 5)
-      setCurrentStep(6)
+      setCurrentStep(4)
       return
     }
 
-    // QUESTION 6 - Intensité du problème (dernière)
-    if (currentStep === 6) {
-      // QUALIFIÉ - Toutes conditions remplies
-      saveToSupabase(true, 6)
-
+    // QUESTION 4 - Intensité du problème (dernière)
+    if (currentStep === 4) {
       // Sauvegarder données complètes
       sessionStorage.setItem('leadQualified', JSON.stringify(formData))
 
@@ -143,20 +84,18 @@ export default function FormulairePage() {
   }
 
   const isStepValid = () => {
-    if (currentStep === 1) return formData.email !== ''
-    if (currentStep === 2) return formData.firstName !== ''
-    if (currentStep === 3) {
+    if (currentStep === 1) {
       if (formData.secteur === 'autre') return formData.secteurAutre.trim() !== ''
       return formData.secteur !== ''
     }
-    if (currentStep === 4) return formData.chiffreAffaires !== ''
-    if (currentStep === 5) return formData.nombreEmployes !== ''
-    if (currentStep === 6) return true
+    if (currentStep === 2) return formData.chiffreAffaires !== ''
+    if (currentStep === 3) return formData.nombreEmployes !== ''
+    if (currentStep === 4) return true
     return false
   }
 
-  // Calcul progression (6 étapes au total)
-  const progressPercentage = (currentStep / 6) * 100
+  // Calcul progression (4 étapes au total)
+  const progressPercentage = (currentStep / 4) * 100
 
   const secteurOptions = [
     { value: 'cabinet-avocats', label: 'Cabinet d\'avocats' },
@@ -488,50 +427,8 @@ export default function FormulairePage() {
         </div>
 
         <div className="form-card">
-          {/* QUESTION 1 - EMAIL */}
+          {/* QUESTION 1 - SECTEUR D'ACTIVITÉ */}
           {currentStep === 1 && (
-            <>
-              <h2 className="question-title">Quelle est votre adresse email ?</h2>
-
-              <input
-                type="email"
-                className="input-field"
-                placeholder="votre.email@entreprise.fr"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && isStepValid()) {
-                    handleNext()
-                  }
-                }}
-                autoFocus
-              />
-            </>
-          )}
-
-          {/* QUESTION 2 - PRÉNOM */}
-          {currentStep === 2 && (
-            <>
-              <h2 className="question-title">Et votre prénom ?</h2>
-
-              <input
-                type="text"
-                className="input-field"
-                placeholder="Votre prénom"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && isStepValid()) {
-                    handleNext()
-                  }
-                }}
-                autoFocus
-              />
-            </>
-          )}
-
-          {/* QUESTION 3 - SECTEUR D'ACTIVITÉ */}
-          {currentStep === 3 && (
             <>
               <h2 className="question-title">Quel est votre secteur d'activité ?</h2>
 
@@ -563,8 +460,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 4 - CHIFFRE D'AFFAIRES */}
-          {currentStep === 4 && (
+          {/* QUESTION 2 - CHIFFRE D'AFFAIRES */}
+          {currentStep === 2 && (
             <>
               <h2 className="question-title">Quel est votre chiffre d'affaires annuel ?</h2>
 
@@ -585,8 +482,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 5 - NOMBRE D'EMPLOYÉS */}
-          {currentStep === 5 && (
+          {/* QUESTION 3 - NOMBRE D'EMPLOYÉS */}
+          {currentStep === 3 && (
             <>
               <h2 className="question-title">Combien d'employés compte votre entreprise ?</h2>
 
@@ -607,8 +504,8 @@ export default function FormulairePage() {
             </>
           )}
 
-          {/* QUESTION 6 - INTENSITÉ DU PROBLÈME */}
-          {currentStep === 6 && (
+          {/* QUESTION 4 - INTENSITÉ DU PROBLÈME */}
+          {currentStep === 4 && (
             <>
               <h2 className="question-title">À quel point le temps perdu à chercher des informations est-il un problème pour votre entreprise ?</h2>
 
@@ -649,7 +546,7 @@ export default function FormulairePage() {
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 6 ? 'Valider' : 'Suivant'}
+              {currentStep === 4 ? 'Valider' : 'Suivant'}
             </button>
           </div>
         </div>
