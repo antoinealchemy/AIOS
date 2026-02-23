@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ received: true, linked: false })
     }
 
-    // Mettre à jour le lead avec email et nom
+    // Mettre à jour le lead avec call_booked = true
     const { error } = await supabase
       .from('leads')
-      .update({ email, name })
+      .update({ call_booked: true })
       .eq('session_id', sessionId)
 
     if (error) {
@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    console.log('✅ Lead mis à jour avec email:', email)
+    console.log('✅ Lead marqué call_booked:', email)
 
-    return NextResponse.json({ success: true, linked: true })
+    return NextResponse.json({ success: true, linked: true, call_booked: true })
 
   } catch (error) {
     console.error('❌ Webhook error:', error)
