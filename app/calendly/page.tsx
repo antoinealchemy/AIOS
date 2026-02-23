@@ -7,7 +7,6 @@ import * as fbq from '../../lib/fbPixel'
 
 function CalendlyContent() {
   const searchParams = useSearchParams()
-  const sessionId = searchParams.get('sid')
   const [calendlyUrl, setCalendlyUrl] = useState('')
 
   useEffect(() => {
@@ -19,12 +18,14 @@ function CalendlyContent() {
     const name = searchParams.get('name') || ''
     const email = searchParams.get('email') || ''
     const phone = searchParams.get('a1') || ''
+    const sid = searchParams.get('sid') || ''
 
     // Construire l'URL Calendly avec préremplissage
     const calendlyParams = new URLSearchParams()
     if (name) calendlyParams.set('name', name)
     if (email) calendlyParams.set('email', email)
     if (phone) calendlyParams.set('a1', phone)
+    if (sid) calendlyParams.set('utm_content', sid)
     calendlyParams.set('hide_gdpr_banner', '1')
 
     setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${calendlyParams.toString()}`)

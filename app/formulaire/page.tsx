@@ -134,11 +134,12 @@ export default function FormulairePage() {
         currency: 'EUR'
       })
 
-      // Redirect vers Calendly avec données préremplies
+      // Redirect vers Calendly avec données préremplies + session_id
       const params = new URLSearchParams({
         name: formData.prenom,
         email: formData.email,
-        a1: `${formData.phonePrefix}${formData.phoneNumber}`
+        a1: `${formData.phonePrefix}${formData.phoneNumber}`,
+        sid: sessionId
       })
       router.push(`/calendly?${params.toString()}`)
     }
@@ -189,10 +190,10 @@ export default function FormulairePage() {
   ]
 
   const employesOptions = [
-    { value: '1-10', label: '1 à 10' },
-    { value: '11-50', label: '11 à 50' },
-    { value: '51-200', label: '51 à 200' },
-    { value: 'plus-200', label: 'Plus de 200' }
+    { value: '1-5', label: '1 à 5' },
+    { value: '5-20', label: '5 à 20' },
+    { value: '20-50', label: '20 à 50' },
+    { value: 'plus-50', label: 'Plus de 50' }
   ]
 
   return (
