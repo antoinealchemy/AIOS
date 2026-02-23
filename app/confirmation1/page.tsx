@@ -14,9 +14,16 @@ function ConfirmationContent() {
   const eventStartTime = searchParams.get('event_start_time') || ''
 
   useEffect(() => {
-    // Pixel Facebook - Conversion
-    fbq.event('Schedule', {
-      content_name: 'RDV Calendly Confirmé'
+    // Pixel Facebook - Conversion Lead (RDV pris)
+    fbq.event('Lead', {
+      content_name: 'RDV Calendly Confirmé',
+      value: 100,
+      currency: 'EUR'
+    })
+
+    // Event custom pour tracking détaillé
+    fbq.customEvent('CalendlyBooked', {
+      content_name: 'RDV Confirmé'
     })
   }, [])
 
