@@ -640,8 +640,8 @@ export default function HomePage() {
         }
 
         .cta-large {
-            padding: 18px 48px;
-            font-size: 20px;
+            padding: 24px 80px;
+            font-size: 24px;
             font-weight: 700;
         }
 
@@ -1680,8 +1680,8 @@ export default function HomePage() {
             }
 
             .cta-primary {
-                padding: 12px 24px;
-                font-size: 15px;
+                padding: 20px 60px;
+                font-size: 20px;
                 gap: 8px;
             }
 
