@@ -1987,6 +1987,9 @@ export default function HomePage() {
                 <Link href="/formulaire" className="cta-primary cta-large">
                     Prendre RDV
                 </Link>
+                <div style={{ marginTop: '16px' }}>
+                    <img src="/trust.png" alt="Avis clients" style={{ maxWidth: '280px', width: '100%', height: 'auto' }} />
+                </div>
             </div>
         </div>
     </section>
