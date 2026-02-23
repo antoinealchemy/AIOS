@@ -25,6 +25,7 @@ function CalendlyContent() {
     if (name) calendlyParams.set('name', name)
     if (email) calendlyParams.set('email', email)
     if (phone) calendlyParams.set('a1', phone)
+    calendlyParams.set('hide_gdpr_banner', '1')
 
     setCalendlyUrl(`https://calendly.com/antoinealchemy/presentation?${calendlyParams.toString()}`)
 
