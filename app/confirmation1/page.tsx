@@ -12,6 +12,7 @@ function ConfirmationContent() {
   const inviteeName = searchParams.get('invitee_full_name') || searchParams.get('name') || ''
   const inviteeEmail = searchParams.get('invitee_email') || searchParams.get('email') || ''
   const eventStartTime = searchParams.get('event_start_time') || ''
+  const sessionId = searchParams.get('utm_content') || ''
 
   useEffect(() => {
     // Pixel Facebook - Conversion Lead (RDV pris)
@@ -25,7 +26,16 @@ function ConfirmationContent() {
     fbq.customEvent('CalendlyBooked', {
       content_name: 'RDV Confirmé'
     })
-  }, [])
+
+    // Marquer call_booked = true dans Supabase
+    if (sessionId) {
+      fetch('/api/leads/booked', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId })
+      }).catch(() => {})
+    }
+  }, [sessionId])
 
   // Formater la date si présente
   let dateFormatted = ''
