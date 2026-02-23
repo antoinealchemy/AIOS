@@ -640,9 +640,15 @@ export default function HomePage() {
         }
 
         .cta-large {
-            padding: 24px 80px;
-            font-size: 24px;
+            padding: 18px 48px;
+            font-size: 26px;
             font-weight: 700;
+            animation: subtlePulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
         }
 
         .cta-icon {
@@ -1680,8 +1686,8 @@ export default function HomePage() {
             }
 
             .cta-primary {
-                padding: 20px 60px;
-                font-size: 20px;
+                padding: 12px 24px;
+                font-size: 22px;
                 gap: 8px;
             }
 
@@ -1983,7 +1989,7 @@ export default function HomePage() {
             </div>
 
             {/* BOUTON CTA */}
-            <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '48px' }}>
+            <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '16px' }}>
                 <Link href="/formulaire" className="cta-primary cta-large">
                     Prendre RDV
                 </Link>
