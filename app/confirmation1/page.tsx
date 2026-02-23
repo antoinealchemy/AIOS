@@ -15,16 +15,11 @@ function ConfirmationContent() {
   const sessionId = searchParams.get('utm_content') || ''
 
   useEffect(() => {
-    // Pixel Facebook - Conversion Lead (RDV pris)
-    fbq.event('Lead', {
+    // Pixel Facebook - Event custom "call" pour conversion
+    fbq.customEvent('call', {
       content_name: 'RDV Calendly Confirmé',
       value: 100,
       currency: 'EUR'
-    })
-
-    // Event custom pour tracking détaillé
-    fbq.customEvent('CalendlyBooked', {
-      content_name: 'RDV Confirmé'
     })
 
     // Marquer call_booked = true dans Supabase
