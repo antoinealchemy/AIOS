@@ -1,15 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function LeadMagnetPage() {
-  const [formData, setFormData] = useState({
-    prenom: '',
-    email: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
     // Pixel Facebook - ViewContent
@@ -40,56 +35,6 @@ export default function LeadMagnetPage() {
     })
 
   }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Validation email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!formData.prenom.trim()) {
-      alert('Veuillez entrer votre prénom')
-      return
-    }
-    if (!emailRegex.test(formData.email)) {
-      alert('Veuillez entrer un email valide')
-      return
-    }
-
-    setIsSubmitting(true)
-
-    try {
-      // Générer session_id unique
-      const sessionId = `lm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-      // Sauvegarder dans Supabase
-      await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          step: 1,
-          completed: true,
-          name: formData.prenom,
-          email: formData.email,
-          source: 'lead_magnet'
-        })
-      })
-
-      // Pixel Facebook - Lead
-      fbq.event('Lead', {
-        content_name: 'Lead Magnet - Etude de cas',
-        value: 0,
-        currency: 'EUR'
-      })
-
-      setIsSubmitted(true)
-    } catch (error) {
-      console.error('Erreur:', error)
-      alert('Une erreur est survenue. Veuillez réessayer.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
     <>
@@ -385,118 +330,51 @@ export default function LeadMagnetPage() {
             opacity: 1 !important;
         }
 
-        /* Lead Magnet Form */
-        .lm-form-container {
-            max-width: 500px;
-            margin: 24px auto 0;
-            padding: 32px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .lm-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .lm-input {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 16px;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            background: #F9FAFB;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .lm-input:focus {
-            outline: none;
-            border-color: #3B82F6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .lm-input::placeholder {
-            color: #9CA3AF;
-        }
-
-        .lm-submit {
+        /* CTA Button */
+        .cta-primary {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            padding: 18px 32px;
+            padding: 14px 32px;
             background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
             color: white;
-            border: none;
+            text-decoration: none;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 18px;
-            cursor: pointer;
+            font-size: 16px;
             transition: all 0.3s ease;
             box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
-            letter-spacing: -0.02em;
-            font-family: inherit;
-            width: 100%;
+            letter-spacing: 0.02em;
         }
 
-        .lm-submit:hover:not(:disabled) {
+        .cta-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5);
         }
 
-        .lm-submit:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .lm-disclaimer {
-            text-align: center;
-            font-size: 14px;
-            color: #6C6C6C;
-            margin-top: 8px;
-        }
-
-        .lm-success {
-            text-align: center;
-            padding: 24px;
-        }
-
-        .lm-success-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-        }
-
-        .lm-success-icon svg {
-            width: 32px;
-            height: 32px;
-            color: white;
-        }
-
-        .lm-success h3 {
-            font-size: 24px;
+        .cta-large {
+            padding: 18px 48px;
+            font-size: 22px;
             font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 8px;
+            animation: subtlePulse 2.5s ease-in-out infinite;
         }
 
-        .lm-success p {
-            font-size: 16px;
-            color: #6C6C6C;
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
         }
 
         .hero-cta {
+            margin-top: 24px;
             margin-bottom: 48px;
             animation: fadeInUp 0.6s ease-out;
+        }
+
+        .cta-reassurance {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #6C6C6C;
+            font-weight: 400;
         }
 
         @keyframes fadeInUp {
@@ -525,14 +403,9 @@ export default function LeadMagnetPage() {
                 margin: 0 auto 8px;
             }
 
-            .lm-form-container {
-                padding: 24px;
-                margin: 16px auto 0;
-            }
-
-            .lm-submit {
+            .cta-large {
+                padding: 16px 32px;
                 font-size: 16px;
-                padding: 16px 24px;
             }
         }
 
@@ -604,6 +477,9 @@ export default function LeadMagnetPage() {
             .floating-icon {
                 animation: none;
                 transform: none;
+            }
+            .cta-large {
+                animation: none;
             }
         }
       `}</style>
@@ -700,46 +576,12 @@ export default function LeadMagnetPage() {
                 }} />
             </div>
 
-            {/* FORMULAIRE LEAD MAGNET */}
-            <div className="lm-form-container">
-                {!isSubmitted ? (
-                    <form className="lm-form" onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            className="lm-input"
-                            placeholder="Votre prénom"
-                            value={formData.prenom}
-                            onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                            required
-                        />
-                        <input
-                            type="email"
-                            className="lm-input"
-                            placeholder="Votre email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            required
-                        />
-                        <button
-                            type="submit"
-                            className="lm-submit"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? 'Envoi en cours...' : "Recevoir l'étude de cas offerte"}
-                        </button>
-                        <p className="lm-disclaimer">Accès immédiat, c'est totalement offert</p>
-                    </form>
-                ) : (
-                    <div className="lm-success">
-                        <div className="lm-success-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        </div>
-                        <h3>Merci {formData.prenom} !</h3>
-                        <p>Vous allez recevoir l'étude de cas par email dans quelques instants.</p>
-                    </div>
-                )}
+            {/* CTA BUTTON */}
+            <div className="hero-cta">
+                <Link href="/lm/etude-de-cas" className="cta-primary cta-large">
+                    RECEVOIR L'ÉTUDE DE CAS OFFERTE
+                </Link>
+                <p className="cta-reassurance">Accès immédiat • 100% gratuit</p>
             </div>
         </div>
     </section>
