@@ -476,12 +476,12 @@ export default function CapturePage() {
             </div>
 
             <h1>
-                Comment le cabinet X a récupéré <span className="gradient-text">12 000€/mois</span><br />grâce à notre système
+                Comment ce cabinet d'avocats parisien a récupéré <span className="gradient-text">12 000€</span><br />grâce à notre système
             </h1>
 
             <p className="subtitle">
-                Découvrez exactement comment on a implémenté le système.<br />
-                Les étapes du déploiement et les résultats obtenus :
+                Découvrez exactement comment on a implémenté le système,<br />
+                les étapes du déploiement et les résultats obtenus :
             </p>
 
             {/* GIF Video */}
