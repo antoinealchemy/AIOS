@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import Head from 'next/head'
 import * as fbq from '@/lib/fbPixel'
 
 export default function EtudeDeCasPage() {
@@ -47,9 +46,11 @@ export default function EtudeDeCasPage() {
 
     // Pixel Facebook - ViewContent
     setTimeout(() => {
-      fbq.event('ViewContent', {
-        content_name: 'Etude de cas - Cabinet Avocats'
-      })
+      try {
+        fbq.event('ViewContent', {
+          content_name: 'Etude de cas - Cabinet Avocats - Video'
+        })
+      } catch (e) {}
     }, 500)
 
   }, [])
@@ -306,9 +307,6 @@ export default function EtudeDeCasPage() {
     <footer>
         <div className="footer-bottom">
             <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
-            <p style={{ marginBottom: 24 }}>
-                Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
-            </p>
         </div>
     </footer>
 

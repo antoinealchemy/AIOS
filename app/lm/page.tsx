@@ -578,7 +578,7 @@ export default function LeadMagnetPage() {
 
             {/* CTA BUTTON */}
             <div className="hero-cta">
-                <Link href="/lm/etude-de-cas" className="cta-primary cta-large">
+                <Link href="/lm/capture" className="cta-primary cta-large">
                     RECEVOIR L'ÉTUDE DE CAS OFFERTE
                 </Link>
                 <p className="cta-reassurance">Accès immédiat • 100% gratuit</p>

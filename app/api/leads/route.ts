@@ -10,6 +10,27 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
+    // Lead Magnet simple (prenom + email + source)
+    if (data.prenom && data.email && !data.session_id) {
+      const { data: created, error } = await supabase
+        .from('lm_leads')
+        .insert([{
+          prenom: data.prenom,
+          email: data.email,
+          source: data.source || 'lm_capture'
+        }])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('❌ INSERT lm_leads:', error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ success: true, leadId: created.id })
+    }
+
+    // Formulaire qualification complet (existant)
     const leadData: any = {
       session_id: data.session_id,
       step: data.step,
