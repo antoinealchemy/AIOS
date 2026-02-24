@@ -14,9 +14,42 @@ export default function LeadMagnetPage() {
       })
     }, 500)
 
+    // Performance tracking
+    const perfScript = document.createElement('script')
+    perfScript.innerHTML = '!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);'
+    document.head.appendChild(perfScript)
+
+    // Preload links
+    const preloads = [
+      { href: 'https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699dde1ba036c88a251ce5f7/v4/player.js', as: 'script' },
+      { href: 'https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js', as: 'script' },
+      { href: 'https://cdn.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/699dd8d148d2f9414f0eecf3/main.m3u8', as: 'fetch' }
+    ]
+    preloads.forEach(({ href, as }) => {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.href = href
+      link.as = as
+      document.head.appendChild(link)
+    })
+
+    // DNS prefetch
+    const dnsPrefetchUrls = [
+      'https://cdn.converteai.net',
+      'https://scripts.converteai.net',
+      'https://images.converteai.net',
+      'https://api.vturb.com.br'
+    ]
+    dnsPrefetchUrls.forEach(url => {
+      const link = document.createElement('link')
+      link.rel = 'dns-prefetch'
+      link.href = url
+      document.head.appendChild(link)
+    })
+
     // Charger le script SmartPlayer
     const script = document.createElement('script')
-    script.src = 'https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699b8a317016a923cccf2012/v4/player.js'
+    script.src = 'https://scripts.converteai.net/fd093069-bcee-437c-8ad1-4ad632e6754f/players/699dde1ba036c88a251ce5f7/v4/player.js'
     script.async = true
     document.head.appendChild(script)
 
@@ -572,7 +605,7 @@ export default function LeadMagnetPage() {
             {/* VIDEO VSL */}
             <div className="vsl-container" style={{ marginBottom: '24px' }}>
                 <div dangerouslySetInnerHTML={{
-                    __html: '<vturb-smartplayer id="vid-699b8a317016a923cccf2012" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
+                    __html: '<vturb-smartplayer id="vid-699dde1ba036c88a251ce5f7" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
                 }} />
             </div>
 
