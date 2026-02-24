@@ -283,15 +283,16 @@ export default function EtudeDeCasPage() {
     <section className="main-section">
         <div className="main-content">
             <div className="badge">
-                Étude de cas
+                Étude de cas :
             </div>
 
             <h1>
-                Comment ce cabinet d'avocats parisien a récupéré <span className="gradient-text">12 000€/mois</span> grâce à notre système
+                Comment le cabinet X a récupéré <span className="gradient-text">12 000€/mois</span><br />grâce à notre système
             </h1>
 
             <p className="subtitle">
-                Découvrez exactement comment on a implémenté le système, les étapes du déploiement, et les résultats obtenus.
+                Découvrez exactement comment on a implémenté le système.<br />
+                Les étapes du déploiement et les résultats obtenus :
             </p>
 
             {/* VIDEO ETUDE DE CAS */}
