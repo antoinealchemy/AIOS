@@ -476,7 +476,7 @@ export default function CapturePage() {
             </div>
 
             <h1>
-                Comment ce cabinet d'avocats parisien a récupéré <span className="gradient-text">12 000€</span><br />grâce à notre système
+                Comment ce cabinet d'avocats parisien<br />a récupéré <span className="gradient-text">12 000€</span> grâce à notre système
             </h1>
 
             <p className="subtitle">
