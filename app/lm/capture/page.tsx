@@ -436,7 +436,7 @@ export default function CapturePage() {
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 1.75rem;
                 margin-bottom: 16px;
             }
 
