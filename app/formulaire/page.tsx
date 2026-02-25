@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import * as fbq from '../../lib/fbPixel'
 
@@ -215,28 +214,42 @@ export default function FormulairePage() {
         .container {
           max-width: 600px;
           margin: 0 auto;
-          padding: 24px;
+          padding: 16px 24px 24px;
         }
 
-        .header {
-          background: white;
+        /* Header */
+        header {
+          background: #FFFFFF;
           border-bottom: 1px solid #E5E7EB;
-          padding: 16px 0;
-          margin-bottom: 40px;
+          padding: 12px 0;
         }
 
-        .logo-container {
+        .header-content {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 0 24px;
-          text-align: center;
+          padding: 0 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+        }
+
+        .logo img {
+          height: 32px;
+          width: auto;
+          display: block;
         }
 
         .progress-container {
           display: flex;
           align-items: center;
           gap: 16px;
-          margin-bottom: 32px;
+          margin-bottom: 24px;
         }
 
         .progress-bar {
@@ -558,27 +571,22 @@ export default function FormulairePage() {
         }
       `}</style>
 
-      <div className="header">
-        <div className="logo-container">
-          <Image
-            src="/logo.png"
-            alt="AIOS Logo"
-            width={120}
-            height={40}
-            priority
-          />
+      <header>
+        <div className="header-content">
+          <a href="/" className="logo">
+            <img src="/logo.png" alt="AIOS Logo" />
+          </a>
         </div>
-      </div>
+      </header>
 
       <div className="container">
-        <div className="progress-container">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
-          </div>
-          <span className="progress-text">{progressPercentage}%</span>
-        </div>
-
         <div className="form-card">
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
+            </div>
+            <span className="progress-text">{progressPercentage}%</span>
+          </div>
           {/* QUESTION 1 - SECTEUR D'ACTIVITÉ */}
           {currentStep === 1 && (
             <>
