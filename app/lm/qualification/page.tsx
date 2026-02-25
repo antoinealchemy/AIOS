@@ -113,30 +113,9 @@ export default function QualificationPage() {
       return
     }
 
-    // QUESTION 4 - Intensité du problème
+    // QUESTION 4 - Intensité du problème (dernière étape)
     if (currentStep === 4) {
-      await saveToSupabase(4)
-      setCurrentStep(5)
-      return
-    }
-
-    // QUESTION 5 - Coordonnées (dernière)
-    if (currentStep === 5) {
-      // Validation email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(formData.email)) {
-        alert('Veuillez entrer un email valide')
-        return
-      }
-
-      // Validation téléphone (9 ou 10 chiffres)
-      const phoneDigits = formData.phoneNumber.replace(/\D/g, '')
-      if (phoneDigits.length < 9 || phoneDigits.length > 10) {
-        alert('Le numéro de téléphone doit contenir 9 ou 10 chiffres')
-        return
-      }
-
-      await saveToSupabase(5, true)
+      await saveToSupabase(4, true)
 
       // Pixel Facebook - Lead_LM (distinct du tunnel principal)
       fbq.customEvent('Lead_LM', {
@@ -145,13 +124,20 @@ export default function QualificationPage() {
         currency: 'EUR'
       })
 
-      // Redirect vers Calendly directement avec données préremplies
-      const params = new URLSearchParams({
-        name: formData.prenom,
-        email: formData.email,
-        a1: `${formData.phonePrefix}${formData.phoneNumber}`,
-        utm_content: sessionId
-      })
+      // Récupérer prénom et email depuis sessionStorage
+      let prenom = formData.prenom
+      let email = formData.email
+      try {
+        prenom = sessionStorage.getItem('lm_prenom') || prenom
+        email = sessionStorage.getItem('lm_email') || email
+      } catch (e) {}
+
+      // Redirect vers Calendly avec données préremplies
+      const params = new URLSearchParams()
+      if (prenom) params.set('name', prenom)
+      if (email) params.set('email', email)
+      params.set('utm_content', sessionId)
+
       window.location.href = `https://calendly.com/antoinealchemy/audit-personnalise?${params.toString()}`
     }
   }
@@ -170,17 +156,11 @@ export default function QualificationPage() {
     if (currentStep === 2) return formData.chiffreAffaires !== ''
     if (currentStep === 3) return formData.nombreEmployes !== ''
     if (currentStep === 4) return true
-    if (currentStep === 5) {
-      const phoneDigits = formData.phoneNumber.replace(/\D/g, '')
-      return formData.prenom.trim() !== '' &&
-             formData.email.includes('@') &&
-             phoneDigits.length >= 9 && phoneDigits.length <= 10
-    }
     return false
   }
 
-  // Calcul progression (5 étapes au total)
-  const progressPercentage = (currentStep / 5) * 100
+  // Calcul progression (4 étapes au total)
+  const progressPercentage = (currentStep / 4) * 100
 
   const secteurOptions = [
     { value: 'cabinet-avocats', label: 'Cabinet d\'avocats' },
@@ -706,74 +686,6 @@ export default function QualificationPage() {
             </>
           )}
 
-          {/* QUESTION 5 - COORDONNÉES */}
-          {currentStep === 5 && (
-            <>
-              <h2 className="question-title">Quelles sont vos coordonnées ?</h2>
-
-              <div className="fields-container">
-                <div className="field-group">
-                  <label className="field-label">Prénom</label>
-                  <input
-                    type="text"
-                    className="input-field"
-                    placeholder="Votre prénom"
-                    value={formData.prenom}
-                    onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                    autoFocus
-                  />
-                </div>
-
-                <div className="field-group">
-                  <label className="field-label">Email</label>
-                  <input
-                    type="email"
-                    className="input-field"
-                    placeholder="votre@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  />
-                </div>
-
-                <div className="field-group">
-                  <label className="field-label">Téléphone</label>
-                  <div className="phone-input">
-                    <select
-                      className="phone-prefix"
-                      value={formData.phonePrefix}
-                      onChange={(e) => setFormData({ ...formData, phonePrefix: e.target.value })}
-                    >
-                      <option value="+33">+33</option>
-                      <option value="+32">+32</option>
-                      <option value="+41">+41</option>
-                      <option value="+352">+352</option>
-                      <option value="+1">+1</option>
-                    </select>
-                    <input
-                      type="tel"
-                      className="phone-number"
-                      placeholder="6 12 34 56 78"
-                      value={formData.phoneNumber}
-                      onChange={(e) => {
-                        // Garder seulement les chiffres
-                        const digits = e.target.value.replace(/\D/g, '').slice(0, 10)
-                        // Formater : X XX XX XX XX
-                        let formatted = ''
-                        for (let i = 0; i < digits.length; i++) {
-                          if (i === 1 || (i > 1 && (i - 1) % 2 === 0)) {
-                            formatted += ' '
-                          }
-                          formatted += digits[i]
-                        }
-                        setFormData({ ...formData, phoneNumber: formatted })
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
           <div className="buttons-container">
             {currentStep > 1 && (
               <button className="btn-back" onClick={handleBack}>
@@ -785,7 +697,7 @@ export default function QualificationPage() {
               onClick={handleNext}
               disabled={!isStepValid()}
             >
-              {currentStep === 5 ? 'Accéder au calendrier →' : 'Suivant →'}
+              {currentStep === 4 ? 'Accéder au calendrier →' : 'Suivant →'}
             </button>
           </div>
         </div>
