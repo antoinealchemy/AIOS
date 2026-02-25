@@ -54,6 +54,15 @@ export default function EtudeDeCasPage() {
       } catch (e) {}
     }, 500)
 
+    // Pixel Facebook - Lead (page atteinte après capture email)
+    setTimeout(() => {
+      try {
+        fbq.event('Lead', {
+          content_name: 'lead_magnet_lm'
+        })
+      } catch (e) {}
+    }, 500)
+
   }, [])
 
   return (
