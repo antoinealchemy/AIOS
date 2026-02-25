@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function EtudeDeCasPage() {
@@ -202,6 +203,55 @@ export default function EtudeDeCasPage() {
             opacity: 1 !important;
         }
 
+        /* CTA Button */
+        .hero-cta {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5);
+        }
+
+        .cta-large {
+            padding: 18px 48px;
+            font-size: 26px;
+            font-weight: 700;
+            animation: subtlePulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
         /* Footer */
         footer {
             padding: 48px 24px 60px;
@@ -267,6 +317,17 @@ export default function EtudeDeCasPage() {
             .vsl-container {
                 border-radius: 12px;
             }
+
+            .cta-primary {
+                padding: 12px 24px;
+                font-size: 22px;
+                gap: 8px;
+            }
+
+            .cta-large {
+                padding: 16px 40px;
+                font-size: 20px;
+            }
         }
       `}</style>
 
@@ -300,6 +361,16 @@ export default function EtudeDeCasPage() {
                 <div dangerouslySetInnerHTML={{
                     __html: '<vturb-smartplayer id="vid-699dd8cf10f8465bfaf7ecb4" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>'
                 }} />
+            </div>
+
+            {/* BOUTON CTA */}
+            <div className="hero-cta" style={{ marginTop: '32px', marginBottom: '16px' }}>
+                <Link href="/lm/qualification" className="cta-primary cta-large">
+                    Prendre RDV
+                </Link>
+                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+                    <img src="/trust.png" alt="Avis clients" style={{ maxWidth: '160px', width: '100%', height: 'auto' }} />
+                </div>
             </div>
         </div>
     </section>
