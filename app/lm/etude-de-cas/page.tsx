@@ -177,6 +177,11 @@ export default function EtudeDeCasPage() {
             margin-right: auto;
         }
 
+        /* Mobile-only line breaks */
+        .mobile-br {
+            display: inline;
+        }
+
         /* VSL Container */
         .vsl-container {
             position: relative;
@@ -306,12 +311,17 @@ export default function EtudeDeCasPage() {
             }
 
             h1 {
+                font-size: 1.75rem;
                 margin-bottom: 16px;
+            }
+
+            .mobile-br {
+                display: block;
             }
 
             .subtitle {
                 margin-bottom: 32px;
-                font-size: 15px;
+                font-size: 1rem;
             }
 
             .vsl-container {
@@ -348,12 +358,11 @@ export default function EtudeDeCasPage() {
             </div>
 
             <h1>
-                Comment ce cabinet d'avocats parisien<br />a récupéré <span className="gradient-text">12 000€</span> grâce à notre système
+                Comment ce cabinet d'avocats<span className="mobile-br" /> parisien a récupéré <span className="gradient-text">12 000€</span><span className="mobile-br" /> grâce à notre système
             </h1>
 
             <p className="subtitle">
-                Découvrez exactement comment on a implémenté le système,<br />
-                les étapes du déploiement et les résultats obtenus :
+                → 13 heures récupérées par semaine,<span className="mobile-br" /> un nouveau client signé à 12 000€/mois,<span className="mobile-br" /> sans changer d'outil ni embaucher :
             </p>
 
             {/* VIDEO ETUDE DE CAS */}
