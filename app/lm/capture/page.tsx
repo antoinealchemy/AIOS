@@ -519,7 +519,7 @@ export default function CapturePage() {
             <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
 
             <h2 className="modal-title">Accédez à l'étude de cas</h2>
-            <p className="modal-subtitle">Entrez vos informations pour voir la vidéo complète</p>
+            <p className="modal-subtitle">Entrez vos informations et recevez la vidéo <span style={{ textDecoration: 'underline' }}>immédiatement</span></p>
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -549,6 +549,9 @@ export default function CapturePage() {
                 >
                     {isSubmitting ? 'ENVOI EN COURS...' : "RECEVOIR L'ÉTUDE DE CAS"}
                 </button>
+                <p style={{ marginTop: '12px', fontSize: '13px', color: '#9CA3AF', textAlign: 'center' }}>
+                    Accès immédiat • 100% gratuit
+                </p>
             </form>
         </div>
     </div>
