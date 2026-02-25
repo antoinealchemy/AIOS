@@ -496,7 +496,7 @@ export default function CapturePage() {
             </h1>
 
             <p className="subtitle">
-                13 heures récupérées par semaine,<span className="mobile-br" /> un nouveau client signé à 12 000€/mois,<span className="mobile-br" /> sans changer d'outil ni embaucher :
+                → 13 heures récupérées par semaine,<span className="mobile-br" /> un nouveau client signé à 12 000€/mois,<span className="mobile-br" /> sans changer d'outil ni embaucher :
             </p>
 
             {/* GIF Video */}
