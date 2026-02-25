@@ -425,12 +425,18 @@ export default function CapturePage() {
             }
 
             h1 {
+                font-size: 2rem;
                 margin-bottom: 16px;
+            }
+
+            h1 br,
+            .subtitle br {
+                display: none;
             }
 
             .subtitle {
                 margin-bottom: 32px;
-                font-size: 15px;
+                font-size: 1rem;
             }
 
             .video-container {
