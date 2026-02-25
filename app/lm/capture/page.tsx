@@ -47,13 +47,19 @@ export default function CapturePage() {
         })
       })
 
-      // Pixel Facebook - Lead
+      // Pixel Facebook - Lead_LM (distinct du tunnel principal)
       try {
-        fbq.event('Lead', {
+        fbq.customEvent('Lead_LM', {
           content_name: 'Lead Magnet - Capture',
           value: 0,
           currency: 'EUR'
         })
+      } catch (e) {}
+
+      // Stocker les données en sessionStorage pour pré-remplir le formulaire de qualification
+      try {
+        sessionStorage.setItem('lm_prenom', formData.prenom)
+        sessionStorage.setItem('lm_email', formData.email)
       } catch (e) {}
 
       // Redirect to etude-de-cas

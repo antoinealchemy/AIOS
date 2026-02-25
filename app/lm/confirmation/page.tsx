@@ -15,8 +15,8 @@ function ConfirmationContent() {
   const sessionId = searchParams.get('utm_content') || ''
 
   useEffect(() => {
-    // Pixel Facebook - Event custom "call" pour conversion
-    fbq.customEvent('call', {
+    // Pixel Facebook - Event custom "call_LM" pour conversion (distinct du tunnel principal)
+    fbq.customEvent('call_LM', {
       content_name: 'RDV Calendly Confirmé LM',
       value: 100,
       currency: 'EUR'

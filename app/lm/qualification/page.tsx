@@ -21,12 +21,25 @@ export default function QualificationPage() {
 
   useEffect(() => {
     // Générer session_id unique
-    const id = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const id = `lm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     setSessionId(id)
+
+    // Récupérer les données pré-remplies depuis /lm/capture
+    try {
+      const storedPrenom = sessionStorage.getItem('lm_prenom')
+      const storedEmail = sessionStorage.getItem('lm_email')
+      if (storedPrenom || storedEmail) {
+        setFormData(prev => ({
+          ...prev,
+          prenom: storedPrenom || prev.prenom,
+          email: storedEmail || prev.email
+        }))
+      }
+    } catch (e) {}
 
     // Pixel Facebook
     try {
-      fbq.customEvent('FormulairePage', {
+      fbq.customEvent('FormulairePage_LM', {
         content_name: 'LM Qualification'
       })
     } catch (e) {}
@@ -40,6 +53,7 @@ export default function QualificationPage() {
       session_id: sessionId,
       step: step,
       completed: completed,
+      source: 'lm',
       secteur: formData.secteur || null,
       secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
       chiffre_affaires: formData.chiffreAffaires || null,
@@ -125,8 +139,8 @@ export default function QualificationPage() {
 
       await saveToSupabase(5, true)
 
-      // Pixel Facebook
-      fbq.event('Lead', {
+      // Pixel Facebook - Lead_LM (distinct du tunnel principal)
+      fbq.customEvent('Lead_LM', {
         content_name: 'Lead Qualifié LM',
         value: 4500,
         currency: 'EUR'

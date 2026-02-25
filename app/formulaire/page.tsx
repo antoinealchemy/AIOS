@@ -42,6 +42,7 @@ export default function FormulairePage() {
       session_id: sessionId,
       step: step,
       completed: completed,
+      source: 'main',
       secteur: formData.secteur || null,
       secteur_autre: formData.secteur === 'autre' ? formData.secteurAutre : null,
       chiffre_affaires: formData.chiffreAffaires || null,

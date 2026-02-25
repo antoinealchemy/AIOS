@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
       session_id: data.session_id,
       step: data.step,
       completed: data.completed || false,
+      source: data.source || 'main',
       secteur: data.secteur,
       secteur_autre: data.secteur_autre,
       chiffre_affaires: data.chiffre_affaires,
