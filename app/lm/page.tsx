@@ -609,8 +609,8 @@ export default function LeadMagnetPage() {
                 }} />
             </div>
 
-            {/* CTA BUTTON */}
-            <div className="hero-cta">
+            {/* CTA BUTTON - Hidden initially, appears after 60 seconds via pure CSS */}
+            <div className="hero-cta" style={{ animation: 'showCTA 0.5s 60s forwards', opacity: 0, pointerEvents: 'none' as const }}>
                 <Link href="/lm/capture" className="cta-primary cta-large" onClick={() => fbq.customEvent('CTA_Click_LM', { content_name: 'Landing Page CTA' })}>
                     RECEVOIR L'ÉTUDE DE CAS OFFERTE
                 </Link>
