@@ -611,7 +611,7 @@ export default function LeadMagnetPage() {
 
             {/* CTA BUTTON */}
             <div className="hero-cta">
-                <Link href="/lm/capture" className="cta-primary cta-large">
+                <Link href="/lm/capture" className="cta-primary cta-large" onClick={() => fbq.customEvent('CTA_Click_LM', { content_name: 'Landing Page CTA' })}>
                     RECEVOIR L'ÉTUDE DE CAS OFFERTE
                 </Link>
                 <p className="cta-reassurance">Accès immédiat • 100% gratuit</p>
