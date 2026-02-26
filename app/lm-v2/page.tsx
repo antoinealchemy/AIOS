@@ -1,18 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import * as fbq from '@/lib/fbPixel'
 
 export default function LeadMagnetPageV2() {
-  const [showCTA, setShowCTA] = useState(false)
 
   useEffect(() => {
-    // Timer pour afficher le CTA après 15 secondes
-    const ctaTimer = setTimeout(() => {
-      setShowCTA(true)
-    }, 15000)
-
     // Pixel Facebook - ViewContent
     setTimeout(() => {
       fbq.event('ViewContent', {
@@ -72,11 +66,6 @@ export default function LeadMagnetPageV2() {
         }
       })
     })
-
-    // Cleanup
-    return () => {
-      clearTimeout(ctaTimer)
-    }
 
   }, [])
 
@@ -411,17 +400,6 @@ export default function LeadMagnetPageV2() {
         .hero-cta {
             margin-top: 24px;
             margin-bottom: 48px;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .hero-cta.cta-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .hero-cta.cta-visible {
-            opacity: 1;
-            pointer-events: auto;
         }
 
         .cta-reassurance {
@@ -535,9 +513,6 @@ export default function LeadMagnetPageV2() {
             .cta-large {
                 animation: none;
             }
-            .hero-cta {
-                transition: none;
-            }
         }
       `}</style>
 
@@ -633,8 +608,8 @@ export default function LeadMagnetPageV2() {
                 }} />
             </div>
 
-            {/* CTA BUTTON - Hidden initially, appears after 15 seconds */}
-            <div className={`hero-cta ${showCTA ? 'cta-visible' : 'cta-hidden'}`}>
+            {/* CTA BUTTON - Hidden initially, appears after 15 seconds via pure CSS */}
+            <div className="hero-cta" style={{ animation: 'showCTA 0.5s 15s forwards', opacity: 0, pointerEvents: 'none' as const }}>
                 <Link href="/lm/capture" className="cta-primary cta-large" onClick={() => fbq.customEvent('CTA_Click_LM', { content_name: 'Landing Page CTA V2' })}>
                     RECEVOIR L'ÉTUDE DE CAS OFFERTE
                 </Link>

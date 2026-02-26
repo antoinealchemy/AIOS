@@ -20,3 +20,11 @@ body {
     scroll-behavior: smooth;
   }
 }
+
+/* Animation pour afficher le CTA après un délai (utilisé dans /lm-v2) */
+@keyframes showCTA {
+  to {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
