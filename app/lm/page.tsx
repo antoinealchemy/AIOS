@@ -410,6 +410,14 @@ export default function LeadMagnetPage() {
             animation: fadeInUp 0.6s ease-out;
         }
 
+        .hero-cta-delayed {
+            margin-top: 24px;
+            margin-bottom: 48px;
+            opacity: 0;
+            pointer-events: none;
+            animation: showCTA 0.5s ease-out 60s forwards;
+        }
+
         .cta-reassurance {
             margin-top: 12px;
             font-size: 14px;
@@ -617,7 +625,7 @@ export default function LeadMagnetPage() {
             </div>
 
             {/* CTA BUTTON - Hidden initially, appears after 60 seconds via pure CSS */}
-            <div className="hero-cta" style={{ animation: 'showCTA 0.5s 60s forwards', opacity: 0, pointerEvents: 'none' as const }}>
+            <div className="hero-cta-delayed">
                 <Link href="/lm/capture" className="cta-primary cta-large" onClick={() => fbq.customEvent('CTA_Click_LM', { content_name: 'Landing Page CTA' })}>
                     RECEVOIR L'ÉTUDE DE CAS OFFERTE
                 </Link>
