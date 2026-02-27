@@ -397,6 +397,13 @@ export default function LeadMagnetPage() {
             50% { transform: scale(1.03); }
         }
 
+        @keyframes showCTA {
+            to {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
         .hero-cta {
             margin-top: 24px;
             margin-bottom: 48px;
