@@ -640,6 +640,10 @@ export default function LeadMagnetPage() {
     {/* Footer */}
     <footer>
         <div className="footer-bottom">
+            <p style={{ marginBottom: 16 }}>
+                <Link href="/mentions-legales" style={{ marginRight: 24 }}>Mentions légales</Link>
+                <Link href="/confidentialite">Politique de confidentialité</Link>
+            </p>
             <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
             <p style={{ marginBottom: 24 }}>
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
