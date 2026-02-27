@@ -392,6 +392,35 @@ export default function CapturePage() {
             50% { transform: scale(1.02); }
         }
 
+        /* CTA Button */
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+            letter-spacing: 0.02em;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5);
+        }
+
+        .cta-large {
+            padding: 18px 48px;
+            font-size: 22px;
+            font-weight: 700;
+            animation: subtlePulse 2.5s ease-in-out infinite;
+        }
+
         /* Footer */
         footer {
             padding: 48px 24px 60px;
@@ -506,6 +535,16 @@ export default function CapturePage() {
                     <div className="play-button">
                         <div className="play-icon"></div>
                     </div>
+                </div>
+            </div>
+
+            {/* Bouton REGARDER */}
+            <div style={{ marginTop: '24px', marginBottom: '16px' }}>
+                <button onClick={() => setShowModal(true)} className="cta-primary cta-large" style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    REGARDER
+                </button>
+                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+                    <img src="/trust.png" alt="Avis clients" style={{ maxWidth: '160px', width: '100%', height: 'auto' }} />
                 </div>
             </div>
         </div>
