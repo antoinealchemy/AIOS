@@ -541,7 +541,7 @@ export default function CapturePage() {
             {/* Bouton REGARDER */}
             <div style={{ marginTop: '24px', marginBottom: '16px' }}>
                 <button onClick={() => setShowModal(true)} className="cta-primary cta-large" style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-                    REGARDER
+                    ▶ REGARDER MAINTENANT
                 </button>
                 <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
                     <img src="/trust.png" alt="Avis clients" style={{ maxWidth: '160px', width: '100%', height: 'auto' }} />
