@@ -341,12 +341,12 @@ export default function AngleCPage() {
             </div>
 
             <h1>
-                Période fiscale en cours.<br />
-                <span className="gradient-text">Vos équipes tiennent le rythme ou sont déjà sous l'eau ?</span>
+                Bilans, liasses, TVA.<br />
+                <span className="gradient-text">Vos collaborateurs enchaînent les heures sup ?</span>
             </h1>
 
             <p className="subtitle">
-                Les cabinets équipés traitent 3x plus de dossiers sans recruter.
+                Et si vos équipes traitaient 3x plus de dossiers sans renfort ?
             </p>
 
             {/* VIDEO */}
