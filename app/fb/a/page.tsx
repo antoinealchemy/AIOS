@@ -349,7 +349,7 @@ export default function AngleAPage() {
             </div>
 
             <h1>
-                <span className="title-line1">4 000 factures en un week-end.</span><br />
+                <span className="title-line1">4 000 factures en un week-end.</span>
                 <span className="gradient-text">Combien d'heures pour tout retraiter ?</span>
             </h1>
 
