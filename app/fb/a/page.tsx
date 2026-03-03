@@ -354,7 +354,7 @@ export default function AngleAPage() {
             </h1>
 
             <p className="subtitle">
-                Les cabinets qui automatisent le retraitement gagnent 15h par semaine.
+                Découvrez comment les cabinets qui automatisent le retraitement gagnent 15h par semaine :
             </p>
 
             {/* VIDEO */}
