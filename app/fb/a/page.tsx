@@ -141,6 +141,10 @@ export default function AngleAPage() {
             letter-spacing: -0.03em;
         }
 
+        .title-line1 {
+            display: block;
+        }
+
         .gradient-text {
             background: linear-gradient(90deg, #3B82F6 0%, #06B6D4 100%);
             -webkit-background-clip: text;
@@ -304,8 +308,11 @@ export default function AngleAPage() {
             }
 
             h1 {
-                font-size: 24px;
                 margin-bottom: 12px;
+            }
+
+            .title-line1 {
+                font-size: 24px;
             }
 
             .subtitle {
@@ -342,7 +349,7 @@ export default function AngleAPage() {
             </div>
 
             <h1>
-                4 000 factures en un week-end.<br />
+                <span className="title-line1">4 000 factures en un week-end.</span><br />
                 <span className="gradient-text">Combien d'heures pour tout retraiter ?</span>
             </h1>
 
