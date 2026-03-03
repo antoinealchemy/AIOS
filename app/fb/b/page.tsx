@@ -346,7 +346,7 @@ export default function AngleBPage() {
             </h1>
 
             <p className="subtitle">
-                Toute l'expertise de votre cabinet, accessible en 20 secondes par n'importe qui.
+                Découvrez comment centraliser toute l'expertise de votre cabinet, accessible en 20 secondes par n'importe quel collaborateur :
             </p>
 
             {/* VIDEO */}
