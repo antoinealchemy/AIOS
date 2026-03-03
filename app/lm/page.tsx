@@ -645,8 +645,8 @@ export default function LeadMagnetPage() {
                 Ce site ne fait pas partie du site Web de Facebook™ ou de Facebook™ Inc. FACEBOOK™ est une marque de commerce de FACEBOOK™, Inc.
             </p>
             <p>
-                <Link href="/mentions-legales" style={{ marginRight: 24 }}>Mentions légales</Link>
-                <Link href="/confidentialite">Politique de confidentialité</Link>
+                <Link href="/legal/mentions-legales" style={{ marginRight: 24 }}>Mentions légales</Link>
+                <Link href="/legal/confidentialite">Politique de confidentialité</Link>
             </p>
         </div>
     </footer>

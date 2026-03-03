@@ -1990,7 +1990,7 @@ export default function HomePage() {
 
             {/* BOUTON CTA */}
             <div className="hero-cta" style={{ marginTop: '0px', marginBottom: '16px' }}>
-                <Link href="/formulaire" className="cta-primary cta-large">
+                <Link href="/vsl/formulaire" className="cta-primary cta-large">
                     Prendre RDV
                 </Link>
                 <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>

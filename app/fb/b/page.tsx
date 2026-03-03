@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import * as fbq from '@/lib/fbPixel'
 import Script from 'next/script'
 
-export default function AngleAPage() {
+export default function AngleBPage() {
   useEffect(() => {
     // PIXEL FACEBOOK - VIEWCONTENT
     setTimeout(() => {
       fbq.event('ViewContent', {
-        content_name: 'Landing Page AIOS - Angle A (Volume/Retraitement)'
+        content_name: 'Landing Page AIOS - Angle B (Scaling/Onboarding)'
       })
     }, 500)
 
@@ -23,7 +23,7 @@ export default function AngleAPage() {
     const handleCalendlyEvent = (e: MessageEvent) => {
       if (e.data.event && e.data.event === 'calendly.event_scheduled') {
         // Rediriger vers la page de confirmation
-        window.location.href = '/confirmation'
+        window.location.href = '/fb/confirmation'
       }
     }
     window.addEventListener('message', handleCalendlyEvent)
@@ -341,12 +341,12 @@ export default function AngleAPage() {
             </div>
 
             <h1>
-                4 000 factures en un week-end.<br />
-                <span className="gradient-text">Combien d'heures pour tout retraiter ?</span>
+                Votre meilleur collaborateur part en vacances.<br />
+                <span className="gradient-text">Qui répond aux questions ?</span>
             </h1>
 
             <p className="subtitle">
-                Les cabinets qui automatisent le retraitement gagnent 15h par semaine.
+                Toute l'expertise de votre cabinet, accessible en 20 secondes par n'importe qui.
             </p>
 
             {/* VIDEO */}
@@ -385,8 +385,8 @@ export default function AngleAPage() {
             </p>
 
             <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', fontSize: '14px' }}>
-                <a href="/mentions-legales">Mentions Légales</a>
-                <a href="/confidentialite">Confidentialité</a>
+                <a href="/legal/mentions-legales">Mentions Légales</a>
+                <a href="/legal/confidentialite">Confidentialité</a>
             </div>
         </div>
     </footer>

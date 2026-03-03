@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import * as fbq from '@/lib/fbPixel'
 import Script from 'next/script'
 
-export default function AngleCPage() {
+export default function AngleAPage() {
   useEffect(() => {
     // PIXEL FACEBOOK - VIEWCONTENT
     setTimeout(() => {
       fbq.event('ViewContent', {
-        content_name: 'Landing Page AIOS - Angle C (Deadline/Urgence fiscale)'
+        content_name: 'Landing Page AIOS - Angle A (Volume/Retraitement)'
       })
     }, 500)
 
@@ -23,7 +23,7 @@ export default function AngleCPage() {
     const handleCalendlyEvent = (e: MessageEvent) => {
       if (e.data.event && e.data.event === 'calendly.event_scheduled') {
         // Rediriger vers la page de confirmation
-        window.location.href = '/confirmation'
+        window.location.href = '/fb/confirmation'
       }
     }
     window.addEventListener('message', handleCalendlyEvent)
@@ -341,12 +341,12 @@ export default function AngleCPage() {
             </div>
 
             <h1>
-                Période fiscale en cours.<br />
-                <span className="gradient-text">Vos équipes tiennent le rythme ou sont déjà sous l'eau ?</span>
+                4 000 factures en un week-end.<br />
+                <span className="gradient-text">Combien d'heures pour tout retraiter ?</span>
             </h1>
 
             <p className="subtitle">
-                Les cabinets équipés traitent 3x plus de dossiers sans recruter.
+                Les cabinets qui automatisent le retraitement gagnent 15h par semaine.
             </p>
 
             {/* VIDEO */}
@@ -385,8 +385,8 @@ export default function AngleCPage() {
             </p>
 
             <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', fontSize: '14px' }}>
-                <a href="/mentions-legales">Mentions Légales</a>
-                <a href="/confidentialite">Confidentialité</a>
+                <a href="/legal/mentions-legales">Mentions Légales</a>
+                <a href="/legal/confidentialite">Confidentialité</a>
             </div>
         </div>
     </footer>

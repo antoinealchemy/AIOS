@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import * as fbq from '../../lib/fbPixel'
+import * as fbq from '@/lib/fbPixel'
 
 export default function FormulairePage() {
   const router = useRouter()
@@ -141,7 +141,7 @@ export default function FormulairePage() {
         a1: `${formData.phonePrefix}${formData.phoneNumber}`,
         sid: sessionId
       })
-      router.push(`/calendly?${params.toString()}`)
+      router.push(`/vsl/calendly?${params.toString()}`)
     }
   }
 

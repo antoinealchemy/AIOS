@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import * as fbq from '@/lib/fbPixel'
 import Script from 'next/script'
 
-export default function AngleBPage() {
+export default function AngleCPage() {
   useEffect(() => {
     // PIXEL FACEBOOK - VIEWCONTENT
     setTimeout(() => {
       fbq.event('ViewContent', {
-        content_name: 'Landing Page AIOS - Angle B (Scaling/Onboarding)'
+        content_name: 'Landing Page AIOS - Angle C (Deadline/Urgence fiscale)'
       })
     }, 500)
 
@@ -23,7 +23,7 @@ export default function AngleBPage() {
     const handleCalendlyEvent = (e: MessageEvent) => {
       if (e.data.event && e.data.event === 'calendly.event_scheduled') {
         // Rediriger vers la page de confirmation
-        window.location.href = '/confirmation'
+        window.location.href = '/fb/confirmation'
       }
     }
     window.addEventListener('message', handleCalendlyEvent)
@@ -341,12 +341,12 @@ export default function AngleBPage() {
             </div>
 
             <h1>
-                Votre meilleur collaborateur part en vacances.<br />
-                <span className="gradient-text">Qui répond aux questions ?</span>
+                Période fiscale en cours.<br />
+                <span className="gradient-text">Vos équipes tiennent le rythme ou sont déjà sous l'eau ?</span>
             </h1>
 
             <p className="subtitle">
-                Toute l'expertise de votre cabinet, accessible en 20 secondes par n'importe qui.
+                Les cabinets équipés traitent 3x plus de dossiers sans recruter.
             </p>
 
             {/* VIDEO */}
@@ -385,8 +385,8 @@ export default function AngleBPage() {
             </p>
 
             <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', fontSize: '14px' }}>
-                <a href="/mentions-legales">Mentions Légales</a>
-                <a href="/confidentialite">Confidentialité</a>
+                <a href="/legal/mentions-legales">Mentions Légales</a>
+                <a href="/legal/confidentialite">Confidentialité</a>
             </div>
         </div>
     </footer>

@@ -599,8 +599,8 @@ export default function CapturePage() {
     <footer>
         <div className="footer-bottom">
             <p style={{ marginBottom: 16 }}>
-                <a href="/mentions-legales" style={{ marginRight: 24 }}>Mentions légales</a>
-                <a href="/confidentialite">Politique de confidentialité</a>
+                <a href="/legal/mentions-legales" style={{ marginRight: 24 }}>Mentions légales</a>
+                <a href="/legal/confidentialite">Politique de confidentialité</a>
             </p>
             <p style={{ fontWeight: 600, marginBottom: 16 }}>Copyright © 2025 by AIOS</p>
         </div>
