@@ -372,7 +372,7 @@ export default function AngleAPage() {
     <section id="calendly" className="calendly-section" style={{ paddingBottom: '60px' }}>
         <div
             className="calendly-inline-widget"
-            data-url="https://calendly.com/antoinealchemy/presentation"
+            data-url="https://calendly.com/antoinealchemy/presentation?hide_gdpr_banner=1&hide_event_type_details=1"
         />
     </section>
 
